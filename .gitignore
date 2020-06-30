@@ -8,3 +8,4 @@
 vignettes/webOnly/*
 docs
 tmp
+.Rproj
