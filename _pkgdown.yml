@@ -1,0 +1,26 @@
+template:
+  params:
+    bootswatch: cosmo
+navbar:
+  title: ~
+  left:
+    - text: Preprocessing
+      menu:
+        - text: Imputation
+          href: articles/webOnly/imputation.html
+        - text: Batch correction
+          href: articles/webOnly/batch_correction.html
+    - text: Downstream analysis
+      menu:
+        - text: Pathway analysis
+          href: articles/webOnly/pathway_analysis.html
+        - text: site-, gene-centric analysis
+          href: articles/webOnly/site_gene_analysis.html
+        - text: Signalomes
+          href: articles/webOnly/signalomes.html
+    - text: Functions
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/PYangLab/PhosR
+future: true

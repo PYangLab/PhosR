@@ -1,0 +1,587 @@
+############################### Global kinase annotatiion ##
+
+#' @title Kinase substrate scoring
+#'
+#' @description This function generates substrate scores for kinases that pass
+#' filtering based on both motifs and dynamic profiles
+#'
+#'
+#' @param substrate.list a list of kinases with each element containing an array
+#'  of substrates.
+#' @param mat a matrix with rows correspond to phosphosites and columns
+#' correspond to samples.
+#' @param seqs an array containing aa sequences surrounding each of all
+#' phosphosites.
+#' Each sequence has length of 15 (-7, p, +7).
+#' @param numMotif minimum number of sequences used for compiling motif for
+#' each kinase.
+#' Default is 5.
+#' @param numSub minimum number of phosphosites used for compiling
+#' phosphorylation
+#' profile for each kinase. Default is 1.
+#'
+#' @importFrom preprocessCore normalize.quantiles
+#'
+#' @return A list of 4 elements.
+#' \code{motifScoreMatrix}, \code{profileScoreMatrix},
+#' \code{combinedScoreMatrix}, \code{ksActivityMatrix} (kinase activity matrix)
+#' and their \code{weights}.
+#'
+#' @examples
+#'
+#' data('phospho_L6_ratio')
+#' data('SPSs')
+#' data('PhosphoSitePlus')
+#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#'
+#' # Cleaning phosphosite label
+#' phospho.site.names = rownames(phospho.L6.ratio)
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#'                                 function(x){paste(toupper(x[2]), x[3], '',
+#'                                                 sep=';')}))
+#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+#'                             colMeans))
+#' phospho.site.names = split(phospho.site.names, L6.sites)
+#'
+#' # Construct a design matrix by condition
+#' design = model.matrix(~ grps - 1)
+#'
+#' # phosphoproteomics data normalisation using RUV
+#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+#'                                 ctl = ctl)
+#'
+#'
+#' phosphoL6 = phospho.L6.ratio.RUV
+#' rownames(phosphoL6) = phospho.site.names
+#'
+#' # filter for up-regulated phosphosites
+#' phosphoL6.mean <- meanAbundance(phosphoL6,
+#'                                 grps = gsub('_.+', '', colnames(phosphoL6)))
+#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#' L6.phos.std <- standardise(phosphoL6.reg)
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+#'
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#'                     function(x)x[4])
+#'
+#' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
+#'     L6.phos.seq, numMotif = 5, numSub = 1)
+#'
+#' @export
+kinaseSubstrateScore <- function(substrate.list, mat, seqs,
+                                numMotif = 5, numSub = 1) {
+    ks.profile.list <- kinaseSubstrateProfile(substrate.list, mat)
+    motif.mouse.list = PhosR::motif.mouse.list
+    print(paste("Number of kinases passed motif size filtering:",
+        sum(motif.mouse.list$NumInputSeq >= numMotif)))
+    print(paste("Number of kinases passed profile size filtering:",
+        sum(ks.profile.list$NumSub >= numSub)))
+    motif.mouse.list.filtered <- motif.mouse.list[
+        which(motif.mouse.list$NumInputSeq >= numMotif) ]
+    ks.profile.list.filtered <- ks.profile.list[
+        which(ks.profile.list$NumSub >= numSub) ]
+    # scoring all phosphosites against all motifs
+    motifScoreMatrix =
+        scorePhosphositesMotifs(mat, motif.mouse.list.filtered, seqs)
+    print("done.")
+    # scoring all phosphosites against all profiles
+    cat("Scoring phosphosites against kinase-substrate profiles:")
+    profileScoreMatrix = scorePhosphositeProfile(mat, ks.profile.list.filtered)
+    print("done.")
+    ### prioritisation by integrating the two parts
+    cat("Generating combined scores for phosphosites
+by motifs and phospho profiles:")
+    o <- intersect(colnames(motifScoreMatrix), colnames(profileScoreMatrix))
+    combinedScoreMatrix <- matrix(NA, nrow = nrow(motifScoreMatrix),
+        ncol = length(o))
+    colnames(combinedScoreMatrix) <- o
+    rownames(combinedScoreMatrix) <- rownames(motifScoreMatrix)
+    # normalising weights for the two parts
+    w1 <- log(rank(motif.mouse.list$NumInputSeq[o]) + 1)
+    w2 <- log(rank(ks.profile.list$NumSub[o]) + 1)
+    w3 <- w1 + w2
+    for (i in seq_len(length(o))) {
+        # weight the two parts by the number of
+        # motifs and quantified known substrates
+        combinedScoreMatrix[, i] <- (w1[i]/(w1[i] +
+            w2[i]) * motifScoreMatrix[, o[i]]) +
+            (w2[i]/(w1[i] + w2[i]) * profileScoreMatrix[, o[i]])
+    }
+    print("done.")
+    # visualise
+    ksActivityMatrix <- do.call(rbind, ks.profile.list.filtered)[o, ]
+    phosScoringMatrices <- list(motifScoreMatrix = motifScoreMatrix,
+        profileScoreMatrix = profileScoreMatrix,
+        combinedScoreMatrix = combinedScoreMatrix,
+        ksActivityMatrix = ksActivityMatrix, weights = w3)
+    kinaseSubstrateHeatmap(phosScoringMatrices)
+    return(phosScoringMatrices)
+}
+
+scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs) {
+    motifScoreMatrix <- matrix(NA, nrow = nrow(mat),
+                            ncol = length(motif.mouse.list.filtered))
+    rownames(motifScoreMatrix) <- rownames(mat)
+    colnames(motifScoreMatrix) <- names(motif.mouse.list.filtered)
+    # extracting flanking sequences
+    seqWin = mapply(function(x) {
+        mid <- (nchar(x) + 1)/2
+        substr(x, start = (mid - 7), stop = (mid + 7))
+    }, seqs)
+
+    print("Scoring phosphosites against kinase motifs:")
+    for (i in seq_len(length(motif.mouse.list.filtered))) {
+        motifScoreMatrix[, i] <- frequencyScoring(seqWin,
+                                                motif.mouse.list.filtered[[i]])
+        cat(paste(i, ".", sep = ""))
+    }
+    motifScoreMatrix <- minmax(motifScoreMatrix)
+    motifScoreMatrix
+}
+
+scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
+    profileScoreMatrix <- (t(apply(mat, 1,
+        cor, t(do.call(rbind, ks.profile.list.filtered)))) + 1)/2
+    rownames(profileScoreMatrix) <- rownames(mat)
+    colnames(profileScoreMatrix) <- names(ks.profile.list.filtered)
+    profileScoreMatrix
+}
+
+#' @title Kinase substrate profiling
+#'
+#' @description This function generates substrate profiles for kinases that have
+#' one or more substrates quantified in the phosphoproteome data.
+#'
+#'
+#' @param substrate.list a list of kinases with each element containing an array
+#' of substrates.
+#' @param mat a matrix with rows correspond to phosphosites and columns
+#' correspond to samples.
+#' @return Kinase profile list.
+#'
+#' @examples
+#' data('phospho_L6_ratio')
+#' data('SPSs')
+#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#'
+#' # Cleaning phosphosite label
+#' phospho.site.names = rownames(phospho.L6.ratio)
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#'                                 function(x){paste(toupper(x[2]), x[3], '',
+#'                                                 sep=';')}))
+#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+#'                             colMeans))
+#' phospho.site.names = split(phospho.site.names, L6.sites)
+#'
+#' # Construct a design matrix by condition
+#' design = model.matrix(~ grps - 1)
+#'
+#' # phosphoproteomics data normalisation using RUV
+#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+#'                                 ctl = ctl)
+#'
+#'
+#' phosphoL6 = phospho.L6.ratio.RUV
+#' rownames(phosphoL6) = phospho.site.names
+#'
+#' # filter for up-regulated phosphosites
+#' phosphoL6.mean <- meanAbundance(phosphoL6,
+#'                                 grps = gsub('_.+', '', colnames(phosphoL6)))
+#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#' L6.phos.std <- standardise(phosphoL6.reg)
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+#'
+#'
+#' ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
+#'
+#' @export
+kinaseSubstrateProfile <- function(substrate.list, mat) {
+    # generate kinase substrate profile list
+    ks.profile.list <- lapply(substrate.list,
+        function(x) {
+            ns <- intersect(x, rownames(mat))
+            m <- c()
+            if (length(ns) == 1) {
+                m <- mat[ns, ]
+            } else if (length(ns) > 1) {
+                m <- apply(mat[ns, ], 2,
+                    median)
+            } else {
+                m <- NA
+            }
+            return(m)
+        })
+
+    # ks.profile.list$NumSub <-
+    # sapply(substrate.list, function(x){
+    # sum(x %in% rownames(mat)) })
+    ks.profile.list$NumSub = mapply(function(x,
+        mat) {
+        sum(x %in% rownames(mat))
+    }, substrate.list, MoreArgs = list(mat = mat))
+
+    return(ks.profile.list)
+}
+
+
+kinaseActivityHeatmap <- function(ksProfileMatrix) {
+    KinaseFamily = PhosR::KinaseFamily
+    o <- intersect(rownames(ksProfileMatrix),
+        rownames(KinaseFamily))
+    annotation_row = data.frame(group = KinaseFamily[o,
+        "kinase_group"], family = KinaseFamily[o,
+        "kinase_family"])
+    rownames(annotation_row) <- o
+
+    pheatmap(ksProfileMatrix, annotation_row = annotation_row,
+        fontsize = 7, main = paste("Kinase substrate profiles"))
+
+}
+
+#' @title Kinase-substrate annotation prioritisation heatmap
+#'
+#'
+#' @param phosScoringMatrices a matrix returned from kinaseSubstrateScore.
+#' @param top the number of top ranked phosphosites for each kinase to be
+#' included in the heatmap. Default is 1.
+#'
+#' @return a pheatmap object.
+#'
+#' @import pheatmap
+#'
+#' @examples
+#' data('phospho_L6_ratio')
+#' data('SPSs')
+#' data('PhosphoSitePlus')
+#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#'
+#' # Cleaning phosphosite label
+#' phospho.site.names = rownames(phospho.L6.ratio)
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#'                                 function(x){paste(toupper(x[2]), x[3], '',
+#'                                                 sep=';')}))
+#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+#'                             colMeans))
+#' phospho.site.names = split(phospho.site.names, L6.sites)
+#'
+#' # Construct a design matrix by condition
+#' design = model.matrix(~ grps - 1)
+#'
+#' # phosphoproteomics data normalisation using RUV
+#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+#'                                 ctl = ctl)
+#'
+#'
+#' phosphoL6 = phospho.L6.ratio.RUV
+#' rownames(phosphoL6) = phospho.site.names
+#'
+#' # filter for up-regulated phosphosites
+#' phosphoL6.mean <- meanAbundance(phosphoL6,
+#'                                 grps = gsub('_.+', '', colnames(phosphoL6)))
+#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#' L6.phos.std <- standardise(phosphoL6.reg)
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+#'
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#'                     function(x)x[4])
+#'
+#' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
+#'     L6.phos.seq, numMotif = 5, numSub = 1)
+#'
+#' kinaseSubstrateHeatmap(L6.matrices)
+#'
+#' @export
+kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
+    KinaseFamily = PhosR::KinaseFamily
+    ####### heatmap 1
+    sites <- c()
+    for (i in seq_len(ncol(phosScoringMatrices$combinedScoreMatrix))) {
+        sites <- union(sites, names(
+            sort(phosScoringMatrices$combinedScoreMatrix[,i],
+                decreasing = TRUE)[seq_len(top)]))
+    }
+
+    o <- intersect(colnames(phosScoringMatrices$combinedScoreMatrix),
+        rownames(KinaseFamily))
+    annotation_col = data.frame(group = KinaseFamily[o,
+        "kinase_group"], family = KinaseFamily[o,
+        "kinase_family"])
+    rownames(annotation_col) <- o
+
+    pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
+        ], annotation_col = annotation_col,
+        cluster_rows = TRUE, cluster_cols = TRUE,
+        fontsize = 7, main = paste("Top",
+            top, "phosphosite(s) for each kinase"))
+}
+
+#' @title Phosphosite annotation
+#'
+#' @description This function plots the combined scores of each of all kinases
+#' for a given phosphosites
+#'
+#'
+#' @param site site the ID of a phosphosite
+#' @param phosScoringMatrices output from function kinaseSubstrateScore()
+#' @param predMatrix a prediction matrix from kinaseSubstratePred()
+#'
+#' @return A graphical plot
+#'
+#' @examples
+#'
+#' data('phospho_L6_ratio')
+#' data('SPSs')
+#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#'
+#' # Cleaning phosphosite label
+#' phospho.site.names = rownames(phospho.L6.ratio)
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#'                                 function(x){paste(toupper(x[2]), x[3], '',
+#'                                                 sep=';')}))
+#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+#'                             colMeans))
+#' phospho.site.names = split(phospho.site.names, L6.sites)
+#'
+#' # Construct a design matrix by condition
+#' design = model.matrix(~ grps - 1)
+#'
+#' # phosphoproteomics data normalisation using RUV
+#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+#'                                 ctl = ctl)
+#'
+#'
+#' phosphoL6 = phospho.L6.ratio.RUV
+#' rownames(phosphoL6) = phospho.site.names
+#'
+#' # filter for up-regulated phosphosites
+#' phosphoL6.mean <- meanAbundance(phosphoL6,
+#'                                 grps = gsub('_.+', '', colnames(phosphoL6)))
+#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#' L6.phos.std <- standardise(phosphoL6.reg)
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+#'
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#'                     function(x)x[4])
+#'
+#' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
+#'     L6.phos.seq, numMotif = 5, numSub = 1)
+#' set.seed(1)
+#' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
+#'
+#' # We will look at the phosphosite AAK1;S677 for demonstration purpose.
+#' site = "AAK1;S677;"
+#' siteAnnotate(site, L6.matrices, L6.predMat)
+#'
+#' @export
+siteAnnotate <- function(site, phosScoringMatrices,
+    predMatrix) {
+    od <- order(predMatrix[site, ], decreasing = TRUE)
+    kinases <- colnames(predMatrix)[od]
+    # cols <- rainbow(length(kinases))
+
+    par(mfrow = c(4, 1))
+    barplot(predMatrix[site, kinases], las = 2,
+        ylab = "Prediction score", col = "red3",
+        main = paste("Site =", site), ylim = c(0,
+            1))
+    barplot(phosScoringMatrices$combinedScoreMatrix[site,
+        kinases], las = 2, ylab = "Combined score",
+        col = "orange2", ylim = c(0, 1))
+    barplot(phosScoringMatrices$motifScoreMatrix[site,
+        kinases], las = 2, ylab = "Motif score",
+        col = "green4", ylim = c(0, 1))
+    barplot(phosScoringMatrices$profileScoreMatrix[site,
+        kinases], las = 2, ylab = "Profile score",
+        col = "lightblue3", ylim = c(0, 1))
+}
+
+
+#' kinaseSubstratePred
+#'
+#' A machine learning approach for predicting specific kinase for a given
+#' substrate. This prediction framework utilise adaptive sampling.
+#'
+#' @usage
+#' kinaseSubstratePred(
+#'     phosScoringMatrices,
+#'     ensembleSize = 10,
+#'     top = 50,
+#'     cs = 0.8,
+#'     inclusion = 20,
+#'     iter = 5
+#' )
+#'
+#' @param phosScoringMatrices An output of kinaseSubstrateScore.
+#' @param ensembleSize An ensemble size.
+#' @param top a number to select top kinase substrates.
+#' @param cs Score threshold.
+#' @param inclusion A minimal number of substrates required for a kinase to be
+#' selected.
+#' @param iter A number of iterations for adaSampling.
+#'
+#' @return Kinase prediction matrix
+#'
+#' @examples
+#'
+#' data('phospho_L6_ratio')
+#' data('SPSs')
+#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#'
+#' # Cleaning phosphosite label
+#' phospho.site.names = rownames(phospho.L6.ratio)
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#'                                 function(x){paste(toupper(x[2]), x[3], '',
+#'                                                 sep=';')}))
+#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+#'                             colMeans))
+#' phospho.site.names = split(phospho.site.names, L6.sites)
+#'
+#' # Construct a design matrix by condition
+#' design = model.matrix(~ grps - 1)
+#'
+#' # phosphoproteomics data normalisation using RUV
+#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+#'                                 ctl = ctl)
+#'
+#'
+#' phosphoL6 = phospho.L6.ratio.RUV
+#' rownames(phosphoL6) = phospho.site.names
+#'
+#' # filter for up-regulated phosphosites
+#' phosphoL6.mean <- meanAbundance(phosphoL6,
+#'                                 grps = gsub('_.+', '', colnames(phosphoL6)))
+#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#' L6.phos.std <- standardise(phosphoL6.reg)
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+#'
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#'                     function(x)x[4])
+#'
+#' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
+#'     L6.phos.seq, numMotif = 5, numSub = 1)
+#' set.seed(1)
+#' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
+#'
+#' @export
+#'
+kinaseSubstratePred <- function(phosScoringMatrices,
+    ensembleSize = 10, top = 50, cs = 0.8,
+    inclusion = 20, iter = 5) {
+    # create the list of kinase-substrates for prediction
+    substrate.list = substrateList(phosScoringMatrices, top, cs, inclusion)
+
+    # building the positive traning set
+    print("Predicting kinases for phosphosites:")
+    featureMat <- phosScoringMatrices$combinedScoreMatrix
+    predMatrix <- matrix(0, nrow = nrow(featureMat),
+        ncol = length(substrate.list))
+    colnames(predMatrix) <- names(substrate.list)
+    rownames(predMatrix) <- rownames(featureMat)
+    for (i in seq_len(length(substrate.list))) {
+        positive.train <- featureMat[substrate.list[[i]],]
+        positive.cls <- rep(1, length(substrate.list[[i]]))
+        negative.pool <- featureMat[!(rownames(featureMat) %in%
+            substrate.list[[i]]), ]
+        cat(paste(i, ".", sep = ""))
+        for (e in seq_len(ensembleSize)) {
+            negativeSize <- length(substrate.list[[i]])
+            idx <- sample(seq_len(nrow(negative.pool)),
+                size = negativeSize, replace = FALSE)
+            negative.samples <- rownames(negative.pool)[idx]
+            negative.train <- featureMat[negative.samples,]
+            negative.cls <- rep(2, length(negative.samples))
+            train.mat <- rbind(positive.train, negative.train)
+            cls <- as.factor(c(positive.cls, negative.cls))
+            names(cls) <- rownames(train.mat)
+            pred <- multiAdaSampling(train.mat,
+                test.mat = featureMat, label = cls,
+                kernelType = "radial", iter = iter)
+            predMatrix[, i] <- predMatrix[names(pred[, 1]), i] + pred[, 1]
+        }
+    }
+    predMatrix <- predMatrix/ensembleSize
+    print("done")
+    return(predMatrix)
+}
+
+substrateList = function(phosScoringMatrices, top, cs, inclusion) {
+    kinaseSel <- c()
+    substrate.list <- list()
+    count <- 0
+    for (i in seq_len(ncol(phosScoringMatrices$combinedScoreMatrix))) {
+        sel <- names(which(sort(phosScoringMatrices$combinedScoreMatrix[, i],
+            decreasing = TRUE)[seq_len(top)] > cs))
+        if (length(sel) >= inclusion) {
+            count <- count + 1
+            substrate.list[[count]] <- sel
+            kinaseSel <- c(kinaseSel,
+                colnames(phosScoringMatrices$combinedScoreMatrix)[i])
+        }
+    }
+    names(substrate.list) <- kinaseSel
+    substrate.list
+}
+
+
+#' @import stats
+#' @import e1071
+multiAdaSampling <- function(train.mat, test.mat,
+    label, kernelType, iter = 5) {
+
+    X <- train.mat
+    Y <- label
+
+    model <- c()
+    prob.mat <- c()
+
+    for (i in seq_len(iter)) {
+        tmp <- X
+        rownames(tmp) <- NULL
+        model <- e1071::svm(tmp, factor(Y),
+            kernel = kernelType, probability = TRUE)
+        prob.mat <- attr(predict(model, train.mat,
+            decision.values = FALSE, probability = TRUE),
+            "probabilities")
+
+        X <- c()
+        Y <- c()
+        for (j in seq_len(ncol(prob.mat))) {
+            voteClass <- prob.mat[label == colnames(prob.mat)[j], ]
+            idx <- c()
+            idx <- sample(seq_len(nrow(voteClass)),
+                size = nrow(voteClass), replace = TRUE,
+                prob = voteClass[, j])
+            X <- rbind(X, train.mat[rownames(voteClass)[idx],])
+            Y <- c(Y, label[rownames(voteClass)[idx]])
+        }
+    }
+
+    pred <- attr(predict(model, newdata = test.mat,
+        probability = TRUE), "prob")
+    return(pred)
+}

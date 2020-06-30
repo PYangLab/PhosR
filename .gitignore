@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.DS_Store$
+.Rbuildignore
+.Ruserdata
+.PhosR.prok
+vignettes/webOnly/*
+docs
+tmp
