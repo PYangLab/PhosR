@@ -4,7 +4,7 @@
 
 ## PhosR overview
 
-<img src="https://raw.githubusercontent.com/PYangLab/PhosR/master/graphical_abstract.png" align="center"/>
+<img src="https://raw.githubusercontent.com/PYangLab/PhosR/master/inst/graphical_abstract.png" align="center"/>
 
 
 ## Installation
