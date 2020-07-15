@@ -1,16 +1,16 @@
 Package: PhosR
 Type: Package
 Title: A set of methods and tools for comprehensive analysis of phosphoproteomics data
-Version: 0.99.1
-Author@R: c(
+Version: 0.99.2
+Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim@sydney.edu.au", role = c("aut", "cre")),
     person("Jieun Hani", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut"))
     )
-Description: PhosR is a package for the comprenhensive analysis of phosphoproteomic data. 
-    There are two major components to PhosR: processing and downstream analysis. 
-    PhosR consists of various processing tools for phosphoproteomics data 
-    including filtering, imputation, normalisation, and functional analysis 
+Description: PhosR is a package for the comprenhensive analysis of phosphoproteomic data.
+    There are two major components to PhosR: processing and downstream analysis.
+    PhosR consists of various processing tools for phosphoproteomics data
+    including filtering, imputation, normalisation, and functional analysis
     for inferring active kinases and signalling pathways.
 License: GPL-3 + file LICENSE
 Depends: R (>= 4.0.0)
@@ -38,7 +38,7 @@ LazyData: true
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 biocViews: Software, ResearchField, SystemsBiology
-Suggests: 
+Suggests:
     testthat,
     knitr,
     GGally,
