@@ -32,12 +32,14 @@ Imports:
     rlang,
     graphics,
     grDevices,
-    utils
+    utils,
+    SummarizedExperiment,
+    methods
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
-biocViews: Software, ResearchField, SystemsBiology
+biocViews: Software, ResearchField, Proteomics
 Suggests:
     testthat,
     knitr,

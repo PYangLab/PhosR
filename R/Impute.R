@@ -7,13 +7,14 @@
 #'
 #' @usage scImpute(mat, percent, grps)
 #'
-#' @param mat a matrix with rows correspond to phosphosites and columns
-#' correspond to replicates within a condition.
+#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' phosphosites and columns correspond to replicates within a condition.
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
 #' values in any treatment group.
 #' @param grps a string specifying the grouping (replciates).
 #'
-#' @return An imputed matrix
+#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
+#' a SummarizedExperiment object will be returned.
 #'
 #' @examples
 #'
@@ -26,7 +27,10 @@
 #'     scImpute(phospho.cells.Ins.filtered,
 #'     0.5,
 #'     grps)[,colnames(phospho.cells.Ins.filtered)]
-#'
+#' 
+#' @importFrom SummarizedExperiment assay
+#' @importFrom methods is
+#' 
 #' @export
 scImpute <- function(mat, percent, grps) {
     if (missing(mat)) {
@@ -44,11 +48,24 @@ scImpute <- function(mat, percent, grps) {
     if ((percent < 0) || (percent > 1)) {
         stop("Parameter percent must be a numeric value between 0 and 1")
     }
-
+    
+    se = FALSE
+    if (methods::is(mat, "SummarizedExperiment")) {
+        mat.orig = mat
+        se = TRUE
+        mat = SummarizedExperiment::assay(mat)
+    }
+    
     tmp <- lapply(split(seq_len(ncol(mat)), grps), function(i) mat[,
         i])
     mat.imputed <- do.call(cbind, lapply(tmp, stImp, percent = percent))[,
         colnames(mat)]
+    
+    if (se) {
+        SummarizedExperiment::assay(mat.orig, "imputed") = mat.imputed
+        mat.imputed = mat.orig
+    }
+    
     return(mat.imputed)
 }
 
@@ -73,13 +90,14 @@ stImp <- function(mat, percent) {
 #'
 #' @usage tImpute(mat, m, s)
 #'
-#' @param mat a matrix with rows correspond to phosphosites and columns
-#' correspond to samples.
+#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' phosphosites and columns correspond to samples.
 #' @param m a numeric number for controlling mean downshifting.
 #' @param s a numeric number for controlling standard deviation of downshifted
 #' sampling values.
 #'
-#' @return An imputed matrix
+#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
+#' a SummarizedExperiment object will be returned.
 #'
 #' @examples
 #'
@@ -90,10 +108,20 @@ stImp <- function(mat, percent) {
 #' set.seed(123)
 #' phospho.cells.Ins.impute <- tImpute(phospho.cells.Ins.filtered)
 #'
+#' @importFrom SummarizedExperiment SummarizedExperiment assay
+#' @importFrom methods is
+#'
 #' @export
 tImpute <- function(mat, m = 1.6, s = 0.6) {
     if (missing(mat)) {
         stop("Paramter mat is missing!")
+    }
+    
+    se = FALSE
+    if (methods::is(mat, "SummarizedExperiment")) {
+        mat.orig = mat
+        se = TRUE
+        mat = SummarizedExperiment::assay(mat)
     }
 
     ms <- colMeans(mat, na.rm = TRUE)
@@ -104,6 +132,12 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
             sds[i] * m), sd = (sds[i] * s))
         mat.impute[which(is.na(mat.impute[, i])), i] <- r
     }
+    
+    if (se) {
+        SummarizedExperiment::assay(mat.orig, "imputed") = mat.impute
+        mat.impute = mat.orig
+    }
+    
     return(mat.impute)
 }
 
@@ -118,7 +152,16 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #' quantified values more than percent1 and mat1 has percentage quantified
 #' values less than percent2.
 #'
-#' @usage ptImpute(mat1, mat2, percent1, percent2, m, s, paired)
+#' @usage ptImpute(
+#'     mat1, 
+#'     mat2, 
+#'     percent1, 
+#'     percent2, 
+#'     m = 1.6, 
+#'     s = 0.6, 
+#'     paired = TRUE, 
+#'     verbose = TRUE
+#' )
 #'
 #' @param mat1 a matrix with rows correspond to phosphosites and columns
 #' correspond to replicates within treatment1.
@@ -133,7 +176,10 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #' downshifted sampling values.
 #' @param paired a flag indicating whether to impute for both treatment1 and
 #' treatment2 (default) or treatment2 only (if paired=FALSE).
-#'
+#' @param verbose Default to \code{TRUE} to show messages during the progress.
+#' All messages will be suppressed if set to \code{FALSE}
+#' 
+#' 
 #' @return An imputed matrix
 #'
 #' @examples
@@ -150,13 +196,18 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #'     grps)[,colnames(phospho.cells.Ins.filtered)]
 #'
 #' set.seed(123)
-#' phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute[,6:10],
-#' phospho.cells.Ins.impute[,1:5], percent1 = 0.6, percent2 = 0, paired = FALSE)
-#'
+#' phospho.cells.Ins.impute[,seq(5)] <- 
+#'     ptImpute(phospho.cells.Ins.impute[,seq(6,10)],
+#' phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6, percent2 = 0, 
+#'     paired = FALSE)
+#' 
+#' @importFrom SummarizedExperiment SummarizedExperiment assay rowData colData
+#' @importFrom methods is
+#' 
 #' @export
 #'
 ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
-    s = 0.6, paired = TRUE) {
+    s = 0.6, paired = TRUE, verbose = TRUE) {
     if (missing(mat1))
         stop("Paramter mat1 is missing!")
     if (missing(mat2))
@@ -165,11 +216,21 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
         stop("Paramter percent1 is missing!")
     if (missing(percent2))
         stop("Paramter percent2 is missing!")
-
+    
+    se = FALSE
+    if (methods::is(mat1, "SummarizedExperiment") && methods::is(mat2, "SummarizedExperiment")) {
+        mat1.orig = mat1
+        mat2.orig = mat2
+        se = TRUE
+        mat1 = SummarizedExperiment::assay(mat1)
+        mat2 = SummarizedExperiment::assay(mat2)
+    }
+    
     # impute for mat2
     idx1 <- which((rowSums(!is.na(mat1))/nrow(mat1)) >= percent1 &
         (rowSums(!is.na(mat2))/nrow(mat2)) <= percent2)
-    print(paste("idx1:", length(idx1)))
+    if (verbose)
+        message(paste("idx1:", length(idx1)))
 
     ms <- colMeans(mat2, na.rm = TRUE)
     sds <- apply(mat2, 2, stats::sd, na.rm = TRUE)
@@ -184,7 +245,8 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
         # impute for mat1
         idx2 <- which((rowSums(!is.na(mat2))/nrow(mat2)) >= percent1 &
             (rowSums(!is.na(mat1))/nrow(mat1)) <= percent2)
-        print(paste("idx2:", length(idx2)))
+        if (verbose)
+            message(paste("idx2:", length(idx2)))
 
         ms <- colMeans(mat1, na.rm = TRUE)
         sds <- apply(mat1, 2, stats::sd, na.rm = TRUE)
@@ -194,8 +256,26 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
                     sds[i] * m), sd = (sds[i] * s))
             }
         }
-        return(cbind(mat1, mat2))
+        if (se) {
+            mat = SummarizedExperiment::SummarizedExperiment(
+                cbind(mat1, mat2),
+                colData = cbind(SummarizedExperiment::colData(mat1.orig), 
+                    SummarizedExperiment::colData(mat2.orig)),
+                rowData = rowData(SummarizedExperiment::rowData(mat1.orig))
+            )
+        } else {
+            mat = cbind(mat1, mat2)
+        }
+        
+        return(mat)
     } else {
+        if (se) {
+            mat2 = SummarizedExperiment::SummarizedExperiment(
+                mat2,
+                colData = SummarizedExperiment::colData(mat2),
+                rowData = SummarizedExperiment::rowData(mat2)
+            )
+        }
         return(mat2)
     }
 }

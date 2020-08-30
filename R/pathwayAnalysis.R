@@ -1,6 +1,6 @@
-#' Gene set over-representation analysis
+#' Gene/phosphosite set over-representation analysis
 #'
-#' @description This function performes gene set over-representation analysis
+#' @description This function performes gene (or phosphosite) set over-representation analysis
 #' using Fisher's exact test.
 #'
 #' @param geneSet an array of gene or phosphosite IDs (IDs are gene symbols etc
@@ -84,7 +84,7 @@
 #' Tc.gene <- phosCollapse(Tc, id=gsub(';.+', '', rownames(Tc)),
 #'     stat=apply(abs(Tc), 1, max), by = 'max')
 #' geneSet <- names(sort(Tc.gene[,1],
-#'                     decreasing = TRUE))[1:round(nrow(Tc.gene) * 0.1)]
+#'                     decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 #' #lapply(PhosphoSite.rat, function(x){gsub(';[STY]', ';', x)})
 #'
 #' # 1D gene-centric pathway analysis
@@ -124,9 +124,9 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
     return(fisherTest.mat)
 }
 
-#' Gene set enrichment analysis
+#' Gene/phosphosite set enrichment analysis
 #'
-#' This function performes gene set enrichment analysis using Wilcoxon Rank Sum
+#' This function performes gene (or phosphosite) set enrichment analysis using Wilcoxon Rank Sum
 #' test.
 #'
 #' @param geneStats an array of statistics (e.g. log2 FC) of all quantified

@@ -3,7 +3,7 @@
 #' @description A function to generate signalomes
 #'
 #' @usage Signalomes(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork=0.9,
-#' signalomeCutoff=0.5)
+#' signalomeCutoff=0.5, verbose = TRUE)
 #'
 #' @param KSR kinase-substrate relationship scoring results
 #' @param predMatrix output of kinaseSubstratePred function
@@ -15,11 +15,13 @@
 #'  the expanded signalomes
 #' @param signalomeCutoff threshold used to filter kinase-substrate
 #' relationships
+#' @param verbose Default to \code{TRUE} to show messages during the progress.
+#' All messages will be suppressed if set to \code{FALSE}
 #'
 #' @importFrom igraph graph_from_adjacency_matrix
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
-#' @importFrom tidyr spread
+#' @importFrom tidyr pivot_wider
 #' @importFrom dplyr count
 #' @importFrom stats hclust
 #' @importFrom rlang .data
@@ -80,7 +82,7 @@
 #'                                 KOI=kinaseOI)
 #' @export
 Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
-    signalomeCutoff = 0.5) {
+    signalomeCutoff = 0.5, verbose = TRUE) {
     ############## generate objects required for signalome function
     protein_assignment = mapply("[[",
                                 strsplit(rownames(KSR$combinedScoreMatrix),";"),
@@ -103,12 +105,12 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     resKinaseNetwork <- .kinaseNetwork(predMatrix, KSR, threskinaseNetwork,
         kinase_signalome_color)
     ############## cluster phosphosites
-    substrate_clusters <- .phosphositeClusters(KSR)
+    substrate_clusters <- .phosphositeClusters(KSR, verbose)
     ############## generate coassignment
     cluster_assignment <- as.factor(substrate_clusters)
     dat.long <- data.frame(table(cluster_assignment, protein_assignment))
-    dftoHeatmap <- tidyr::spread(dat.long, protein_assignment,
-        .data$Freq)[, -1]
+    dftoHeatmap <- tidyr::pivot_wider(dat.long, names_from = protein_assignment, 
+        values_from = Freq)[,-1]
     dftoHeatmap[is.na(dftoHeatmap)] <- 0
     dftoHeatmap[dftoHeatmap > 0] <- 1
     hclust_res <- stats::hclust(stats::dist(t(dftoHeatmap)),
@@ -123,7 +125,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     ############## generate kinase-specific signalomes (extended signalome)
     signalomes_of_KOI <- .getSignalomes(predMatrix, exprsMat,
         KOI, resKinaseNetwork, signalomeSubstrates, modules,
-        kinaseGroup)
+        kinaseGroup, verbose = verbose)
     signalome_res <- list(Signalomes = signalomes_of_KOI,
                         proteinModules = modules,
                         kinaseSubstrates = signalomeSubstrates)
@@ -159,11 +161,12 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 
 }
 
-.phosphositeClusters <- function(KSR) {
+.phosphositeClusters <- function(KSR, verbose = TRUE) {
     substrate_cor <- stats::cor(t(KSR$combinedScoreMatrix))
     substrate_hclust <- stats::hclust(stats::dist(KSR$combinedScoreMatrix),
         method = "ward.D")
-    cat("calculating optimal number of clusters...")
+    if (verbose)
+        message("calculating optimal number of clusters...")
     res <- lapply(seq(2,10,1), function(x) {
         substrate_clusters <- stats::cutree(substrate_hclust, k = x)
         cor.res <- lapply(seq_len(x), function(y) {
@@ -175,7 +178,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
         cor.res <- lapply(cor.res, function(x) median(x))
         cor.res <- unlist(cor.res)
         cor.logic <- sum(cor.res >= 0.5) == x
-        if (cor.logic == TRUE) {
+        if (cor.logic) {
             cluster = mean(cor.res)
             names(cluster) = x
             return(cluster)
@@ -192,7 +195,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
             })
             cor.res <- unlist(lapply(cor.res, function(x) median(x)))
             cor.logic <- sum(cor.res >= 0.1) == x
-            if (cor.logic == TRUE) {
+            if (cor.logic) {
                 cluster = median(cor.res)
                 names(cluster) = x
                 return(cluster)
@@ -202,7 +205,8 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     } else {
         res <- as.numeric(names(which(unlist(res) == max(unlist(res)))[1]))
     }
-    cat(paste0("optimal number of clusters = ", res))
+    if (verbose)
+        message(paste0("optimal number of clusters = ", res))
     substrate_clusters <- stats::cutree(substrate_hclust, k = res)
     return(substrate_clusters)
 }
@@ -249,10 +253,10 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 }
 
 #' @importFrom dplyr count %>%
-#' @importFrom tidyr spread
+#' @importFrom tidyr pivot_wider
 #' @importFrom rlang .data
 .getSignalomes <- function(predMatrix, exprsMat, KOI, resKinaseNetwork,
-    signalomeSubstrates, modules, kinaseGroup) {
+    signalomeSubstrates, modules, kinaseGroup, verbose = TRUE) {
     protein = mapply("[[", strsplit(rownames(exprsMat), ";"),
         MoreArgs = list(1))
     KinaseSubstrateList <- resKinaseNetwork$kinaseNetwork
@@ -269,8 +273,9 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
         dplyr::count(.data$cluster, .data$ind)
     balloon_bycluster$ind <- as.factor(balloon_bycluster$ind)
     balloon_bycluster$cluster <- as.factor(balloon_bycluster$cluster)
-    balloon_bycluster <- tidyr::spread(balloon_bycluster, .data$ind,
-        .data$n)[, -1]
+    balloon_bycluster <- tidyr::pivot_wider(balloon_bycluster, names_from = .data$ind,
+        values_from = .data$n)[, -1]
+    
     balloon_bycluster[is.na(balloon_bycluster)] <- 0
     balloon_bycluster <- do.call(rbind, lapply(seq_len(nrow(balloon_bycluster)),
         function(x) {
@@ -284,7 +289,8 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     ############## generate kinase specific signalomes
     res = generateSignalome(kinaseAnnot, kinaseGroup, predMatrix, KOI,
                             KinaseSubstrateList, kinaseProportions,
-                            signalomeSubstrates, exprsMat, protein, modules)
+                            signalomeSubstrates, exprsMat, protein, modules, 
+                            verbose = verbose)
     return(res)
 }
 
@@ -307,7 +313,8 @@ annoKinaseSubstrateRelation = function(predMatrix) {
 
 generateSignalome = function(kinaseAnnot, kinaseGroup, predMatrix, KOI,
                             KinaseSubstrateList, kinaseProportions,
-                            signalomeSubstrates, exprsMat, protein, modules) {
+                            signalomeSubstrates, exprsMat, protein, modules,
+                            verbose = TRUE) {
     annotation <- data.frame(kinase = as.factor(kinaseAnnot$kinase),
         kinaseFamily = as.factor(kinaseGroup[kinaseAnnot$kinase]),
         score = as.numeric(kinaseAnnot$score))
@@ -330,7 +337,8 @@ generateSignalome = function(kinaseAnnot, kinaseGroup, predMatrix, KOI,
                                     annotation = annotation_dat)
             return(kinaseSignalome)
         } else {
-            print(paste0(x, " is not found"))
+            if (verbose)
+                message(paste0(x, " is not found"))
         }
     })
     names(res) <- KOI

@@ -5,7 +5,7 @@
 \title{PhosR Signalomes}
 \usage{
 Signalomes(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork=0.9,
-signalomeCutoff=0.5)
+signalomeCutoff=0.5, verbose = TRUE)
 }
 \arguments{
 \item{KSR}{kinase-substrate relationship scoring results}
@@ -23,6 +23,9 @@ the expanded signalomes}
 
 \item{signalomeCutoff}{threshold used to filter kinase-substrate
 relationships}
+
+\item{verbose}{Default to \code{TRUE} to show messages during the progress.
+All messages will be suppressed if set to \code{FALSE}}
 }
 \value{
 A list of 3 elements.

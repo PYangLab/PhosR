@@ -7,8 +7,8 @@
 tImpute(mat, m, s)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples.}
 
 \item{m}{a numeric number for controlling mean downshifting.}
 
@@ -16,7 +16,8 @@ correspond to samples.}
 sampling values.}
 }
 \value{
-An imputed matrix
+An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
+a SummarizedExperiment object will be returned.
 }
 \description{
 Tail-based imputation approach as implemented in Perseus.

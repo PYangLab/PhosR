@@ -25,7 +25,7 @@ data('KinaseMotifs')
 # Extracting first 10 sequences for demonstration purpose
 seqs = unlist(lapply(strsplit(rownames(phospho.L6.ratio), "~"),
                     function(i) {i[4]}))
-seqs = seqs[1:10]
+seqs = seqs[seq(10)]
 
 # extracting flanking sequences
 seqWin = mapply(function(x) {
@@ -34,7 +34,7 @@ seqWin = mapply(function(x) {
 }, seqs)
 
 # The first 10 for demonstration purpose
-phospho.L6.ratio = phospho.L6.ratio[1:10,]
+phospho.L6.ratio = phospho.L6.ratio[seq(10),]
 
 # minimum number of sequences used for compiling motif for each kinase.
 numMotif=5

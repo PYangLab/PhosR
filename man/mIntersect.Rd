@@ -28,19 +28,31 @@ site1 <- gsub('~[STY]', '~',
 site2 <- rownames(phospho.liver.Ins.TC.ratio.RUV)
 
 # step 2: rank by fold changes
-tmp <- do.call(cbind, lapply(split(1:ncol(phospho.L6.ratio), gsub('_exp\\\\d+',
-                            '', colnames(phospho.L6.ratio))),
-                            function(i){rowMeans(phospho.L6.ratio[,i])}))
+treatment.grps = split(seq(ncol(phospho.L6.ratio)), 
+    gsub('_exp\\\\d+', '', colnames(phospho.L6.ratio)))
+tmp <- do.call(
+    cbind, 
+    lapply(treatment.grps, function(i){
+        rowMeans(phospho.L6.ratio[,i])
+    })
+)
 site1 <- t(sapply(split(data.frame(tmp), site1), colMeans))[,-1]
 
-tmp <- do.call(cbind, lapply(split(1:ncol(phospho.liver.Ins.TC.ratio.RUV),
-                            gsub(
-                                '(Intensity\\\\.)(.*)(\\\\_Bio\\\\d+)',
-                                '\\\\2',
-                                colnames(phospho.liver.Ins.TC.ratio.RUV))),
-                            function(i){
-                                rowMeans(phospho.liver.Ins.TC.ratio.RUV[,i])
-                            }))
+treatment.grps = split(
+    seq(ncol(phospho.liver.Ins.TC.ratio.RUV)),
+    gsub('(Intensity\\\\.)(.*)(\\\\_Bio\\\\d+)', '\\\\2', 
+        colnames(phospho.liver.Ins.TC.ratio.RUV)
+    )
+)
+tmp <- do.call(
+    cbind, 
+    lapply(
+        treatment.grps,
+        function(i){
+            rowMeans(phospho.liver.Ins.TC.ratio.RUV[,i])
+        }
+    )
+)
 site2 <- t(sapply(split(data.frame(tmp), site2), colMeans))
 
 o <- mIntersect(site1, site2)

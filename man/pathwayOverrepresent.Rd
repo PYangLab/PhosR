@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathwayAnalysis.R
 \name{pathwayOverrepresent}
 \alias{pathwayOverrepresent}
-\title{Gene set over-representation analysis}
+\title{Gene/phosphosite set over-representation analysis}
 \usage{
 pathwayOverrepresent(geneSet, annotation, universe, alter = "greater")
 }
@@ -23,7 +23,7 @@ profiled dataset.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes gene set over-representation analysis
+This function performes gene (or phosphosite) set over-representation analysis
 using Fisher's exact test.
 }
 \examples{
@@ -96,7 +96,7 @@ colnames(Tc) <- c('Ins', 'AICAR', 'AICAR+Ins')
 Tc.gene <- phosCollapse(Tc, id=gsub(';.+', '', rownames(Tc)),
     stat=apply(abs(Tc), 1, max), by = 'max')
 geneSet <- names(sort(Tc.gene[,1],
-                    decreasing = TRUE))[1:round(nrow(Tc.gene) * 0.1)]
+                    decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 #lapply(PhosphoSite.rat, function(x){gsub(';[STY]', ';', x)})
 
 # 1D gene-centric pathway analysis

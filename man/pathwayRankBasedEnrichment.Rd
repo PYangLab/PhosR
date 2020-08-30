@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathwayAnalysis.R
 \name{pathwayRankBasedEnrichment}
 \alias{pathwayRankBasedEnrichment}
-\title{Gene set enrichment analysis}
+\title{Gene/phosphosite set enrichment analysis}
 \usage{
 pathwayRankBasedEnrichment(geneStats, annotation, alter = "greater")
 }
@@ -20,7 +20,7 @@ gene IDs.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes gene set enrichment analysis using Wilcoxon Rank Sum
+This function performes gene (or phosphosite) set enrichment analysis using Wilcoxon Rank Sum
 test.
 }
 \examples{

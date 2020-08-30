@@ -35,8 +35,9 @@ phospho.cells.Ins.impute <-
             grps)[,colnames(phospho.cells.Ins.filtered)]
 
 set.seed(123)
-phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute[,6:10],
-    phospho.cells.Ins.impute[,1:5], percent1 = 0.6,
+phospho.cells.Ins.impute[,seq(5)] <- ptImpute(
+    phospho.cells.Ins.impute[,seq(6,10)],
+    phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6,
     percent2 = 0, paired = FALSE)
 
 phospho.cells.Ins.ms <-

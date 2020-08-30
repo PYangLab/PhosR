@@ -4,7 +4,16 @@
 \alias{ptImpute}
 \title{Paired-tail (pt) based impute}
 \usage{
-ptImpute(mat1, mat2, percent1, percent2, m, s, paired)
+ptImpute(
+    mat1, 
+    mat2, 
+    percent1, 
+    percent2, 
+    m = 1.6, 
+    s = 0.6, 
+    paired = TRUE, 
+    verbose = TRUE
+)
 }
 \arguments{
 \item{mat1}{a matrix with rows correspond to phosphosites and columns
@@ -26,6 +35,9 @@ downshifted sampling values.}
 
 \item{paired}{a flag indicating whether to impute for both treatment1 and
 treatment2 (default) or treatment2 only (if paired=FALSE).}
+
+\item{verbose}{Default to \code{TRUE} to show messages during the progress.
+All messages will be suppressed if set to \code{FALSE}}
 }
 \value{
 An imputed matrix
@@ -52,7 +64,9 @@ phospho.cells.Ins.impute <-
     grps)[,colnames(phospho.cells.Ins.filtered)]
 
 set.seed(123)
-phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute[,6:10],
-phospho.cells.Ins.impute[,1:5], percent1 = 0.6, percent2 = 0, paired = FALSE)
+phospho.cells.Ins.impute[,seq(5)] <- 
+    ptImpute(phospho.cells.Ins.impute[,seq(6,10)],
+phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6, percent2 = 0, 
+    paired = FALSE)
 
 }

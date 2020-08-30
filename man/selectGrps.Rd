@@ -7,10 +7,11 @@
 selectGrps(mat, grps, percent, n)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples in replicates for different treatments.}
+\item{mat}{a matrix (SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples in replicates for different 
+treatments.}
 
-\item{grps}{a string specifying the grouping (replciates).}
+\item{grps}{a string specifying the grouping (replicates).}
 
 \item{percent}{a percent from 0 to 1, specifying the percentage of quantified
 values in any treatment group.}
@@ -20,7 +21,8 @@ filtering for a phosphosite to be included.}
 }
 \value{
 a filtered matrix with at least 'percent' quantification
-in one or more conditions
+in one or more conditions. If an input \code{mat} is a SummarizedExperiment 
+object, filtered SummarizedExperiment object will be returned.
 }
 \description{
 Select phosphosites that have been quantified in a given

@@ -46,8 +46,10 @@
 #'     grps)[,colnames(phospho.cells.Ins.filtered)]
 #'
 #' set.seed(123)
-#' phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute[,6:10],
-#' phospho.cells.Ins.impute[,1:5], percent1 = 0.6, percent2 = 0, paired = FALSE)
+#' phospho.cells.Ins.impute[,seq_len(5)] <- ptImpute(
+#'     phospho.cells.Ins.impute[,seq(6,10)],
+#'     phospho.cells.Ins.impute[,seq(5)], 
+#'     percent1 = 0.6, percent2 = 0, paired = FALSE)
 #'
 #' phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute,
 #'                                     scale = FALSE)
@@ -105,19 +107,19 @@
 #'
 #' @export
 #'
-plotQC <- function(mat, cols = NA, labels = NULL, panel = 0, ...) {
+plotQC <- function(mat, cols = NA, labels = NULL, panel = c("quantify", "dendrogram", "abundance", "pca", "all"), ...) {
     if (missing(mat))
         stop("Paramter mat is missing!")
-    if (panel == 1) {
+    if (panel == "quantify") {
         quantPlot(mat, cols, ...)
-    } else if (panel == 2) {
+    } else if (panel == "dendrogram") {
         dendPlot(mat, cols, ...)
-    } else if (panel == 3) {
+    } else if (panel == "abundance") {
         abundPlot(mat, cols, ...)
-    } else if (panel == 4) {
+    } else if (panel == "pca") {
         pcaPlot(mat, cols, labels, ...)
     }
-    if (panel == 0) {
+    if (panel == "all") {
         graphics::par(mfrow = c(2, 2))
         quantPlot(mat, cols, ...)
         dendPlot(mat, cols, ...)
@@ -129,19 +131,19 @@ plotQC <- function(mat, cols = NA, labels = NULL, panel = 0, ...) {
 quantPlot = function(mat, cols, ...) {
     graphics::barplot((1 - colSums(is.na(mat))/nrow(mat)) *
             100, las = 2, col = cols, ylab = "Quantification (%)",
-        main = "Quantification per sample", ylim = c(0, 100))
+        main = "Quantification per sample", ylim = c(0, 100), ...)
 }
 
 dendPlot = function(mat, cols, ...) {
     dend <- stats::as.dendrogram(stats::hclust(stats::dist(t(mat))))
     dendextend::labels_colors(dend) <- cols[stats::order.dendrogram(dend)]
     graphics::plot(dend, main = "Sample hierarchical clustering",
-        ylab = "Tree height")
+        ylab = "Tree height", ...)
 }
 
 abundPlot = function(mat, cols, ...) {
     graphics::boxplot(mat, las = 2, col = cols,
-        ylab = "Expression/Abundance level")
+        ylab = "Expression/Abundance level", ...)
 }
 
 pcaPlot = function(mat, cols, labels, ...) {

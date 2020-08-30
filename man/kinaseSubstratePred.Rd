@@ -10,7 +10,8 @@ kinaseSubstratePred(
     top = 50,
     cs = 0.8,
     inclusion = 20,
-    iter = 5
+    iter = 5,
+    verbose = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ kinaseSubstratePred(
 selected.}
 
 \item{iter}{A number of iterations for adaSampling.}
+
+\item{verbose}{Default to \code{TRUE} to show messages during the progress.
+All messages will be suppressed if set to \code{FALSE}}
 }
 \value{
 Kinase prediction matrix
