@@ -163,10 +163,10 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #'     verbose = TRUE
 #' )
 #'
-#' @param mat1 a matrix with rows correspond to phosphosites and columns
-#' correspond to replicates within treatment1.
-#' @param mat2 a matrix with rows correspond to phosphosites and columns
-#' correspond to replicates within treatment2.
+#' @param mat1 a matrix (or SummarizedExperiment object) with rows correspond to
+#'  phosphosites and columns correspond to replicates within treatment1.
+#' @param mat2 a matrix (or SummarizedExperiment object) with rows correspond to
+#'  phosphosites and columns correspond to replicates within treatment2.
 #' @param percent1 a percent indicating minimum quantified percentages required
 #' for considering for imputation.
 #' @param percent2 a percent indicating minimum quantified percentages required
@@ -196,10 +196,23 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #'     grps)[,colnames(phospho.cells.Ins.filtered)]
 #'
 #' set.seed(123)
-#' phospho.cells.Ins.impute[,seq(5)] <- 
-#'     ptImpute(phospho.cells.Ins.impute[,seq(6,10)],
-#' phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6, percent2 = 0, 
+#' phospho.cells.Ins.impute[,seq(6)] <- 
+#'     ptImpute(phospho.cells.Ins.impute[,seq(7,12)],
+#' phospho.cells.Ins.impute[,seq(6)], percent1 = 0.6, percent2 = 0, 
 #'     paired = FALSE)
+#' 
+#' 
+#' # For SummarizedExperiment objects
+#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' #     assay = phospho.cells.Ins.impute,
+#' #     colData = S4Vectors::DataFrame(
+#' #         groups = grps
+#' #     )
+#' # )
+#' # SummarizedExperiment::assay(mat)[,seq(6)] <- 
+#' #     ptImpute(SummarizedExperiment::assay(mat)[,seq(7,12)],
+#' #         SummarizedExperiment::assay(mat)[,seq(6)], percent1 = 0.6, 
+#' #         percent2 = 0, paired = FALSE)
 #' 
 #' @importFrom SummarizedExperiment SummarizedExperiment assay rowData colData
 #' @importFrom methods is
@@ -218,7 +231,8 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
         stop("Paramter percent2 is missing!")
     
     se = FALSE
-    if (methods::is(mat1, "SummarizedExperiment") && methods::is(mat2, "SummarizedExperiment")) {
+    if (methods::is(mat1, "SummarizedExperiment") && 
+            methods::is(mat2, "SummarizedExperiment")) {
         mat1.orig = mat1
         mat2.orig = mat2
         se = TRUE

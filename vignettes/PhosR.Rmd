@@ -202,14 +202,14 @@ missing values in the first condition.
 ```{r}
 set.seed(123)
 phospho.cells.Ins.impute <- phospho.cells.Ins.impute1
-phospho.cells.Ins.impute[,seq(5)] <- ptImpute(
-    phospho.cells.Ins.impute1[,seq(6,10)], 
-    phospho.cells.Ins.impute1[,seq(1,5)], 
+phospho.cells.Ins.impute[,seq(6)] <- ptImpute(
+    phospho.cells.Ins.impute1[,seq(7,12)], 
+    phospho.cells.Ins.impute1[,seq(6)], 
     percent1 = 0.6, percent2 = 0, 
     paired = FALSE)
-phospho.cells.Ins.impute[,seq(11,15)] <- ptImpute(
-    phospho.cells.Ins.impute1[,seq(16,20)], 
-    phospho.cells.Ins.impute1[,seq(11,15)], 
+phospho.cells.Ins.impute[,seq(13,18)] <- ptImpute(
+    phospho.cells.Ins.impute1[,seq(19,24)], 
+    phospho.cells.Ins.impute1[,seq(13,18)], 
     percent1 = 0.6, percent2 = 0, 
     paired = FALSE)
 ```

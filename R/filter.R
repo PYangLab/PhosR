@@ -26,7 +26,16 @@
 #' grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
 #'
 #' phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
-#'
+#' 
+#' # For SummarizedExperiment objects
+#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' #     assay = phospho.cells.Ins,
+#' #     colData = S4Vectors::DataFrame(
+#' #         groups = grps
+#' #     )
+#' # )
+#' # phospho.cells.Ins.filtered = selectGrps(mat, mat$groups, 0.5, n=1)
+#' 
 #' @importFrom SummarizedExperiment assay
 #' @importFrom methods is
 #'
@@ -113,7 +122,17 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #' phospho.liver.Ins.TC.sim = selectTimes(phospho.liver.Ins.TC.sim,
 #'                                     timepoint, timepointOrder, 0.5,
 #'                                     w = length(table(timepoint)))
-#'
+#' 
+#' # For SummarizedExperiment objects
+#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' #     assay = phospho.liver.Ins.TC.sim,
+#' #     colData = S4Vectors::DataFrame(
+#' #         timepoint = timepoint
+#' #     )
+#' # )
+#' # phospho.liver.Ins.TC.sim = selectTimes(mat, mat$timepoint, timepointOrder, 
+#' #       0.5, w = length(table(mat$timepoint)))
+#' 
 #' # Before filtering
 #' dim(phospho.liver.Ins.TC.ratio.RUV)
 #' # After filtering
@@ -185,8 +204,9 @@ Please try a smaller w.")
 #'
 #' @usage selectOverallPercent(mat, percent=NULL, n=NULL)
 #'
-#' @param mat a matrix with rows correspond to phosphosites and columns
-#' correspond to samples in replicates for different treatments.
+#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' phosphosites and columns correspond to samples in replicates for different 
+#' treatments.
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
 #' values in across all samples for retaining a phosphosite for subsequent
 #' analysis.

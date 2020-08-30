@@ -35,6 +35,15 @@ grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
 
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
 
+# For SummarizedExperiment objects
+# mat = SummarizedExperiment::SummarizedExperiment(
+#     assay = phospho.cells.Ins,
+#     colData = S4Vectors::DataFrame(
+#         groups = grps
+#     )
+# )
+# phospho.cells.Ins.filtered = selectGrps(mat, mat$groups, 0.5, n=1)
+
 }
 \author{
 Pengyi Yang, Taiyun Kim

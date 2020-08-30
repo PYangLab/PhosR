@@ -7,8 +7,9 @@
 selectOverallPercent(mat, percent=NULL, n=NULL)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples in replicates for different treatments.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples in replicates for different 
+treatments.}
 
 \item{percent}{a percent from 0 to 1, specifying the percentage of quantified
 values in across all samples for retaining a phosphosite for subsequent

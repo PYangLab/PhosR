@@ -16,11 +16,11 @@ ptImpute(
 )
 }
 \arguments{
-\item{mat1}{a matrix with rows correspond to phosphosites and columns
-correspond to replicates within treatment1.}
+\item{mat1}{a matrix (or SummarizedExperiment object) with rows correspond to
+phosphosites and columns correspond to replicates within treatment1.}
 
-\item{mat2}{a matrix with rows correspond to phosphosites and columns
-correspond to replicates within treatment2.}
+\item{mat2}{a matrix (or SummarizedExperiment object) with rows correspond to
+phosphosites and columns correspond to replicates within treatment2.}
 
 \item{percent1}{a percent indicating minimum quantified percentages required
 for considering for imputation.}
@@ -64,9 +64,22 @@ phospho.cells.Ins.impute <-
     grps)[,colnames(phospho.cells.Ins.filtered)]
 
 set.seed(123)
-phospho.cells.Ins.impute[,seq(5)] <- 
-    ptImpute(phospho.cells.Ins.impute[,seq(6,10)],
-phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6, percent2 = 0, 
+phospho.cells.Ins.impute[,seq(6)] <- 
+    ptImpute(phospho.cells.Ins.impute[,seq(7,12)],
+phospho.cells.Ins.impute[,seq(6)], percent1 = 0.6, percent2 = 0, 
     paired = FALSE)
+
+
+# For SummarizedExperiment objects
+# mat = SummarizedExperiment::SummarizedExperiment(
+#     assay = phospho.cells.Ins.impute,
+#     colData = S4Vectors::DataFrame(
+#         groups = grps
+#     )
+# )
+# SummarizedExperiment::assay(mat)[,seq(6)] <- 
+#     ptImpute(SummarizedExperiment::assay(mat)[,seq(7,12)],
+#         SummarizedExperiment::assay(mat)[,seq(6)], percent1 = 0.6, 
+#         percent2 = 0, paired = FALSE)
 
 }

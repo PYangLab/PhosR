@@ -49,6 +49,16 @@ phospho.liver.Ins.TC.sim = selectTimes(phospho.liver.Ins.TC.sim,
                                     timepoint, timepointOrder, 0.5,
                                     w = length(table(timepoint)))
 
+# For SummarizedExperiment objects
+# mat = SummarizedExperiment::SummarizedExperiment(
+#     assay = phospho.liver.Ins.TC.sim,
+#     colData = S4Vectors::DataFrame(
+#         timepoint = timepoint
+#     )
+# )
+# phospho.liver.Ins.TC.sim = selectTimes(mat, mat$timepoint, timepointOrder, 
+#       0.5, w = length(table(mat$timepoint)))
+
 # Before filtering
 dim(phospho.liver.Ins.TC.ratio.RUV)
 # After filtering
