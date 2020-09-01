@@ -234,8 +234,8 @@ set `panel = 1` to visualise barplots of samples.
 cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 par(mfrow=c(1,2))
 plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
-        panel = 1, cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = 1, 
+        panel = "quantify", cols = cols)
+plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "quantify", 
         cols = cols)
 ```
 
@@ -247,8 +247,8 @@ from the same conditions cluster together.
 ```{r}
 par(mfrow=c(1,2))
 plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
-        panel = 2, cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = 2, 
+        panel = "dendrogram", cols = cols)
+plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "dendrogram", 
         cols = cols)
 ```
 
@@ -360,8 +360,7 @@ cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 par(mfrow=c(1,1))
-plotQC(phospho.L6.ratio, panel = 2, cols=colorCodes, 
-        main = "Before batch correction")
+plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
 ```
 
 We can also visualise the samples in PCA space by setting `panel = 4`. The PCA 
@@ -374,7 +373,7 @@ and those from batches 3 and 4.
 ```{r}
 par(mfrow=c(1,1))
 plotQC(phospho.L6.ratio, cols=colorCodes, labels = colnames(phospho.L6.ratio), 
-        panel = 4, ylim=c(-20, 20), xlim=c(-30, 30), 
+        panel = "pca", ylim=c(-20, 20), xlim=c(-30, 30), 
         main = "Before batch correction")
 ```
 
@@ -416,18 +415,18 @@ in `PhosR` facilitates effective batch correction.
 ```{r}
 # plot after batch correction
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = 2, cols=colorCodes)
+plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
 plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel=2, ylim=c(-20, 20), 
+        labels = colnames(phospho.L6.ratio), panel="dendrogram", ylim=c(-20, 20), 
         xlim=c(-30, 30))
 ```
 
 ```{r}
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = 4, cols=colorCodes, 
+plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes, 
         labels = colnames(phospho.L6.ratio), main="Before Batch correction")
 plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel=4, ylim=c(-20, 20), 
+        labels = colnames(phospho.L6.ratio), panel="pca", ylim=c(-20, 20), 
         xlim=c(-30, 30), main="After Batch correction")
 ```
 
