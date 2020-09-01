@@ -36,21 +36,27 @@ createFrequencyMat <- function(substrates.seq) {
         sep = "")
 
     # calculate frequency
-    for (i in seq_len(ncol(frequency.mat))) {
-        # aa <- sapply(substrates.seq.split,
-        # function(x)x[i])
+    frequency.list = lapply(seq(ncol(frequency.mat)), function(i) {
         aa = mapply(function(x, i) x[i],
             substrates.seq.split, MoreArgs = list(i = i))
-
+        tmp_col = frequency.mat[,i]
         for (j in seq_len(length(aa))) {
             if (aa[j] == "_") {
                 next
             }
-            frequency.mat[aa[j], i] <- frequency.mat[aa[j],
-                i] + 1
+            tmp_col[aa[j]] <- tmp_col[aa[j]] + 1
         }
-    }
-
+        tmp_col
+    })
+    frequency.mat = matrix(unlist(frequency.list), ncol = ncol(frequency.mat))
+    colnames(frequency.mat) = paste("p",
+        seq_len(length(substrates.seq.split[[1]])),
+        sep = "")
+    rownames(frequency.mat) <- c("A", "R",
+        "N", "D", "C", "E", "Q", "G", "H",
+        "I", "L", "K", "M", "F", "P", "S",
+        "T", "W", "Y", "V")
+    
     frequency.mat <- frequency.mat/length(substrates.seq)
     return(frequency.mat)
 }
@@ -108,23 +114,18 @@ frequencyScoring <- function(sequence.list, frequency.mat) {
 
     frequency.score <- c()
 
-    for (idx in seq_len(length(sequence.list))) {
+    frequency.score = lapply(seq(length(sequence.list)), function(idx) {
         if (sequence.list[idx] == "") {
             sequence.list[idx] = "_"
         }
-        # seqs <-
-        # unlist(sapply(sequence.list[idx],
-        # strsplit, ''))
         seqs = unlist(mapply(strsplit, sequence.list[idx],
             MoreArgs = list(split = "")))
         score <- 0
-
         if (is.na(sequence.list[idx])) {
             frequency.score <- c(frequency.score,
                 score)
-            next
+            return()
         }
-
         for (i in seq_len(length(seqs))) {
             aa <- c("A", "R", "N", "D", "C",
                 "E", "Q", "G", "H", "I",
@@ -136,11 +137,12 @@ frequencyScoring <- function(sequence.list, frequency.mat) {
             score <- frequency.mat[seqs[i],
                 i] + score
         }
-
         frequency.score <- c(frequency.score,
             score)
-    }
-
+        frequency.score
+    })
+    frequency.score = unlist(frequency.score)
+    
     if (!is.null(names(sequence.list))) {
         names(frequency.score) <- names(sequence.list)
     }

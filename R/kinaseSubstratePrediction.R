@@ -517,13 +517,15 @@ kinaseSubstratePred <- function(phosScoringMatrices,
         ncol = length(substrate.list))
     colnames(predMatrix) <- names(substrate.list)
     rownames(predMatrix) <- rownames(featureMat)
-    for (i in seq_len(length(substrate.list))) {
+    
+    tmp.list = lapply(seq(length(substrate.list)), function(i) {
         positive.train <- featureMat[substrate.list[[i]],]
         positive.cls <- rep(1, length(substrate.list[[i]]))
         negative.pool <- featureMat[!(rownames(featureMat) %in%
-            substrate.list[[i]]), ]
+                substrate.list[[i]]), ]
         if (verbose)
             message(paste(i, ".", sep = ""))
+        tmp_col = predMatrix[,i]
         for (e in seq_len(ensembleSize)) {
             negativeSize <- length(substrate.list[[i]])
             idx <- sample(seq_len(nrow(negative.pool)),
@@ -537,9 +539,14 @@ kinaseSubstratePred <- function(phosScoringMatrices,
             pred <- multiAdaSampling(train.mat,
                 test.mat = featureMat, label = cls,
                 kernelType = "radial", iter = iter)
-            predMatrix[, i] <- predMatrix[names(pred[, 1]), i] + pred[, 1]
+            tmp_col <- tmp_col[names(pred[, 1])] + pred[, 1]
         }
-    }
+        tmp_col
+    })
+    predMatrix = matrix(unlist(tmp.list), ncol = ncol(predMatrix))
+    colnames(predMatrix) = names(substrate.list)
+    rownames(predMatrix) = rownames(featureMat)
+    
     predMatrix <- predMatrix/ensembleSize
     if (verbose)
         message("done")
@@ -567,6 +574,7 @@ substrateList = function(phosScoringMatrices, top, cs, inclusion) {
 
 #' @import stats
 #' @import e1071
+#' @importFrom utils tail
 multiAdaSampling <- function(train.mat, test.mat,
     label, kernelType, iter = 5) {
 
@@ -587,7 +595,7 @@ multiAdaSampling <- function(train.mat, test.mat,
 
         X <- c()
         Y <- c()
-        for (j in seq_len(ncol(prob.mat))) {
+        tmp = lapply(seq(ncol(prob.mat)), function(j) {
             voteClass <- prob.mat[label == colnames(prob.mat)[j], ]
             idx <- c()
             idx <- sample(seq_len(nrow(voteClass)),
@@ -595,7 +603,12 @@ multiAdaSampling <- function(train.mat, test.mat,
                 prob = voteClass[, j])
             X <- rbind(X, train.mat[rownames(voteClass)[idx],])
             Y <- c(Y, label[rownames(voteClass)[idx]])
-        }
+            cbind(X,Y)
+        })
+        tmp = do.call(rbind, tmp)
+        Y = tmp[,tail(seq(ncol(tmp)), 1)]
+        X = tmp[,-tail(seq(ncol(tmp)),1)]
+        
     }
 
     pred <- attr(predict(model, newdata = test.mat,
