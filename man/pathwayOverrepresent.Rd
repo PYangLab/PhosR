@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathwayAnalysis.R
 \name{pathwayOverrepresent}
 \alias{pathwayOverrepresent}
-\title{Gene/phosphosite set over-representation analysis}
+\title{phosphosite/Gene set over-representation analysis}
 \usage{
 pathwayOverrepresent(geneSet, annotation, universe, alter = "greater")
 }
@@ -23,7 +23,7 @@ profiled dataset.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes gene (or phosphosite) set over-representation analysis
+This function performes phosphosite (or gene) set over-representation analysis
 using Fisher's exact test.
 }
 \examples{

@@ -21,7 +21,7 @@ createFrequencyMat <- function(substrates.seq) {
     # substrates.seq.split <-
     # sapply(substrates.seq, strsplit, '')
 
-    Map(function(substrates.seq) {
+    substrates.seq.split = Map(function(substrates.seq) {
         unlist(strsplit(substrates.seq, split = ""))
     }, substrates.seq)
     
