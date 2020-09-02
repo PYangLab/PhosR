@@ -36,3 +36,77 @@ input matrix.
 matrix.
 `panel = "pca"` is used to show PCA plot
 }
+\examples{
+# Imputation
+data('phospho.cells.Ins.sample')
+grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
+phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
+
+set.seed(123)
+phospho.cells.Ins.impute <-
+    scImpute(
+        phospho.cells.Ins.filtered,
+        0.5,
+        grps)[,colnames(phospho.cells.Ins.filtered)]
+
+set.seed(123)
+phospho.cells.Ins.impute[,seq_len(5)] <- ptImpute(
+    phospho.cells.Ins.impute[,seq(6,10)],
+    phospho.cells.Ins.impute[,seq(5)], 
+    percent1 = 0.6, percent2 = 0, paired = FALSE)
+
+phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute,
+                                    scale = FALSE)
+
+cols <- rep(c('#ED4024', '#7FBF42', '#3F61AD', '#9B822F'), each=6)
+par(mfrow=c(1,2))
+plotQC(phospho.cells.Ins.filtered,
+        labels=colnames(phospho.cells.Ins.filtered),
+        panel = "quantify", cols = cols)
+plotQC(phospho.cells.Ins.ms,
+        labels=colnames(phospho.cells.Ins.ms),
+        panel = "quantify", cols = cols)
+
+# Batch correction
+data('phospho_L6_ratio')
+data('SPSs')
+
+grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+
+# Cleaning phosphosite label
+phospho.site.names = rownames(phospho.L6.ratio)
+L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+                                function(x){paste(toupper(x[2]), x[3], '',
+                                                sep=';')}))
+phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
+                            colMeans))
+phospho.site.names = split(phospho.site.names, L6.sites)
+
+# Construct a design matrix by condition
+design = model.matrix(~ grps - 1)
+
+# phosphoproteomics data normalisation using RUV
+ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
+phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
+                                ctl = ctl)
+
+cs = rainbow(length(unique(grps)))
+colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
+
+# plot after batch correction
+par(mfrow=c(1,2))
+plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
+plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+        labels = colnames(phospho.L6.ratio),
+        panel="dendrogram", ylim=c(-20, 20), xlim=c(-30, 30))
+
+par(mfrow=c(1,2))
+plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,
+        labels = colnames(phospho.L6.ratio),
+        main='Before Batch correction')
+plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+        labels = colnames(phospho.L6.ratio),
+        panel="pca", ylim=c(-20, 20), xlim=c(-30, 30),
+        main='After Batch correction')
+
+}

@@ -16,8 +16,8 @@ values in any treatment group.}
 \item{grps}{a string specifying the grouping (replciates).}
 }
 \value{
-An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
-a SummarizedExperiment object will be returned.
+An imputed matrix. If param \code{mat} is a SummarizedExperiment 
+object, a SummarizedExperiment object will be returned.
 }
 \description{
 Impute the missing values for a phosphosite across replicates within a single

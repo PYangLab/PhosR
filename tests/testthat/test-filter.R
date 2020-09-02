@@ -164,7 +164,7 @@ test_that(
     percent = 0.5
     
     # w > length(order)
-    expect_error(selectTimes(mat, timepoint, order, percent, w = 1:15))
+    expect_error(selectTimes(mat, timepoint, order, percent, w = 15))
     # incorrect percent
     expect_error(selectTimes(mat, timepoint, order, percent = -1))
     expect_error(selectTimes(mat, timepoint, order, percent = 5))

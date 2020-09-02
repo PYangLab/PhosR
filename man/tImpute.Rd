@@ -16,8 +16,8 @@ phosphosites and columns correspond to samples.}
 sampling values.}
 }
 \value{
-An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
-a SummarizedExperiment object will be returned.
+An imputed matrix. If param \code{mat} is a SummarizedExperiment 
+object, a SummarizedExperiment object will be returned.
 }
 \description{
 Tail-based imputation approach as implemented in Perseus.

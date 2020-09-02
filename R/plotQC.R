@@ -32,7 +32,6 @@
 #' @importFrom graphics barplot plot boxplot par title
 #'
 #' @examples
-#'
 #' # Imputation
 #' data('phospho.cells.Ins.sample')
 #' grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
@@ -41,9 +40,9 @@
 #' set.seed(123)
 #' phospho.cells.Ins.impute <-
 #'     scImpute(
-#'     phospho.cells.Ins.filtered,
-#'     0.5,
-#'     grps)[,colnames(phospho.cells.Ins.filtered)]
+#'         phospho.cells.Ins.filtered,
+#'         0.5,
+#'         grps)[,colnames(phospho.cells.Ins.filtered)]
 #'
 #' set.seed(123)
 #' phospho.cells.Ins.impute[,seq_len(5)] <- ptImpute(
@@ -94,7 +93,7 @@
 #' plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
 #' plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
 #'         labels = colnames(phospho.L6.ratio),
-#'         panel="dendrogram, ylim=c(-20, 20), xlim=c(-30, 30))
+#'         panel="dendrogram", ylim=c(-20, 20), xlim=c(-30, 30))
 #'
 #' par(mfrow=c(1,2))
 #' plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,

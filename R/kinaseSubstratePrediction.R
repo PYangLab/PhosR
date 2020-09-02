@@ -4,7 +4,16 @@
 #'
 #' @description This function generates substrate scores for kinases that pass
 #' filtering based on both motifs and dynamic profiles
-#'
+#' 
+#' @usage 
+#' kinaseSubstrateScore(
+#'     substrate.list,
+#'     mat,
+#'     seqs,
+#'     numMotif = 5, 
+#'     numSub = 1, 
+#'     verbose = TRUE
+#' )
 #'
 #' @param substrate.list a list of kinases with each element containing an array
 #'  of substrates.

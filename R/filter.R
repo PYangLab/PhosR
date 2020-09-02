@@ -89,8 +89,9 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #'
 #' @usage selectTimes(mat, timepoint, order, percent, w)
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to phosphosites and columns
-#' correspond to samples in replicates for different treatments.
+#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' phosphosites and columns correspond to samples in replicates for different 
+#' treatments.
 #' @param timepoint a timepoint as factor with a length equal to the
 #' number of columns of mat.
 #' @param order a vector specifying the order of timepoints.
@@ -98,8 +99,8 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #' with missing value larger than percent per timepoint.
 #' @param w a timepoint window for selection of phosphosites to remove.
 #'
-#' @return a filtered matrix. If param \code{mat} is a SummarizedExperiment object, a
-#' SummarizedExperiment object will be returned.
+#' @return a filtered matrix. If param \code{mat} is a SummarizedExperiment 
+#' object, a SummarizedExperiment object will be returned.
 #'
 #' @examples
 #' data("phospho_liverInsTC_RUV_sample")
@@ -263,7 +264,7 @@ given phosphosite to be retained.")
         mat.filtered = SummarizedExperiment::SummarizedExperiment(
             mat.filtered,
             colData = SummarizedExperiment::colData(mat.orig),
-            rowData = SummarizedExperiment::rowData(mat.orig)[sel,, drop = FALSE]
+            rowData = SummarizedExperiment::rowData(mat.orig)[sel,,drop = FALSE]
         )
     }
     

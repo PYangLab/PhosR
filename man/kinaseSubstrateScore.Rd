@@ -5,12 +5,12 @@
 \title{Kinase substrate scoring}
 \usage{
 kinaseSubstrateScore(
-  substrate.list,
-  mat,
-  seqs,
-  numMotif = 5,
-  numSub = 1,
-  verbose = TRUE
+    substrate.list,
+    mat,
+    seqs,
+    numMotif = 5, 
+    numSub = 1, 
+    verbose = TRUE
 )
 }
 \arguments{

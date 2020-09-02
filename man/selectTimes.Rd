@@ -7,8 +7,9 @@
 selectTimes(mat, timepoint, order, percent, w)
 }
 \arguments{
-\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to phosphosites and columns
-correspond to samples in replicates for different treatments.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples in replicates for different 
+treatments.}
 
 \item{timepoint}{a timepoint as factor with a length equal to the
 number of columns of mat.}
@@ -21,8 +22,8 @@ with missing value larger than percent per timepoint.}
 \item{w}{a timepoint window for selection of phosphosites to remove.}
 }
 \value{
-a filtered matrix. If param \code{mat} is a SummarizedExperiment object, a
-SummarizedExperiment object will be returned.
+a filtered matrix. If param \code{mat} is a SummarizedExperiment 
+object, a SummarizedExperiment object will be returned.
 }
 \description{
 selectTimes

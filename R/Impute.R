@@ -13,8 +13,8 @@
 #' values in any treatment group.
 #' @param grps a string specifying the grouping (replciates).
 #'
-#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
-#' a SummarizedExperiment object will be returned.
+#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment 
+#' object, a SummarizedExperiment object will be returned.
 #'
 #' @examples
 #'
@@ -96,8 +96,8 @@ stImp <- function(mat, percent) {
 #' @param s a numeric number for controlling standard deviation of downshifted
 #' sampling values.
 #'
-#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment object,
-#' a SummarizedExperiment object will be returned.
+#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment 
+#' object, a SummarizedExperiment object will be returned.
 #'
 #' @examples
 #'
