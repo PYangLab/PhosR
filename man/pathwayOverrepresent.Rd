@@ -29,8 +29,11 @@ using Fisher's exact test.
 \examples{
 
 library(limma)
+library(org.Rn.eg.db)
+library(reactome.db)
+library(annotate)
 
-data('phospho_L6_ratio')
+
 data('SPSs')
 
 grps = gsub('_.+', '', colnames(phospho.L6.ratio))
@@ -99,8 +102,25 @@ geneSet <- names(sort(Tc.gene[,1],
                     decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 #lapply(PhosphoSite.rat, function(x){gsub(';[STY]', ';', x)})
 
+
+# Preparing Reactome annotation for our pathways analysis
+pathways = as.list(reactomePATHID2EXTID)
+
+path_names = as.list(reactomePATHID2NAME)
+name_id = match(names(pathways), names(path_names))
+names(pathways) = unlist(path_names)[name_id]
+
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+    ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+    toupper(unique(gene_name))
+})
+
+
 # 1D gene-centric pathway analysis
-path1 <- pathwayOverrepresent(geneSet, annotation=Pathways.reactome,
+path1 <- pathwayOverrepresent(geneSet, annotation=pathways,
     universe = rownames(Tc.gene), alter = 'greater')
 
 }

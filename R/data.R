@@ -183,23 +183,3 @@
 #' @name SPSs
 #' @docType data
 "SPSs"
-
-#' @title KEGG pathway annotations
-#'
-#' @description The data object contains the annotations of KEGG pathways.
-#'
-#' @usage data(Pathways)
-#'
-#' @name Pathways.KEGG
-#' @docType data
-"Pathways.KEGG"
-
-#' @title Reactome pathway annotations
-#'
-#' @description The data object contains the annotations of Reactome pathways.
-#'
-#' @usage data(Pathways)
-#'
-#' @name Pathways.reactome
-#' @docType data
-"Pathways.reactome"

@@ -534,11 +534,32 @@ Tc.gene <- phosCollapse(Tc, id=gsub(";.+", "", rownames(Tc)),
 geneSet <- names(sort(Tc.gene[,1], 
                         decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 
+# Preparing Reactome annotation for our pathways analysis
+suppressPackageStartupMessages({
+    library(org.Rn.eg.db)
+    library(reactome.db)
+    library(annotate)
+})
+
+pathways = as.list(reactomePATHID2EXTID)
+
+path_names = as.list(reactomePATHID2NAME)
+name_id = match(names(pathways), names(path_names))
+names(pathways) = unlist(path_names)[name_id]
+
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+    ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+    toupper(unique(gene_name))
+})
+
 # 1D gene-centric pathway analysis
-path1 <- pathwayOverrepresent(geneSet, annotation=Pathways.reactome, 
+path1 <- pathwayOverrepresent(geneSet, annotation=pathways, 
                                 universe = rownames(Tc.gene), alter = "greater")
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1], 
-                                    annotation=Pathways.reactome, 
+                                    annotation=pathways, 
                                     alter = "greater")
 ```
 
@@ -550,8 +571,8 @@ pathways, while these highly enriched pathways are largely in agreement between
 the two types of enrichment analyses.
 
 ```{r}
-lp1 <- -log10(as.numeric(path2[names(Pathways.reactome),1]))
-lp2 <- -log10(as.numeric(path1[names(Pathways.reactome),1]))
+lp1 <- -log10(as.numeric(path2[names(pathways),1]))
+lp2 <- -log10(as.numeric(path1[names(pathways),1]))
 plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)", 
         xlab="Rank-based enrichment (-log10 pvalue)", 
         main="Comparison of 1D pathway analyses", xlim = c(0, 10))
@@ -559,7 +580,7 @@ plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)",
 # select highly enriched pathways
 sel <- which(lp1 > 1.5 & lp2 > 0.9)
 textxy(lp1[sel], lp2[sel], gsub("_", " ", gsub("REACTOME_", "", 
-                                                names(Pathways.reactome)))[sel])
+                                                names(pathways)))[sel])
 ```
 
 ### 2- and 3-dimensional signalling pathway analysis
@@ -679,7 +700,7 @@ phospho.liverInsTC.gene <-
 # perform ClueR to identify optimal number of clusters
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
-c1 <- runClue(phospho.liverInsTC.gene, annotation=Pathways.reactome, 
+c1 <- runClue(phospho.liverInsTC.gene, annotation=pathways, 
             kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
             pvalueCutoff = 0.05, alpha = 0.5)
 
@@ -694,7 +715,7 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(123)
-best <- clustOptimal(c1, rep=5, mfrow=c(2, 2), visualize = TRUE)
+best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
 
 # Finding enriched pathways from each cluster
 # ps <- sapply(best$enrichList, function(x){
@@ -826,9 +847,10 @@ kinase-substrate relationship scores.
 
 ```{r}
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std, 
-                                    L6.phos.seq, numMotif = 5, numSub = 1)
+                                    L6.phos.seq, numMotif = 5, numSub = 1, 
+                                    verbose = FALSE)
 set.seed(1)
-L6.predMat <- kinaseSubstratePred(L6.matrices, top=30) 
+L6.predMat <- kinaseSubstratePred(L6.matrices, top=30, verbose = FALSE) 
 ```
 
 ## Signalome construction
