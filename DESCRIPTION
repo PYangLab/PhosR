@@ -1,7 +1,7 @@
 Package: PhosR
 Type: Package
 Title: A set of methods and tools for comprehensive analysis of phosphoproteomics data
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut", "cre")),
@@ -34,10 +34,7 @@ Imports:
     grDevices,
     utils,
     SummarizedExperiment,
-    methods,
-    org.Rn.eg.db,
-    reactome.db,
-    annotate
+    methods
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
@@ -53,4 +50,7 @@ Suggests:
     directPA,
     ggplot2,
     ggpubr,
-    rmarkdown
+    rmarkdown,
+    org.Rn.eg.db,
+    reactome.db,
+    annotate

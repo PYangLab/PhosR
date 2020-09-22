@@ -14,9 +14,6 @@
 #'
 #' @return A matrix of pathways and their associated substrates and p-values.
 #'
-#' @importFrom org.Rn.eg.db org.Rn.eg
-#' @importFrom reactome.db reactomePATHID2EXTID reactomePATHID2NAME
-#' @importFrom annotate getSYMBOL
 #'
 #' @examples
 #'
@@ -162,9 +159,6 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 #'
 #' @return A matrix of pathways and their associated substrates and p-values.
 #'
-#' @importFrom org.Rn.eg.db org.Rn.eg
-#' @importFrom reactome.db reactomePATHID2EXTID reactomePATHID2NAME
-#' @importFrom annotate getSYMBOL
 #'
 #' @examples
 #'
