@@ -23,7 +23,10 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master      
       
-         
+      - name: "[Stage] [Linux] Install curl"
+        if: runner.os == 'Linux'
+        run: sudo apt install libcurl4-openssl-dev
+
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "rgl"))
