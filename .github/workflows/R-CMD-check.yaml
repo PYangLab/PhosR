@@ -23,9 +23,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master      
       
-      - name: Install XQaurtz
-        run: brew cask install xquartz
-        
+         
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "rgl"))
