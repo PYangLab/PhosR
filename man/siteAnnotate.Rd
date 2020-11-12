@@ -65,6 +65,7 @@ L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
 set.seed(1)
 L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
+dev.off()
 
 # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 site = "AAK1;S677;"

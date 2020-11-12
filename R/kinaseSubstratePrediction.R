@@ -407,7 +407,8 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #' set.seed(1)
 #' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
-#'
+#' dev.off()
+#' 
 #' # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 #' site = "AAK1;S677;"
 #' siteAnnotate(site, L6.matrices, L6.predMat)
