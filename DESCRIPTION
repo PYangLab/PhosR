@@ -34,7 +34,8 @@ Imports:
     grDevices,
     utils,
     SummarizedExperiment,
-    methods
+    methods,
+    S4Vectors
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

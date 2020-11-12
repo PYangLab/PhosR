@@ -3,7 +3,6 @@
 ### -------------------------------------------------------------------------
 ###
 #' @export
-#' @rdname PhosphoExperiment
 #' @importFrom utils packageVersion
 #' @importFrom S4Vectors SimpleList
 #' @importFrom stats setNames
@@ -58,8 +57,6 @@ setGeneric("Sequence", function(x, ...) standardGeneric("Sequence"))
 setGeneric("Sequence<-", function(x, value) standardGeneric("Sequence<-"))
 
 #' @export
-#' @rdname UniprotID
-#' @importFrom PhosphoExperiment UniprotID <- UniprotID
 
 setReplaceMethod("UniprotID", signature="PhosphoExperiment", function(x, value) {
         x@UniprotID <- as.character(value)
@@ -67,8 +64,6 @@ setReplaceMethod("UniprotID", signature="PhosphoExperiment", function(x, value) 
 })
 
 #' @export
-#' @rdname GeneSymbol
-#' @importFrom PhosphoExperiment GeneSymbol <- GeneSymbol
 
 setReplaceMethod("GeneSymbol", signature="PhosphoExperiment", function(x, value) {
     x@GeneSymbol<- as.character(value)
@@ -76,8 +71,6 @@ setReplaceMethod("GeneSymbol", signature="PhosphoExperiment", function(x, value)
 })
 
 #' @export
-#' @rdname Site
-#' @importFrom PhosphoExperiment Site <- Site
 
 setReplaceMethod("Site", signature="PhosphoExperiment", function(x, value) {
     x@Site <- as.numeric(value)
@@ -85,8 +78,6 @@ setReplaceMethod("Site", signature="PhosphoExperiment", function(x, value) {
 })
 
 #' @export
-#' @rdname Residue
-#' @importFrom PhosphoExperiment Residue <- Residue
 
 setReplaceMethod("Residue", signature="PhosphoExperiment", function(x, value) {
     x@Residue <- as.character(value)
@@ -94,8 +85,6 @@ setReplaceMethod("Residue", signature="PhosphoExperiment", function(x, value) {
 })
 
 #' @export
-#' @rdname Sequence
-#' @importFrom PhosphoExperiment Sequence <- Sequence
 
 setReplaceMethod("Sequence", signature="PhosphoExperiment", function(x, value) {
     x@Sequence<- as.character(value)
