@@ -54,4 +54,5 @@ Suggests:
     rmarkdown,
     org.Rn.eg.db,
     reactome.db,
-    annotate
+    annotate,
+    BiocStyle
