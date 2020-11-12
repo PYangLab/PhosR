@@ -1,6 +1,6 @@
-#' Gene set over-representation analysis
+#' phosphosite/Gene set over-representation analysis
 #'
-#' @description This function performes gene set over-representation analysis
+#' @description This function performes phosphosite (or gene) set over-representation analysis
 #' using Fisher's exact test.
 #'
 #' @param geneSet an array of gene or phosphosite IDs (IDs are gene symbols etc
@@ -14,11 +14,15 @@
 #'
 #' @return A matrix of pathways and their associated substrates and p-values.
 #'
+#'
 #' @examples
 #'
 #' library(limma)
-#'
-#' data('phospho_L6_ratio')
+#' library(org.Rn.eg.db)
+#' library(reactome.db)
+#' library(annotate)
+#' 
+#' 
 #' data('SPSs')
 #'
 #' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
@@ -84,11 +88,28 @@
 #' Tc.gene <- phosCollapse(Tc, id=gsub(';.+', '', rownames(Tc)),
 #'     stat=apply(abs(Tc), 1, max), by = 'max')
 #' geneSet <- names(sort(Tc.gene[,1],
-#'                     decreasing = TRUE))[1:round(nrow(Tc.gene) * 0.1)]
+#'                     decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 #' #lapply(PhosphoSite.rat, function(x){gsub(';[STY]', ';', x)})
 #'
+#' 
+#' # Preparing Reactome annotation for our pathways analysis
+#' pathways = as.list(reactomePATHID2EXTID)
+#' 
+#' path_names = as.list(reactomePATHID2NAME)
+#' name_id = match(names(pathways), names(path_names))
+#' names(pathways) = unlist(path_names)[name_id]
+#' 
+#' pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+#'     ignore.case = TRUE))]
+#' 
+#' pathways = lapply(pathways, function(path) {
+#'     gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+#'     toupper(unique(gene_name))
+#' })
+#'
+#'
 #' # 1D gene-centric pathway analysis
-#' path1 <- pathwayOverrepresent(geneSet, annotation=Pathways.reactome,
+#' path1 <- pathwayOverrepresent(geneSet, annotation=pathways,
 #'     universe = rownames(Tc.gene), alter = 'greater')
 #'
 #' @export
@@ -124,9 +145,9 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
     return(fisherTest.mat)
 }
 
-#' Gene set enrichment analysis
+#' Phosphosite/Gene set enrichment analysis
 #'
-#' This function performes gene set enrichment analysis using Wilcoxon Rank Sum
+#' This function performes phosphosite (or gene) set enrichment analysis using Wilcoxon Rank Sum
 #' test.
 #'
 #' @param geneStats an array of statistics (e.g. log2 FC) of all quantified
@@ -138,10 +159,15 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 #'
 #' @return A matrix of pathways and their associated substrates and p-values.
 #'
+#'
 #' @examples
 #'
 #' library(limma)
 #'
+#' library(org.Rn.eg.db)
+#' library(reactome.db)
+#' library(annotate)
+#' 
 #' data('phospho_L6_ratio')
 #' data('SPSs')
 #'
@@ -207,10 +233,25 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 #' #  gene-centric analyses.
 #' Tc.gene <- phosCollapse(Tc, id=gsub(';.+', '', rownames(Tc)),
 #'     stat=apply(abs(Tc), 1, max), by = 'max')
-#'
+#' 
+#' # Preparing Reactome annotation for our pathways analysis
+#' pathways = as.list(reactomePATHID2EXTID)
+#' 
+#' path_names = as.list(reactomePATHID2NAME)
+#' name_id = match(names(pathways), names(path_names))
+#' names(pathways) = unlist(path_names)[name_id]
+#' 
+#' pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+#'     ignore.case = TRUE))]
+#' 
+#' pathways = lapply(pathways, function(path) {
+#'     gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+#'     toupper(unique(gene_name))
+#' })
+#' 
 #' # 1D gene-centric pathway analysis
 #' path2 <- pathwayRankBasedEnrichment(Tc.gene[,1],
-#'                                     annotation=Pathways.reactome,
+#'                                     annotation=pathways,
 #'                                     alter = 'greater')
 #' @export
 pathwayRankBasedEnrichment <- function(geneStats, annotation,

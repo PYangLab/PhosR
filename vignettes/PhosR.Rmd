@@ -20,7 +20,7 @@ author:
   - Computational Systems Biology Group, Children’s Medical Research Institute, Faculty of Medicine and Health, The University of Sydney
   - Charles Perkins Centre, The University of Sydney
 output:
-  BiocStyle::pdf_document:
+  BiocStyle::html_document:
     toc_newpage: true
     fig_retina: NULL
 package: BiocStyle
@@ -37,15 +37,36 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-`PhosR` is a package for the comprenhensive analysis of phosphoproteomic data. There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, enabling integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.
+`PhosR` is a package for the comprenhensive analysis of phosphoproteomic data. 
+There are two major components to PhosR: processing and downstream analysis. 
+PhosR consists of various processing tools for phosphoproteomic data including 
+filtering, imputation, normalisaton and batch correction, enabling integration 
+of multiple phosphoproteomic datasets. Downstream analytical tools consists of 
+site- and protein-centric pathway analysis to evaluate activities of kinases and
+signalling pathways, large-scale kinase-substrate annotation from dynamic 
+phosphoproteomic profiling, and visualisation and construction of signalomes 
+present in the phosphoproteomic data of interest.
 
-Below is a schematic overview of main componenets of PhosR, categorised into two broad steps of data analytics - processing and downstream analysis.
+Below is a schematic overview of main componenets of PhosR, categorised into two
+broad steps of data analytics - processing and downstream analysis.
 
 ![Overview of PhosR methods](../inst/graphical_abstract.png)
 
 
-The purpose of this vignette is to illustrate some uses of `PhosR` and explain its key components.
+The purpose of this vignette is to illustrate some uses of `PhosR` and explain 
+its key components.
 
+
+# Installation
+
+To install PhosR, enter the following to your R console.
+
+```{r, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("PhosR")
+```
 
 
 # Loading packages and data
@@ -57,11 +78,18 @@ suppressPackageStartupMessages({
 })
 ```
 
-For demonstration purposes, we provide a rat L6 myotubes phosphoproteome dataset in our package. The data contains ratios of samples treated with AICAR, an analog of adenosine monophosphate that stimulates AMPK activity, insulin (Ins), or in combination (AICAR+Ins) with the basal condition. The full(?) raw data can be found [here](https://www.google.com).
+For demonstration purposes, we provide a rat L6 myotubes phosphoproteome dataset
+in our package. The data contains ratios of samples treated with AICAR, 
+an analog of adenosine monophosphate that stimulates AMPK activity, 
+insulin (Ins), or in combination (AICAR+Ins) with the basal condition. 
+The raw data can be found [here](https://www.google.com).
 
-We also provide our novel list of SPSs to be used as a negative control in batch correction and the [PhosphoSitePlus](https://www.phosphosite.org/) annotation for rat, which we will use for XXX analysis below.
+We also provide our novel list of SPSs to be used as a negative control in batch
+correction and the [PhosphoSitePlus](https://www.phosphosite.org/) annotation 
+for rat, which we will use for XXX analysis below.
 
-For details on how we defined our SPSs can be found in our manuscript, available at [XXX](https://www.google.com)
+For details on how we defined our SPSs can be found in our manuscript, 
+available at [XXX](https://www.google.com)
 
 
 # Part A. Preprocessing
@@ -70,11 +98,22 @@ For details on how we defined our SPSs can be found in our manuscript, available
 
 ### Introduction
 
-PhosR is a package for the all-rounded analysis of phosphoproteomic data from processing to downstream analysis. This vignette will provide a step-by-step workflow of how PhosR can be used to process and analyse a a panel of phosphoproteomic datasets. As one of the first steps of data processing in phosphoproteomic analysis, we will begin by performing filtering and imputation of phosphoproteomic data with PhosR.
+PhosR is a package for the all-rounded analysis of phosphoproteomic data from 
+processing to downstream analysis. This vignette will provide a step-by-step 
+workflow of how PhosR can be used to process and analyse a a panel of 
+phosphoproteomic datasets. As one of the first steps of data processing in 
+phosphoproteomic analysis, we will begin by performing filtering and imputation 
+of phosphoproteomic data with PhosR.
 
 ### Setting up the data
 
-We assume that you will have the raw data processed using platforms frequently used for mass-spectrometry based proteomics such as MaxQuant. For demonstration purposes, we will take a parts of phosphoproteomic data generated by Humphrey et al. [doi:10.1038/nbt.3327] with accession number PXD001792. The dataset contains the phosphoproteomic quantifications of two mouse liver cell lines (Hepa1.6 and FL38B) that were treated with either PBS (mock) or insulin.
+We assume that you will have the raw data processed using platforms frequently 
+used for mass-spectrometry based proteomics such as MaxQuant. For demonstration 
+purposes, we will take a parts of phosphoproteomic data generated by 
+Humphrey et al. [doi:10.1038/nbt.3327] with accession number PXD001792. 
+The dataset contains the phosphoproteomic quantifications of two mouse liver 
+cell lines (Hepa1.6 and FL38B) that were treated with either PBS (mock) or 
+insulin.
 
 We will take the grouping information from colnames of our matrix.
 
@@ -83,13 +122,14 @@ data("phospho.cells.Ins.sample")
 grps = gsub("_[0-9]{1}", "", colnames(phospho.cells.Ins))
 ```
 
-For each cell line, there are two conditions (Control vs Insulin-stimulated) and 6 replicates for each condition.
+For each cell line, there are two conditions (Control vs Insulin-stimulated) 
+and 6 replicates for each condition.
 
 ```{r}
 # FL38B
-gsub("Intensity.", "", grps)[1:12]
+gsub("Intensity.", "", grps)[seq(12)]
 # Hepa1
-gsub("Intensity.", "", grps)[13:24]
+gsub("Intensity.", "", grps)[seq(13,24)]
 ```
 
 Note that there are in total 24 samples and 5000 phosphosites profiled.
@@ -100,14 +140,18 @@ dim(phospho.cells.Ins)
 
 ### Filtering of phosphosites
 
-Next, we will perform some filtering of phosphosites so that only phosphosites with quantifications for at least 50% of the replicates in at least one of the conditions are retained. For this filtering step, we use the `selectGrps` function. The filtering leaves us with 1772 phosphosites.
+Next, we will perform some filtering of phosphosites so that only phosphosites 
+with quantifications for at least 50% of the replicates in at least one of the 
+conditions are retained. For this filtering step, we use the `selectGrps` 
+function. The filtering leaves us with 1772 phosphosites.
 
 ```{r}
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1) 
 dim(phospho.cells.Ins.filtered)
 ```
 
-`selectGrps` gives you the option to relax the threshold for filtering. The filtering threshold can therefore be optimised for each dataset.
+`selectGrps` gives you the option to relax the threshold for filtering. 
+The filtering threshold can therefore be optimised for each dataset.
 
 ```{r}
 # In cases where you have fewer replicates ( e.g.,triplicates), you may want to 
@@ -118,11 +162,19 @@ dim(phospho.cells.Ins.filtered1)
 
 ### Imputation of phosphosites
 
-We can proceed to imputation now that we have filtered for suboptimal phosphosites. To take advantage of data structure and experimental design, PhosR provides users with a lot of flexibility for imputation. There are three functions for imputation: `scImpute`,`tImpute`, and `ptImpute`. Here, we will demonstrate the use of `scImpute` and `ptImpute`.
+We can proceed to imputation now that we have filtered for suboptimal 
+phosphosites. To take advantage of data structure and experimental design, 
+PhosR provides users with a lot of flexibility for imputation. There are three 
+functions for imputation: `scImpute`,`tImpute`, and `ptImpute`. Here, we will 
+demonstrate the use of `scImpute` and `ptImpute`.
 
 ### Site- and condition-specific imputation
 
-The `scImpute` function is used for site- and condition-specific imputation. A predefined thereshold is used to select phosphosites to impute. Phosphosites with missing values equal to or greater than a predefined value will be imputed by sampling from the empirical normal distribution constructed from the quantification values of phosphosites from the same condition. 
+The `scImpute` function is used for site- and condition-specific imputation. 
+A predefined thereshold is used to select phosphosites to impute. Phosphosites 
+with missing values equal to or greater than a predefined value will be imputed 
+by sampling from the empirical normal distribution constructed from the 
+quantification values of phosphosites from the same condition. 
 
 ```{r}
 set.seed(123)
@@ -131,28 +183,39 @@ phospho.cells.Ins.impute1 <-
         grps)[,colnames(phospho.cells.Ins.filtered)]
 ```
 
-In the above example, only phosphosites that are quantified in more than 50% of samples from the same condition will be imputed. 
+In the above example, only phosphosites that are quantified in more than 50% of 
+samples from the same condition will be imputed. 
 
 #### Paired tail-based imputation
 
-We then perform paired tail-based imputation on the dataset imputed with `scImpute`. Paired tail-based imputation performs imputation of phosphosites that have missing values in *all* replicates in one condition (e.g. in `basal`) but not in another condition (e.g., in `stimulation`). This method of imputation ensures that we do not accidentally filter phosphosites that seemingly have low detection rate, which may be because of true 
+We then perform paired tail-based imputation on the dataset imputed with 
+`scImpute`. Paired tail-based imputation performs imputation of phosphosites 
+that have missing values in *all* replicates in one condition (e.g. in `basal`) 
+but not in another condition (e.g., in `stimulation`). This method of imputation
+ensures that we do not accidentally filter phosphosites that seemingly have low 
+detection rate, which may be because of true 
 
-As for `scImpute`, we can set a predefined threshold to in another condition (e.g. ‘stimulation’), the tail-based imputation is applied to impute for the missing values in the first condition.
+As for `scImpute`, we can set a predefined threshold to in another condition 
+(e.g. ‘stimulation’), the tail-based imputation is applied to impute for the 
+missing values in the first condition.
 
 ```{r}
 set.seed(123)
 phospho.cells.Ins.impute <- phospho.cells.Ins.impute1
-phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute1[,6:10], 
-                                            phospho.cells.Ins.impute1[,1:5], 
-                                            percent1 = 0.6, percent2 = 0, 
-                                            paired = FALSE)
-phospho.cells.Ins.impute[,11:15] <- ptImpute(phospho.cells.Ins.impute1[,16:20], 
-                                            phospho.cells.Ins.impute1[,11:15], 
-                                            percent1 = 0.6, percent2 = 0, 
-                                            paired = FALSE)
+phospho.cells.Ins.impute[,seq(6)] <- ptImpute(
+    phospho.cells.Ins.impute1[,seq(7,12)], 
+    phospho.cells.Ins.impute1[,seq(6)], 
+    percent1 = 0.6, percent2 = 0, 
+    paired = FALSE)
+phospho.cells.Ins.impute[,seq(13,18)] <- ptImpute(
+    phospho.cells.Ins.impute1[,seq(19,24)], 
+    phospho.cells.Ins.impute1[,seq(13,18)], 
+    percent1 = 0.6, percent2 = 0, 
+    paired = FALSE)
 ```
 
-Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data. 
+Lastly, we perform normalisation of the filtered and imputed phosphoproteomic 
+data. 
 
 ```{r}
 phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute, scale = FALSE)
@@ -160,39 +223,63 @@ phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute, scale = FALSE)
 
 ### Quantification plots
 
-A useful function in `PhosR` is to visualize the percentage of quantified sites before and after filtering and imputation. The main inputs of `plotQC` are the quantification matrix, sample labels (equating the column names of the matrix), an integer indicating the panel to plot, and lastly, a color vector. To visualize the percentage of quantified sites, use the `plotQC` function and set `panel = 1` to visualise barplots of samples. 
+A useful function in `PhosR` is to visualize the percentage of quantified sites 
+before and after filtering and imputation. The main inputs of `plotQC` are the 
+quantification matrix, sample labels (equating the column names of the matrix), 
+an integer indicating the panel to plot, and lastly, a color vector. 
+To visualize the percentage of quantified sites, use the `plotQC` function and 
+set `panel = 1` to visualise barplots of samples. 
 
 ```{r}
 cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 par(mfrow=c(1,2))
 plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
-        panel = 1, cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = 1, 
+        panel = "quantify", cols = cols)
+plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "quantify", 
         cols = cols)
 ```
 
-By setting `panel = 2`, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together. 
+By setting `panel = 2`, we can visualise the results of unsupervised 
+hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates 
+that imputation has improved the clustering of the samples so that replicates 
+from the same conditions cluster together. 
 
 ```{r}
 par(mfrow=c(1,2))
 plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
-        panel = 2, cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = 2, 
+        panel = "dendrogram", cols = cols)
+plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "dendrogram", 
         cols = cols)
 ```
 
-We can now move onto the next step in the `PhosR` workflow: integration of datasets and batch correction.
+We can now move onto the next step in the `PhosR` workflow: integration of 
+datasets and batch correction.
 
 
 ## Batch correction
 
 ### Introduction
 
-A common but largely unaddressed challenge in phosphoproteomic data analysis is to correct for batch effect. Without correcting for batch effect, it is impossible to analyze datasets, derived in batches or from independent labs, in an integrative manner. To perform data integration and batch effect correction, we identified a set of stably phosphorylated sites (SPSs) across a panel of phosphoproteomic datasets and, using these SPSs, implemented a wrapper function of RUV-III from the `ruv` package called `RUVphospho`. 
+A common but largely unaddressed challenge in phosphoproteomic data analysis is 
+to correct for batch effect. Without correcting for batch effect, it is 
+impossible to analyze datasets, derived in batches or from independent labs, in 
+an integrative manner. To perform data integration and batch effect correction, 
+we identified a set of stably phosphorylated sites (SPSs) across a panel of 
+phosphoproteomic datasets and, using these SPSs, implemented a wrapper function 
+of RUV-III from the `ruv` package called `RUVphospho`. 
 
-Note that when the input data contains missing values, imputation should be performed before batch correction since RUV-III requires a complete data matrix. The imputed values are removed by default after normalisation but can be retained for downstream analysis if the users wish to use the imputed matrix. This vignette will provide an example of how PhosR can be used for batch correction. 
+Note that when the input data contains missing values, imputation should be 
+performed before batch correction since RUV-III requires a complete data matrix. 
+The imputed values are removed by default after normalisation but can be 
+retained for downstream analysis if the users wish to use the imputed matrix. 
+This vignette will provide an example of how PhosR can be used for batch 
+correction. 
 
-In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to our preprint for the full list of the datasets used). The `SPSs` will be used as our `negative control` during RUV normalisation.
+In this example, we will use L6 myotube phosphoproteome dataset 
+(with accession number PXD019127) and the SPSs we identified from a panel of 
+phosphoproteomic datasets (please refer to our preprint for the full list of the
+datasets used). The `SPSs` will be used as our `negative control` during RUV 
+normalisation.
 
 ```{r}
 data("phospho_L6_ratio")
@@ -201,7 +288,11 @@ data("SPSs")
 
 ### Setting up the data
 
-The L6 myotube data contains phosphoproteomic samples from three treatment conditions each with quadruplicates. Myotube cells were treated with either AICAR or Insulin (Ins), which are both important modulators of the insulin signalling pathway, or both (AICARIns) before phosphoproteomic analysis. 
+The L6 myotube data contains phosphoproteomic samples from three treatment 
+conditions each with quadruplicates. Myotube cells were treated with either 
+AICAR or Insulin (Ins), which are both important modulators of the insulin 
+signalling pathway, or both (AICARIns) before phosphoproteomic analysis. 
+
 ```{r}
 colnames(phospho.L6.ratio)[grepl("AICAR_", colnames(phospho.L6.ratio))]
 colnames(phospho.L6.ratio)[grepl("^Ins_", colnames(phospho.L6.ratio))]
@@ -214,13 +305,16 @@ Note that we have in total 6654 quantified phosphosites and 12 samples in total.
 dim(phospho.L6.ratio)
 ```
 
-We have already performed the revelant processing steps to generate a dense matrix. Please refer to `imputation` page to perform filtering and imputation of phosphosites in order to generate a matrix without any missing values. 
+We have already performed the revelant processing steps to generate a dense 
+matrix. Please refer to `imputation` page to perform filtering and imputation of
+phosphosites in order to generate a matrix without any missing values. 
 
 ```{r}
 sum(is.na(phospho.L6.ratio))
 ```
 
-We will clean up the phosphosite labels, which currently contain many unnecessary information for our current analysis (e.g., phosphosite sequence).
+We will clean up the phosphosite labels, which currently contain many 
+unnecessary information for our current analysis (e.g., phosphosite sequence).
 
 ```{r}
 # Cleaning phosphosite label
@@ -250,31 +344,45 @@ grps
 
 ### Diagnosing batch effect
 
-There are a number of ways to diagnose batch effect. In `PhosR`, we make use of two visualisation methods to detect batch effect: dendrogram of hierachical clustering and a principal component analysis (PCA) plot. We use the `plotQC` function we introduced in the `imputation` section of the vignette. 
+There are a number of ways to diagnose batch effect. In `PhosR`, we make use of 
+two visualisation methods to detect batch effect: dendrogram of hierachical 
+clustering and a principal component analysis (PCA) plot. We use the `plotQC` 
+function we introduced in the `imputation` section of the vignette. 
 
-By setting `panel = 2`, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is strong batch effect by batch (denoted as `expX`, where X refers to the batch number). This is particularly evident for samples from `Ins` and `AICARIns` treated conditions.
+By setting `panel = 2`, we can plot the dendrogram illustrating the results of 
+unsupervised hierarchical clustering of our 12 samples. Clustering results of 
+the samples demonstrate that there is strong batch effect by batch (denoted as 
+`expX`, where X refers to the batch number). This is particularly evident for 
+samples from `Ins` and `AICARIns` treated conditions.
 
 ```{r}
 cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 par(mfrow=c(1,1))
-plotQC(phospho.L6.ratio, panel = 2, cols=colorCodes, 
-        main = "Before batch correction")
+plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
 ```
 
-We can also visualise the samples in PCA space by setting `panel = 4`. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the `AICAR` treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
+We can also visualise the samples in PCA space by setting `panel = 4`. The PCA 
+plot demonstrates aggregation of samples by batch rather than treatment groups 
+(each point represents a sample coloured by treatment condition). It has become 
+clearer that even within the `AICAR` treated samples, there is some degree of 
+batch effect as data points are separated between samples from batches 1 and 2 
+and those from batches 3 and 4. 
 
 ```{r}
 par(mfrow=c(1,1))
 plotQC(phospho.L6.ratio, cols=colorCodes, labels = colnames(phospho.L6.ratio), 
-        panel = 4, ylim=c(-20, 20), xlim=c(-30, 30), 
+        panel = "pca", ylim=c(-20, 20), xlim=c(-30, 30), 
         main = "Before batch correction")
 ```
 
 ### Correcting batch effect
 
-We have now diagnosed that our dataset exhibits batch effect that is driven by experiment runs for samples treated with three different conditions. To address this batch effect, we correct for this unwanted variation in the data by utilising our novel SPSs as a negative control for `RUVphospho`.
+We have now diagnosed that our dataset exhibits batch effect that is driven by 
+experiment runs for samples treated with three different conditions. To address 
+this batch effect, we correct for this unwanted variation in the data by 
+utilising our novel SPSs as a negative control for `RUVphospho`.
 
 First, we construct a design matrix by condition.
 ```{r}
@@ -282,9 +390,13 @@ design = model.matrix(~ grps - 1)
 design
 ```
 
-We will then use the `RUVphospho` function to normalise the data. Besides the quantification matrix and the design matrix, there are two other important inputs to `RUVphospho`: 
-    1) the `ctl` argument is an integer vector denoting the position of SPSs within the quantification matrix
-    2) `k` parameter is an integer denoting the expected number of experimental (e.g., treatment) groups within the data
+We will then use the `RUVphospho` function to normalise the data. Besides the 
+quantification matrix and the design matrix, there are two other important 
+inputs to `RUVphospho`: 
+    1) the `ctl` argument is an integer vector denoting the position of SPSs 
+    within the quantification matrix
+    2) `k` parameter is an integer denoting the expected number of experimental 
+    (e.g., treatment) groups within the data
 
 ```{r}
 # phosphoproteomics data normalisation and batch correction using RUV
@@ -295,23 +407,26 @@ phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
 
 ### Quality control
 
-As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again `plotQC`. Both the hierachical clustering and PCA results demonstrate the normalisation procedure in `PhosR` facilitates effective batch correction.
+As quality control, we will demonstrate and evaluate our normalisation method 
+with hierarchical clustering and PCA plot using again `plotQC`. Both the 
+hierachical clustering and PCA results demonstrate the normalisation procedure 
+in `PhosR` facilitates effective batch correction.
 
 ```{r}
 # plot after batch correction
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = 2, cols=colorCodes)
+plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
 plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel=2, ylim=c(-20, 20), 
+        labels = colnames(phospho.L6.ratio), panel="dendrogram", ylim=c(-20, 20), 
         xlim=c(-30, 30))
 ```
 
 ```{r}
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = 4, cols=colorCodes, 
+plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes, 
         labels = colnames(phospho.L6.ratio), main="Before Batch correction")
 plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel=4, ylim=c(-20, 20), 
+        labels = colnames(phospho.L6.ratio), panel="pca", ylim=c(-20, 20), 
         xlim=c(-30, 30), main="After Batch correction")
 ```
 
@@ -321,15 +436,29 @@ plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
 
 ### Introduction
 
-Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis on the gene level, `PhosR` implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as ‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
+Most phosphoproteomic studies have adopted a phosphosite-level analysis of the 
+data. To enable phosphoproteomic data analysis on the gene level, `PhosR` 
+implements both site- and gene-centric analyses for detecting changes in kinase 
+activities and signalling pathways through traditional enrichment analyses 
+(over-representation or rank-based gene set test, together referred to as 
+‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
 
-This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank--based gene set tests and also provide an example of how `directPA` can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) https://academic.oup.com/bioinformatics/article/30/6/808/286146. 
+This vignette will perform gene-centric pathway enrichment analyses on the 
+normalised myotube phosphoproteomic dataset using both over-representation and 
+rank--based gene set tests and also provide an example of how `directPA` can be 
+used to test which kinases are activated upon different stimulations in myotubes 
+using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) 
+https://academic.oup.com/bioinformatics/article/30/6/808/286146. 
 
 ### Loading packages and data
 
-First, we will load the PhosR package with few other packages will use for the demonstration purpose.
+First, we will load the PhosR package with few other packages will use for the 
+demonstration purpose.
 
-We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome under three different treatment conditions and a basal condition, and three conditions are (1) AMPK agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).
+We will use RUV normalised L6 phosphopreteome data for demonstration of 
+gene-centric pathway analysis. It contains phosphoproteome under three different
+treatment conditions and a basal condition, and three conditions are (1) AMPK 
+agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).
 
 ```{r}
 suppressPackageStartupMessages({
@@ -343,12 +472,19 @@ suppressPackageStartupMessages({
 data("PhosphoSitePlus")
 ```
 
-We will use `phospho.L6.ratio.RUV` matrix from [Section 1.2 Batch correction](#Batch_correction).
+We will use `phospho.L6.ratio.RUV` matrix from 
+[Section 1.2 Batch correction](#Batch_correction).
 
 
 ### 1-dimensional enrichment analysis 
 
-To enable enrichment analyses on both gene and phosphosite levels, PhosR implements a simple method called `phosCollapse` which reduces phosphosite level of information to the proteins for performing downstream gene-centric analyses. We will utilise two functions, `pathwayOverrepresent` and `pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation and rank-based gene set test) gene-centric pathway enrichment analysis respectively.
+To enable enrichment analyses on both gene and phosphosite levels, PhosR 
+implements a simple method called `phosCollapse` which reduces phosphosite 
+level of information to the proteins for performing downstream gene-centric 
+analyses. We will utilise two functions, `pathwayOverrepresent` and 
+`pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation 
+and rank-based gene set test) gene-centric pathway enrichment analysis 
+respectively.
 
 ```{r}
 # divides the phospho.L6.ratio data into groups by phosphosites
@@ -396,21 +532,47 @@ colnames(Tc) <- c("Ins", "AICAR", "AICAR+Ins")
 Tc.gene <- phosCollapse(Tc, id=gsub(";.+", "", rownames(Tc)), 
                         stat=apply(abs(Tc), 1, max), by = "max")
 geneSet <- names(sort(Tc.gene[,1], 
-                        decreasing = TRUE))[1:round(nrow(Tc.gene) * 0.1)]
+                        decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
+
+# Preparing Reactome annotation for our pathways analysis
+suppressPackageStartupMessages({
+    library(org.Rn.eg.db)
+    library(reactome.db)
+    library(annotate)
+})
+
+pathways = as.list(reactomePATHID2EXTID)
+
+path_names = as.list(reactomePATHID2NAME)
+name_id = match(names(pathways), names(path_names))
+names(pathways) = unlist(path_names)[name_id]
+
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+    ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+    toupper(unique(gene_name))
+})
 
 # 1D gene-centric pathway analysis
-path1 <- pathwayOverrepresent(geneSet, annotation=Pathways.reactome, 
+path1 <- pathwayOverrepresent(geneSet, annotation=pathways, 
                                 universe = rownames(Tc.gene), alter = "greater")
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1], 
-                                    annotation=Pathways.reactome, 
+                                    annotation=pathways, 
                                     alter = "greater")
 ```
 
-Next, we will compare enrichment of pathways (in negative log10 p-values) between the two 1-dimensional pathway enrichment analysis. On the scatter plot, the x-axis and y-axis refer to the p-values derived from the rank-based gene set test and over-representation test, respectively. We find several expected pathways, while these highly enriched pathways are largely in agreement between the two types of enrichment analyses.
+Next, we will compare enrichment of pathways (in negative log10 p-values) 
+between the two 1-dimensional pathway enrichment analysis. On the scatter plot, 
+the x-axis and y-axis refer to the p-values derived from the rank-based gene set
+test and over-representation test, respectively. We find several expected 
+pathways, while these highly enriched pathways are largely in agreement between 
+the two types of enrichment analyses.
 
 ```{r}
-lp1 <- -log10(as.numeric(path2[names(Pathways.reactome),1]))
-lp2 <- -log10(as.numeric(path1[names(Pathways.reactome),1]))
+lp1 <- -log10(as.numeric(path2[names(pathways),1]))
+lp2 <- -log10(as.numeric(path1[names(pathways),1]))
 plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)", 
         xlab="Rank-based enrichment (-log10 pvalue)", 
         main="Comparison of 1D pathway analyses", xlim = c(0, 10))
@@ -418,14 +580,22 @@ plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)",
 # select highly enriched pathways
 sel <- which(lp1 > 1.5 & lp2 > 0.9)
 textxy(lp1[sel], lp2[sel], gsub("_", " ", gsub("REACTOME_", "", 
-                                                names(Pathways.reactome)))[sel])
+                                                names(pathways)))[sel])
 ```
 
 ### 2- and 3-dimensional signalling pathway analysis
 
-One key aspect in studying signalling pathways is to identify key kinases that are involved in signalling cascades. To identify these kinases, we make use of kinase-substrate annotation databases such as `PhosphoSitePlus` and `Phospho.ELM`. These databases are included in the `PhosR` and `directPA` packages already. To access them, simply load the package and access the data by `data("PhosphoSitePlus")` and `data("PhosphoELM")`.
+One key aspect in studying signalling pathways is to identify key kinases that 
+are involved in signalling cascades. To identify these kinases, we make use of 
+kinase-substrate annotation databases such as `PhosphoSitePlus` and 
+`Phospho.ELM`. These databases are included in the `PhosR` and `directPA` 
+packages already. To access them, simply load the package and access the data 
+by `data("PhosphoSitePlus")` and `data("PhosphoELM")`.
 
-The 2- and 3-dimensional analyses enable the investigation of kinases regulated by different combinations of treatments. We will introduce more advanced methods implemented in the R package `directPA` for performing “2 and 3-dimentional” direction site-centric kinase activity analyses.
+The 2- and 3-dimensional analyses enable the investigation of kinases regulated 
+by different combinations of treatments. We will introduce more advanced methods
+implemented in the R package `directPA` for performing “2 and 3-dimentional” 
+direction site-centric kinase activity analyses.
 
 ```{r}
 # 2D direction site-centric kinase activity analyses
@@ -440,12 +610,14 @@ dpa2 <- directPA(Tc[,c(1,3)], direction=pi*7/4,
                 main="Direction pathway analysis")
 
 # top activated kinases
-dpa1$pathways[1:5,]
-dpa2$pathways[1:5,]
+dpa1$pathways[seq(5),]
+dpa2$pathways[seq(5),]
 
 ```
 
-There is also a function called `perturbPlot2d` implemented in `kinasePA` for testing and visualising activity of all kinases on all possible directions. Below are the demonstration from using this function. 
+There is also a function called `perturbPlot2d` implemented in `kinasePA` for 
+testing and visualising activity of all kinases on all possible directions. 
+Below are the demonstration from using this function. 
 
 ```{r}
 z1 <- perturbPlot2d(Tc=Tc[,c(1,2)], 
@@ -469,9 +641,14 @@ z3 <- perturbPlot2d(Tc=Tc[,c(2,3)],
 
 ### Introduction
 
-While 1, 2, and 3D pathway analyses are useful for data generated from experiments with different treatment/conditions, analysis designed for time-course data may be better suited to analysis experiments that profile multiple time points.
+While 1, 2, and 3D pathway analyses are useful for data generated from 
+experiments with different treatment/conditions, analysis designed for 
+time-course data may be better suited to analysis experiments that profile 
+multiple time points.
 
-Here, we will apply `ClueR` which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis ([Pengyi Yang et al. 2015])(https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403).
+Here, we will apply `ClueR` which is an R package specifically designed for 
+time-course proteomic and phosphoproteomic data analysis 
+([Pengyi Yang et al. 2015](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403)).
 
 ## Loading packages and data
 
@@ -485,7 +662,9 @@ suppressPackageStartupMessages({
 })
 ```
 
-We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.
+We will load a dataset integrated from two time-course datasets of early and 
+intermediate insulin signalling in mouse liver upon insulin stimulation to 
+demonstrate the time-course phosphoproteomic data analyses.
 
 ```{r}
 data("phospho_liverInsTC_RUV_sample")
@@ -493,7 +672,9 @@ data("phospho_liverInsTC_RUV_sample")
 
 ## Gene-centric analyses of the liver phosphoproteome data
 
-Let us start with gene-centric analysis. Such analysis can be directly applied to proteomics data. It can also be applied to phosphoproteomic data by using the `phosCollapse` function to summarise phosphosite information to proteins.
+Let us start with gene-centric analysis. Such analysis can be directly applied 
+to proteomics data. It can also be applied to phosphoproteomic data by using the
+`phosCollapse` function to summarise phosphosite information to proteins.
 
 ```{r}
 rownames(phospho.liver.Ins.TC.ratio.RUV) <- 
@@ -519,12 +700,12 @@ phospho.liverInsTC.gene <-
 # perform ClueR to identify optimal number of clusters
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
-c1 <- runClue(phospho.liverInsTC.gene, annotation=Pathways.reactome, 
-            kRange = 2:10, rep = 5, effectiveSize = c(5, 100), 
+c1 <- runClue(phospho.liverInsTC.gene, annotation=pathways, 
+            kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
             pvalueCutoff = 0.05, alpha = 0.5)
 
 # Visualise the evaluation results
-data <- data.frame(Success=as.numeric(c1$evlMat), Freq=rep(2:10, each=5))
+data <- data.frame(Success=as.numeric(c1$evlMat), Freq=rep(seq(2,10), each=5))
 myplot <- ggplot(data, aes(x=Freq, y=Success)) + 
     geom_boxplot(aes(x = factor(Freq), fill="gray")) +
     stat_smooth(method="loess", colour="red", size=3, span = 0.5) +
@@ -534,7 +715,7 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(123)
-best <- clustOptimal(c1, rep=5, mfrow=c(2, 2), visualize = TRUE)
+best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
 
 # Finding enriched pathways from each cluster
 # ps <- sapply(best$enrichList, function(x){
@@ -547,7 +728,8 @@ best <- clustOptimal(c1, rep=5, mfrow=c(2, 2), visualize = TRUE)
 
 ## Site-centric analyses of the liver phosphoproteome data
 
-Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.
+Phosphosite-centric analyses will perform using kinase-substrate annotation 
+information from PhosphoSitePlus.
 
 ```{r}
 RNGkind("L'Ecuyer-CMRG")
@@ -558,11 +740,11 @@ PhosphoSite.mouse2 = mapply(function(kinase) {
 
 # perform ClueR to identify optimal number of clusters
 c3 <- runClue(phospho.LiverInsTC.sel, annotation=PhosphoSite.mouse2, 
-            kRange = 2:10, rep = 5, effectiveSize = c(5, 100), 
+            kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
             pvalueCutoff = 0.05, alpha = 0.5)
 
 # Visualise the evaluation results
-data <- data.frame(Success=as.numeric(c3$evlMat), Freq=rep(2:10, each=5))
+data <- data.frame(Success=as.numeric(c3$evlMat), Freq=rep(seq(2,10), each=5))
 myplot <- ggplot(data, aes(x=Freq, y=Success)) + 
     geom_boxplot(aes(x = factor(Freq), fill="gray")) +
     stat_smooth(method="loess", colour="red", size=3, span = 0.5) + 
@@ -584,13 +766,23 @@ best$enrichList
 
 ### Introduction
 
-A key component of the `PhosR` package is to construct signalomes. The signalome construction is composed of two main steps: 1) kinase-substrate relationsip scoring and 2) signalome construction. This involves a sequential workflow where the outputs of the first step are used as inputs of the latter step. 
+A key component of the `PhosR` package is to construct signalomes. The signalome
+construction is composed of two main steps: 1) kinase-substrate relationsip 
+scoring and 2) signalome construction. This involves a sequential workflow where
+the outputs of the first step are used as inputs of the latter step. 
 
-In brief, our kinase-substrate relationship scoring method (`kinaseSubstrateScore` and `kinaseSubstratePred`) prioritises potential kinases that could be responsible for the phosphorylation change of phosphosite on the basis of kinase recognition motif and phosphoproteomic dynamics. Using the kinase-substrate relationships derived from the scoring methods, we reconstruct signalome networks present in the data (`Signalomes`) wherin we highlight kinase regulation of discrete modules.
+In brief, our kinase-substrate relationship scoring method 
+(`kinaseSubstrateScore` and `kinaseSubstratePred`) prioritises potential kinases
+that could be responsible for the phosphorylation change of phosphosite on the 
+basis of kinase recognition motif and phosphoproteomic dynamics. Using the 
+kinase-substrate relationships derived from the scoring methods, we reconstruct 
+signalome networks present in the data (`Signalomes`) wherin we highlight kinase
+regulation of discrete modules.
 
 ## Loading packages and data
 
-First, we will load few other packages that we will be using in this section of the vignette.
+First, we will load few other packages that we will be using in this section of 
+the vignette.
 
 ```{r}
 suppressPackageStartupMessages({
@@ -602,7 +794,9 @@ suppressPackageStartupMessages({
 })
 ```
 
-We will also be needing data containing kinase-substrate annotations from `PhosphoSitePlus`, kinase recognition motifs from `kinase motifs`, and annotations of kinase families from `kinase family`. 
+We will also be needing data containing kinase-substrate annotations from 
+`PhosphoSitePlus`, kinase recognition motifs from `kinase motifs`, and 
+annotations of kinase families from `kinase family`. 
 
 ```{r}
 data("KinaseMotifs")
@@ -611,9 +805,10 @@ data("KinaseFamily")
 
 ## Setting up the data
 
-<!-- As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. -->
 
-We will use `phospho.L6.ratio.RUV` matrix from [Section 1.2 Batch correction](#Batch_correction), and we will call it `phosphoL6` from this point for simplicity.
+We will use `phospho.L6.ratio.RUV` matrix from 
+[Section 1.2 Batch correction](#Batch_correction), and we will call it 
+`phosphoL6` from this point for simplicity.
 
 
 ```{r}
@@ -622,7 +817,8 @@ phosphoL6 = phospho.L6.ratio.RUV
 
 ## Generation of kinase-substrate relationship scores
 
-Next, we will filtered for dynamically regulated phosphosites and then standardise the filtered matrix. 
+Next, we will filtered for dynamically regulated phosphosites and then 
+standardise the filtered matrix. 
 
 ```{r}
 rownames(phosphoL6) = phospho.site.names
@@ -645,18 +841,25 @@ We next extract the kinase recognition motifs from each of the phosphosites.
 L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), "~"), function(x)x[4])
 ```
 
-Now that we have all the inputs for `kinaseSubstrateScore` and `kinaseSubstratePred` ready, we can proceed to the generation of kinase-substrate relationship scores.
+Now that we have all the inputs for `kinaseSubstrateScore` and 
+`kinaseSubstratePred` ready, we can proceed to the generation of 
+kinase-substrate relationship scores.
 
 ```{r}
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std, 
-                                    L6.phos.seq, numMotif = 5, numSub = 1)
+                                    L6.phos.seq, numMotif = 5, numSub = 1, 
+                                    verbose = FALSE)
 set.seed(1)
-L6.predMat <- kinaseSubstratePred(L6.matrices, top=30) 
+L6.predMat <- kinaseSubstratePred(L6.matrices, top=30, verbose = FALSE) 
 ```
 
 ## Signalome construction
 
-The signalome construction uses the outputs of `kinaseSubstrateScore` and `kinaseSubstratePred` functions for the generation of a visualisation of the kinase regulation of discrete regulatory protein modules present in our phosphoproteomic data. 
+The signalome construction uses the outputs of `kinaseSubstrateScore` and 
+`kinaseSubstratePred` functions for the generation of a visualisation of the 
+kinase regulation of discrete regulatory protein modules present in our 
+phosphoproteomic data. 
+
 ```{r}
 kinaseOI = c("PRKAA1", "AKT1")
 
@@ -668,7 +871,10 @@ Signalomes_results <- Signalomes(KSR=L6.matrices,
 
 ## Generate signalome map
 
-We can also visualise the relative contribution of each kinase towards the regulation of protein modules by plotting a balloon plot. In the balloon plot, the size of the balloons denote the percentage magnitude of kinase regulation in each module. 
+We can also visualise the relative contribution of each kinase towards the 
+regulation of protein modules by plotting a balloon plot. In the balloon plot, 
+the size of the balloons denote the percentage magnitude of kinase regulation in
+each module. 
 
 ```{r}
 my_color_palette <- 
@@ -695,7 +901,7 @@ dftoPlot_balloon_bycluster <-
 dftoPlot_balloon_bycluster[is.na(dftoPlot_balloon_bycluster)] <- 0
 
 dftoPlot_balloon_bycluster <- 
-    do.call(rbind, lapply(1:nrow(dftoPlot_balloon_bycluster), function(x) {
+    do.call(rbind, lapply(seq(nrow(dftoPlot_balloon_bycluster)), function(x) {
         res <- sapply(dftoPlot_balloon_bycluster[x,], function(y) 
             y/sum(dftoPlot_balloon_bycluster[x,])*100)
 }))
@@ -720,7 +926,8 @@ ggplot(dftoPlot_balloon_bycluster, aes(x = ind, y = cluster)) +
 
 ### Generate signalome network
 
-Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks. 
+Finally, we can also plot the signalome network that illustrates the 
+connectivity between kinase signalome networks. 
 
 ```{r}
 threskinaseNetwork = 0.9
@@ -729,7 +936,7 @@ kinase_cor <- stats::cor(L6.matrices$combinedScoreMatrix)
 
 cor_kinase_mat <- kinase_cor
 diag(cor_kinase_mat) <- 0
-kinase_network <- lapply(1:ncol(cor_kinase_mat), function(x) 
+kinase_network <- lapply(seq(ncol(cor_kinase_mat)), function(x) 
     names(which(cor_kinase_mat[,x] > threskinaseNetwork))) 
 names(kinase_network) <- colnames(cor_kinase_mat)
 
@@ -740,7 +947,7 @@ cor_kinase_mat[cor_kinase_mat == TRUE] <- 1
 library(network)
 links <- reshape2::melt(cor_kinase_mat)
 links <- links[links$value == 1,]
-res <- sapply(1:length(links$Var1), function(x) { 
+res <- sapply(seq(length(links$Var1)), function(x) { 
     kinase_cor[rownames(kinase_cor) == links$Var1[x], 
         colnames(kinase_cor) == links$Var2[x]]
 })

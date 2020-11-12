@@ -4,7 +4,16 @@
 #'
 #' @description This function generates substrate scores for kinases that pass
 #' filtering based on both motifs and dynamic profiles
-#'
+#' 
+#' @usage 
+#' kinaseSubstrateScore(
+#'     substrate.list,
+#'     mat,
+#'     seqs,
+#'     numMotif = 5, 
+#'     numSub = 1, 
+#'     verbose = TRUE
+#' )
 #'
 #' @param substrate.list a list of kinases with each element containing an array
 #'  of substrates.
@@ -19,6 +28,8 @@
 #' @param numSub minimum number of phosphosites used for compiling
 #' phosphorylation
 #' profile for each kinase. Default is 1.
+#' @param verbose Default to \code{TRUE} to show messages during the progress.
+#' All messages will be suppressed if set to \code{FALSE}
 #'
 #' @importFrom preprocessCore normalize.quantiles
 #'
@@ -74,28 +85,34 @@
 #'
 #' @export
 kinaseSubstrateScore <- function(substrate.list, mat, seqs,
-                                numMotif = 5, numSub = 1) {
+                                numMotif = 5, numSub = 1, verbose = TRUE) {
     ks.profile.list <- kinaseSubstrateProfile(substrate.list, mat)
     motif.mouse.list = PhosR::motif.mouse.list
-    print(paste("Number of kinases passed motif size filtering:",
-        sum(motif.mouse.list$NumInputSeq >= numMotif)))
-    print(paste("Number of kinases passed profile size filtering:",
-        sum(ks.profile.list$NumSub >= numSub)))
+    if (verbose) {
+        message(paste("Number of kinases passed motif size filtering:",
+            sum(motif.mouse.list$NumInputSeq >= numMotif)))
+        message(paste("Number of kinases passed profile size filtering:",
+            sum(ks.profile.list$NumSub >= numSub)))
+    }
     motif.mouse.list.filtered <- motif.mouse.list[
         which(motif.mouse.list$NumInputSeq >= numMotif) ]
     ks.profile.list.filtered <- ks.profile.list[
         which(ks.profile.list$NumSub >= numSub) ]
     # scoring all phosphosites against all motifs
     motifScoreMatrix =
-        scorePhosphositesMotifs(mat, motif.mouse.list.filtered, seqs)
-    print("done.")
-    # scoring all phosphosites against all profiles
-    cat("Scoring phosphosites against kinase-substrate profiles:")
+        scorePhosphositesMotifs(mat, motif.mouse.list.filtered, seqs, verbose)
+    if (verbose) {
+        message("done.")
+        # scoring all phosphosites against all profiles
+        message("Scoring phosphosites against kinase-substrate profiles:")
+    }
     profileScoreMatrix = scorePhosphositeProfile(mat, ks.profile.list.filtered)
-    print("done.")
-    ### prioritisation by integrating the two parts
-    cat("Generating combined scores for phosphosites
+    if (verbose) {
+        message("done.")
+        ### prioritisation by integrating the two parts
+        message("Generating combined scores for phosphosites
 by motifs and phospho profiles:")
+    }
     o <- intersect(colnames(motifScoreMatrix), colnames(profileScoreMatrix))
     combinedScoreMatrix <- matrix(NA, nrow = nrow(motifScoreMatrix),
         ncol = length(o))
@@ -112,7 +129,8 @@ by motifs and phospho profiles:")
             w2[i]) * motifScoreMatrix[, o[i]]) +
             (w2[i]/(w1[i] + w2[i]) * profileScoreMatrix[, o[i]])
     }
-    print("done.")
+    if (verbose)
+        message("done.")
     # visualise
     ksActivityMatrix <- do.call(rbind, ks.profile.list.filtered)[o, ]
     phosScoringMatrices <- list(motifScoreMatrix = motifScoreMatrix,
@@ -123,7 +141,7 @@ by motifs and phospho profiles:")
     return(phosScoringMatrices)
 }
 
-scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs) {
+scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs, verbose = TRUE) {
     motifScoreMatrix <- matrix(NA, nrow = nrow(mat),
                             ncol = length(motif.mouse.list.filtered))
     rownames(motifScoreMatrix) <- rownames(mat)
@@ -133,12 +151,14 @@ scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs) {
         mid <- (nchar(x) + 1)/2
         substr(x, start = (mid - 7), stop = (mid + 7))
     }, seqs)
-
-    print("Scoring phosphosites against kinase motifs:")
+    
+    if (verbose)
+        message("Scoring phosphosites against kinase motifs:")
     for (i in seq_len(length(motif.mouse.list.filtered))) {
         motifScoreMatrix[, i] <- frequencyScoring(seqWin,
                                                 motif.mouse.list.filtered[[i]])
-        cat(paste(i, ".", sep = ""))
+        if (verbose)
+            message(paste(i, ".", sep = ""))
     }
     motifScoreMatrix <- minmax(motifScoreMatrix)
     motifScoreMatrix
@@ -428,7 +448,8 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #'     top = 50,
 #'     cs = 0.8,
 #'     inclusion = 20,
-#'     iter = 5
+#'     iter = 5,
+#'     verbose = TRUE
 #' )
 #'
 #' @param phosScoringMatrices An output of kinaseSubstrateScore.
@@ -438,6 +459,8 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' @param inclusion A minimal number of substrates required for a kinase to be
 #' selected.
 #' @param iter A number of iterations for adaSampling.
+#' @param verbose Default to \code{TRUE} to show messages during the progress.
+#' All messages will be suppressed if set to \code{FALSE}
 #'
 #' @return Kinase prediction matrix
 #'
@@ -491,23 +514,27 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #'
 kinaseSubstratePred <- function(phosScoringMatrices,
     ensembleSize = 10, top = 50, cs = 0.8,
-    inclusion = 20, iter = 5) {
+    inclusion = 20, iter = 5, verbose = TRUE) {
     # create the list of kinase-substrates for prediction
     substrate.list = substrateList(phosScoringMatrices, top, cs, inclusion)
 
     # building the positive traning set
-    print("Predicting kinases for phosphosites:")
+    if (verbose)
+        message("Predicting kinases for phosphosites:")
     featureMat <- phosScoringMatrices$combinedScoreMatrix
     predMatrix <- matrix(0, nrow = nrow(featureMat),
         ncol = length(substrate.list))
     colnames(predMatrix) <- names(substrate.list)
     rownames(predMatrix) <- rownames(featureMat)
-    for (i in seq_len(length(substrate.list))) {
+    
+    tmp.list = lapply(seq(length(substrate.list)), function(i) {
         positive.train <- featureMat[substrate.list[[i]],]
         positive.cls <- rep(1, length(substrate.list[[i]]))
         negative.pool <- featureMat[!(rownames(featureMat) %in%
-            substrate.list[[i]]), ]
-        cat(paste(i, ".", sep = ""))
+                substrate.list[[i]]), ]
+        if (verbose)
+            message(paste(i, ".", sep = ""))
+        tmp_col = predMatrix[,i]
         for (e in seq_len(ensembleSize)) {
             negativeSize <- length(substrate.list[[i]])
             idx <- sample(seq_len(nrow(negative.pool)),
@@ -521,11 +548,17 @@ kinaseSubstratePred <- function(phosScoringMatrices,
             pred <- multiAdaSampling(train.mat,
                 test.mat = featureMat, label = cls,
                 kernelType = "radial", iter = iter)
-            predMatrix[, i] <- predMatrix[names(pred[, 1]), i] + pred[, 1]
+            tmp_col <- tmp_col[names(pred[, 1])] + pred[, 1]
         }
-    }
+        tmp_col
+    })
+    predMatrix = matrix(unlist(tmp.list), ncol = ncol(predMatrix))
+    colnames(predMatrix) = names(substrate.list)
+    rownames(predMatrix) = rownames(featureMat)
+    
     predMatrix <- predMatrix/ensembleSize
-    print("done")
+    if (verbose)
+        message("done")
     return(predMatrix)
 }
 
@@ -550,6 +583,7 @@ substrateList = function(phosScoringMatrices, top, cs, inclusion) {
 
 #' @import stats
 #' @import e1071
+#' @importFrom utils tail
 multiAdaSampling <- function(train.mat, test.mat,
     label, kernelType, iter = 5) {
 
@@ -570,7 +604,7 @@ multiAdaSampling <- function(train.mat, test.mat,
 
         X <- c()
         Y <- c()
-        for (j in seq_len(ncol(prob.mat))) {
+        tmp = lapply(seq(ncol(prob.mat)), function(j) {
             voteClass <- prob.mat[label == colnames(prob.mat)[j], ]
             idx <- c()
             idx <- sample(seq_len(nrow(voteClass)),
@@ -578,7 +612,12 @@ multiAdaSampling <- function(train.mat, test.mat,
                 prob = voteClass[, j])
             X <- rbind(X, train.mat[rownames(voteClass)[idx],])
             Y <- c(Y, label[rownames(voteClass)[idx]])
-        }
+            cbind(X,Y)
+        })
+        tmp = do.call(rbind, tmp)
+        Y = tmp[,tail(seq(ncol(tmp)), 1)]
+        X = tmp[,-tail(seq(ncol(tmp)),1)]
+        
     }
 
     pred <- attr(predict(model, newdata = test.mat,

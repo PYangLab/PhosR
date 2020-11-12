@@ -26,8 +26,9 @@
 #'             grps)[,colnames(phospho.cells.Ins.filtered)]
 #'
 #' set.seed(123)
-#' phospho.cells.Ins.impute[,1:5] <- ptImpute(phospho.cells.Ins.impute[,6:10],
-#'     phospho.cells.Ins.impute[,1:5], percent1 = 0.6,
+#' phospho.cells.Ins.impute[,seq(5)] <- ptImpute(
+#'     phospho.cells.Ins.impute[,seq(6,10)],
+#'     phospho.cells.Ins.impute[,seq(5)], percent1 = 0.6,
 #'     percent2 = 0, paired = FALSE)
 #'
 #' phospho.cells.Ins.ms <-
@@ -44,7 +45,7 @@ medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE) {
         mat.medianScaled <- do.call(cbind, lapply(tmp, medianScale,
             scale = scale))
 
-        if (reorder == FALSE) {
+        if (!reorder) {
             mat.medianScaled <- mat.medianScaled[, colnames(mat)]
         }
     } else {
@@ -55,7 +56,7 @@ medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE) {
 }
 
 medianScale <- function(mat, scale) {
-    if (scale == TRUE) {
+    if (scale) {
         normcont <- stats::median(apply(mat, 2, stats::median,
             na.rm = TRUE))
         adjval <- apply(mat, 2, stats::median, na.rm = TRUE) -
@@ -157,19 +158,31 @@ standardise <- function(mat) {
 #' site2 <- rownames(phospho.liver.Ins.TC.ratio.RUV)
 #'
 #' # step 2: rank by fold changes
-#' tmp <- do.call(cbind, lapply(split(1:ncol(phospho.L6.ratio), gsub('_exp\\d+',
-#'                             '', colnames(phospho.L6.ratio))),
-#'                             function(i){rowMeans(phospho.L6.ratio[,i])}))
+#' treatment.grps = split(seq(ncol(phospho.L6.ratio)), 
+#'     gsub('_exp\\d+', '', colnames(phospho.L6.ratio)))
+#' tmp <- do.call(
+#'     cbind, 
+#'     lapply(treatment.grps, function(i){
+#'         rowMeans(phospho.L6.ratio[,i])
+#'     })
+#' )
 #' site1 <- t(sapply(split(data.frame(tmp), site1), colMeans))[,-1]
 #'
-#' tmp <- do.call(cbind, lapply(split(1:ncol(phospho.liver.Ins.TC.ratio.RUV),
-#'                             gsub(
-#'                                 '(Intensity\\.)(.*)(\\_Bio\\d+)',
-#'                                 '\\2',
-#'                                 colnames(phospho.liver.Ins.TC.ratio.RUV))),
-#'                             function(i){
-#'                                 rowMeans(phospho.liver.Ins.TC.ratio.RUV[,i])
-#'                             }))
+#' treatment.grps = split(
+#'     seq(ncol(phospho.liver.Ins.TC.ratio.RUV)),
+#'     gsub('(Intensity\\.)(.*)(\\_Bio\\d+)', '\\2', 
+#'         colnames(phospho.liver.Ins.TC.ratio.RUV)
+#'     )
+#' )
+#' tmp <- do.call(
+#'     cbind, 
+#'     lapply(
+#'         treatment.grps,
+#'         function(i){
+#'             rowMeans(phospho.liver.Ins.TC.ratio.RUV[,i])
+#'         }
+#'     )
+#' )
 #' site2 <- t(sapply(split(data.frame(tmp), site2), colMeans))
 #'
 #' o <- mIntersect(site1, site2)

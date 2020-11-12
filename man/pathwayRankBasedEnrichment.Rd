@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathwayAnalysis.R
 \name{pathwayRankBasedEnrichment}
 \alias{pathwayRankBasedEnrichment}
-\title{Gene set enrichment analysis}
+\title{Phosphosite/Gene set enrichment analysis}
 \usage{
 pathwayRankBasedEnrichment(geneStats, annotation, alter = "greater")
 }
@@ -20,12 +20,16 @@ gene IDs.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes gene set enrichment analysis using Wilcoxon Rank Sum
+This function performes phosphosite (or gene) set enrichment analysis using Wilcoxon Rank Sum
 test.
 }
 \examples{
 
 library(limma)
+
+library(org.Rn.eg.db)
+library(reactome.db)
+library(annotate)
 
 data('phospho_L6_ratio')
 data('SPSs')
@@ -93,8 +97,23 @@ colnames(Tc) <- c('Ins', 'AICAR', 'AICAR+Ins')
 Tc.gene <- phosCollapse(Tc, id=gsub(';.+', '', rownames(Tc)),
     stat=apply(abs(Tc), 1, max), by = 'max')
 
+# Preparing Reactome annotation for our pathways analysis
+pathways = as.list(reactomePATHID2EXTID)
+
+path_names = as.list(reactomePATHID2NAME)
+name_id = match(names(pathways), names(path_names))
+names(pathways) = unlist(path_names)[name_id]
+
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
+    ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+    toupper(unique(gene_name))
+})
+
 # 1D gene-centric pathway analysis
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1],
-                                    annotation=Pathways.reactome,
+                                    annotation=pathways,
                                     alter = 'greater')
 }

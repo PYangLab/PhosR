@@ -7,8 +7,9 @@
 selectTimes(mat, timepoint, order, percent, w)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples in replicates for different treatments.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples in replicates for different 
+treatments.}
 
 \item{timepoint}{a timepoint as factor with a length equal to the
 number of columns of mat.}
@@ -21,7 +22,8 @@ with missing value larger than percent per timepoint.}
 \item{w}{a timepoint window for selection of phosphosites to remove.}
 }
 \value{
-a filtered matrix
+a filtered matrix. If param \code{mat} is a SummarizedExperiment 
+object, a SummarizedExperiment object will be returned.
 }
 \description{
 selectTimes
@@ -42,11 +44,21 @@ rmId = which(timepoint == "0s")
 
 # We replace the values to NA for the first 26 (~60\%) of the '0s' samples
 # for the first 100 phosphosite as NA
-phospho.liver.Ins.TC.sim[1:100,rmId[1:26]] = NA
+phospho.liver.Ins.TC.sim[seq(100),rmId[seq(26)]] = NA
 
 phospho.liver.Ins.TC.sim = selectTimes(phospho.liver.Ins.TC.sim,
                                     timepoint, timepointOrder, 0.5,
                                     w = length(table(timepoint)))
+
+# For SummarizedExperiment objects
+# mat = SummarizedExperiment::SummarizedExperiment(
+#     assay = phospho.liver.Ins.TC.sim,
+#     colData = S4Vectors::DataFrame(
+#         timepoint = timepoint
+#     )
+# )
+# phospho.liver.Ins.TC.sim = selectTimes(mat, mat$timepoint, timepointOrder, 
+#       0.5, w = length(table(mat$timepoint)))
 
 # Before filtering
 dim(phospho.liver.Ins.TC.ratio.RUV)

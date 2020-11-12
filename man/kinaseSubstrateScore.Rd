@@ -4,7 +4,14 @@
 \alias{kinaseSubstrateScore}
 \title{Kinase substrate scoring}
 \usage{
-kinaseSubstrateScore(substrate.list, mat, seqs, numMotif = 5, numSub = 1)
+kinaseSubstrateScore(
+    substrate.list,
+    mat,
+    seqs,
+    numMotif = 5, 
+    numSub = 1, 
+    verbose = TRUE
+)
 }
 \arguments{
 \item{substrate.list}{a list of kinases with each element containing an array
@@ -24,6 +31,9 @@ Default is 5.}
 \item{numSub}{minimum number of phosphosites used for compiling
 phosphorylation
 profile for each kinase. Default is 1.}
+
+\item{verbose}{Default to \code{TRUE} to show messages during the progress.
+All messages will be suppressed if set to \code{FALSE}}
 }
 \value{
 A list of 4 elements.

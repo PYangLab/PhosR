@@ -7,8 +7,8 @@
 scImpute(mat, percent, grps)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to replicates within a condition.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to replicates within a condition.}
 
 \item{percent}{a percent from 0 to 1, specifying the percentage of quantified
 values in any treatment group.}
@@ -16,7 +16,8 @@ values in any treatment group.}
 \item{grps}{a string specifying the grouping (replciates).}
 }
 \value{
-An imputed matrix
+An imputed matrix. If param \code{mat} is a SummarizedExperiment 
+object, a SummarizedExperiment object will be returned.
 }
 \description{
 Impute the missing values for a phosphosite across replicates within a single

@@ -7,8 +7,8 @@
 #' applying RUVIII. It will then return the normalised values for quantified
 #' phosphosites and remove imputed values.
 #'
-#' @param mat a matrix with rows correspond to phosphosites and columns
-#' correspond to samples.
+#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' phosphosites and columns correspond to samples.
 #' @param M is the design matrix as defined in RUVIII.
 #' @param ctl is the stable phosphosites (or negative controls as defined in
 #' RUVIII).
@@ -44,8 +44,17 @@
 #' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
 #' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
 #'                                 ctl = ctl)
-#'
+#' 
+#' # For SummarizedExperiment objects
+#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' #     assay = phospho.L6.ratio
+#' # )
+#' # phospho.L6.ratio.RUV = RUVphospho(mat, M = design, k = 3,
+#' #                                 ctl = ctl)
+#' 
 #' @importFrom ruv RUVIII
+#' @importFrom methods is
+#' @importFrom SummarizedExperiment assay
 #'
 #' @aliases RUVproteome
 #'
@@ -58,8 +67,20 @@ RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
         stop("Parameter M is missing!")
     if (missing(ctl))
         stop("Parameter ctl is missing!")
-    RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
+    
+    se = FALSE
+    if (methods::is(mat, "SummarizedExperiment")) {
+        mat.orig = mat
+        mat = as.matrix(SummarizedExperiment::assay(mat))
+        se = TRUE
+    }
+    mat = RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
         keepImpute = keepImpute, ...)
+    if (se) {
+        SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
+        mat = mat.orig
+    }
+    mat
 }
 
 
@@ -67,8 +88,21 @@ RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
 #' @export RUVproteome
 RUVproteome <- function(mat, M, ctl, k = NULL, m = 1.8, s = 0.3,
     keepImpute = FALSE, ...) {
-    RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
+    se = FALSE
+    if (methods::is(mat, "SummarizedExperiment")) {
+        mat.orig = mat
+        mat = as.matrix(SummarizedExperiment::assay(mat))
+        se = TRUE
+    }
+    
+    mat = RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
         keepImpute = keepImpute, ...)
+    
+    if (se) {
+        SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
+        mat = mat.orig
+    }
+    mat
 }
 
 # An internal wrapper function for calling RUVIII

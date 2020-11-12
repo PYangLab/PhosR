@@ -8,8 +8,8 @@
 RUVphospho(mat, M, ctl, k = NULL, m = 1.6, s = 0.6, keepImpute = FALSE, ...)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples.}
+\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+phosphosites and columns correspond to samples.}
 
 \item{M}{is the design matrix as defined in RUVIII.}
 
@@ -61,5 +61,12 @@ design = model.matrix(~ grps - 1)
 ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
 phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
                                 ctl = ctl)
+
+# For SummarizedExperiment objects
+# mat = SummarizedExperiment::SummarizedExperiment(
+#     assay = phospho.L6.ratio
+# )
+# phospho.L6.ratio.RUV = RUVphospho(mat, M = design, k = 3,
+#                                 ctl = ctl)
 
 }

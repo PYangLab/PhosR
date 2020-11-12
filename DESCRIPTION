@@ -4,7 +4,7 @@ Title: A set of methods and tools for comprehensive analysis of phosphoproteomic
 Version: 1.1.0
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
-    person("Taiyun", "Kim", email = "taiyun.kim@sydney.edu.au", role = c("aut", "cre")),
+    person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut", "cre")),
     person("Jieun Hani", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut"))
     )
 Description: PhosR is a package for the comprenhensive analysis of phosphoproteomic data.
@@ -32,12 +32,14 @@ Imports:
     rlang,
     graphics,
     grDevices,
-    utils
+    utils,
+    SummarizedExperiment,
+    methods
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
-biocViews: Software, ResearchField, SystemsBiology
+biocViews: Software, ResearchField, Proteomics
 Suggests:
     testthat,
     knitr,
@@ -47,4 +49,8 @@ Suggests:
     ClueR,
     directPA,
     ggplot2,
-    ggpubr
+    ggpubr,
+    rmarkdown,
+    org.Rn.eg.db,
+    reactome.db,
+    annotate
