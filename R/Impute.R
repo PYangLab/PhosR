@@ -7,14 +7,14 @@
 #'
 #' @usage scImpute(mat, percent, grps)
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to replicates within a condition.
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
 #' values in any treatment group.
 #' @param grps a string specifying the grouping (replciates).
 #'
-#' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment 
-#' object, a SummarizedExperiment object will be returned.
+#' @return An imputed matrix. If param \code{mat} is a PhosphoExperiment 
+#' object, a PhosphoExperiment object will be returned.
 #'
 #' @examples
 #'
@@ -49,13 +49,14 @@ scImpute <- function(mat, percent, grps) {
         stop("Parameter percent must be a numeric value between 0 and 1")
     }
     
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
-        mat.orig = mat
-        se = TRUE
-        mat = SummarizedExperiment::assay(mat)
+    mat.orig = mat
+    if (methods::is(mat, "PhosphoExperiment")) {
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
     }
-    
     tmp <- lapply(split(seq_len(ncol(mat)), grps), function(i) mat[,
         i])
     mat.imputed <- do.call(cbind, lapply(tmp, stImp, percent = percent))[,
@@ -90,7 +91,7 @@ stImp <- function(mat, percent) {
 #'
 #' @usage tImpute(mat, m, s)
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples.
 #' @param m a numeric number for controlling mean downshifting.
 #' @param s a numeric number for controlling standard deviation of downshifted
@@ -112,16 +113,20 @@ stImp <- function(mat, percent) {
 #' @importFrom methods is
 #'
 #' @export
-tImpute <- function(mat, m = 1.6, s = 0.6) {
+tImpute <- function(mat, assay = NULL, m = 1.6, s = 0.6) {
     if (missing(mat)) {
         stop("Paramter mat is missing!")
     }
     
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
-        mat.orig = mat
-        se = TRUE
-        mat = SummarizedExperiment::assay(mat)
+    mat.orig = mat
+    pe = FALSE
+    if (methods::is(mat, "PhosphoExperiment")) {
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
+        pe = TRUE
     }
 
     ms <- colMeans(mat, na.rm = TRUE)
@@ -133,7 +138,7 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
         mat.impute[which(is.na(mat.impute[, i])), i] <- r
     }
     
-    if (se) {
+    if (pe) {
         SummarizedExperiment::assay(mat.orig, "imputed") = mat.impute
         mat.impute = mat.orig
     }
@@ -163,9 +168,9 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #'     verbose = TRUE
 #' )
 #'
-#' @param mat1 a matrix (or SummarizedExperiment object) with rows correspond to
+#' @param mat1 a matrix (or PhosphoExperiment object) with rows correspond to
 #'  phosphosites and columns correspond to replicates within treatment1.
-#' @param mat2 a matrix (or SummarizedExperiment object) with rows correspond to
+#' @param mat2 a matrix (or PhosphoExperiment object) with rows correspond to
 #'  phosphosites and columns correspond to replicates within treatment2.
 #' @param percent1 a percent indicating minimum quantified percentages required
 #' for considering for imputation.
@@ -202,8 +207,8 @@ tImpute <- function(mat, m = 1.6, s = 0.6) {
 #'     paired = FALSE)
 #' 
 #' 
-#' # For SummarizedExperiment objects
-#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' # For PhosphoExperiment objects
+#' # mat = PhosphoExperiment(
 #' #     assay = phospho.cells.Ins.impute,
 #' #     colData = S4Vectors::DataFrame(
 #' #         groups = grps
@@ -230,15 +235,22 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
     if (missing(percent2))
         stop("Paramter percent2 is missing!")
     
-    se = FALSE
-    if (methods::is(mat1, "SummarizedExperiment") && 
-            methods::is(mat2, "SummarizedExperiment")) {
-        mat1.orig = mat1
-        mat2.orig = mat2
-        se = TRUE
-        mat1 = SummarizedExperiment::assay(mat1)
-        mat2 = SummarizedExperiment::assay(mat2)
+    pe = FALSE
+    mat1.orig = mat1
+    mat2.orig = mat2
+    
+    if (methods::is(mat1, "PhosphoExperiment") && 
+            methods::is(mat2, "PhosphoExperiment")) {
+        pe = TRUE
+        if (is.null(assay)) {
+            mat1 = SummarizedExperiment::assay(mat1)
+            mat2 = SummarizedExperiment::assay(mat2)
+        } else {
+            mat1 = SummarizedExperiment::assay(mat1, assay)
+            mat2 = SummarizedExperiment::assay(mat2, assay)
+        }
     }
+    
     
     # impute for mat2
     idx1 <- which((rowSums(!is.na(mat1))/nrow(mat1)) >= percent1 &
@@ -270,25 +282,31 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
                     sds[i] * m), sd = (sds[i] * s))
             }
         }
-        if (se) {
-            mat = SummarizedExperiment::SummarizedExperiment(
-                cbind(mat1, mat2),
-                colData = cbind(SummarizedExperiment::colData(mat1.orig), 
-                    SummarizedExperiment::colData(mat2.orig)),
-                rowData = rowData(SummarizedExperiment::rowData(mat1.orig))
-            )
+        if (pe) {
+            mat = cbind(mat1.orig, mat2.orig)
+            if (is.null(assay)) {
+                SummarizedExperiment::assay(mat, withDimnames = FALSE) = 
+                    cbind(mat1, mat2)
+            } else {
+                SummarizedExperiment::assay(mat, assay, withDimnames = FALSE) = 
+                    cbind(mat1, mat2)
+            }
+            
         } else {
             mat = cbind(mat1, mat2)
         }
         
         return(mat)
     } else {
-        if (se) {
-            mat2 = SummarizedExperiment::SummarizedExperiment(
-                mat2,
-                colData = SummarizedExperiment::colData(mat2),
-                rowData = SummarizedExperiment::rowData(mat2)
-            )
+        if (pe) {
+            if (is.null(assay)) {
+                SummarizedExperiment::assay(mat2.orig, withDimnames = FALSE) = 
+                    mat2
+            } else {
+                SummarizedExperiment::assay(mat2.orig, assay, 
+                    withDimnames = FALSE) = mat2            
+            }
+            mat2 = mat2.orig
         }
         return(mat2)
     }

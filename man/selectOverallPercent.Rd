@@ -7,7 +7,7 @@
 selectOverallPercent(mat, percent=NULL, n=NULL)
 }
 \arguments{
-\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+\item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples in replicates for different 
 treatments.}
 

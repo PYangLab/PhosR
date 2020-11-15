@@ -8,7 +8,7 @@
 #'
 #' @usage selectGrps(mat, grps, percent, n)
 #'
-#' @param mat a matrix (SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
 #' treatments. 
 #' @param grps a string specifying the grouping (replicates).
@@ -27,8 +27,8 @@
 #'
 #' phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
 #' 
-#' # For SummarizedExperiment objects
-#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' # For PhosphoExperiment objects
+#' # mat = PhosR::PhosphoExperiment(
 #' #     assay = phospho.cells.Ins,
 #' #     colData = S4Vectors::DataFrame(
 #' #         groups = grps
@@ -41,7 +41,7 @@
 #'
 #' @export
 #'
-selectGrps <- function(mat, grps, percent, n = 1) {
+selectGrps <- function(mat, assay = NULL, grps, percent, n = 1) {
     if (missing(mat))
         stop("Parameter mat is missing!")
     if (missing(grps))
@@ -54,11 +54,14 @@ selectGrps <- function(mat, grps, percent, n = 1) {
     if ((percent < 0) || (percent > 1))
         stop("Parameter percent must be a numeric value between 0 and 1")
     
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
-        mat.orig = mat
-        mat = SummarizedExperiment::assay(mat)
-        se = TRUE
+    mat.filtered = mat
+    
+    if (methods::is(mat, "PhosphoExperiment")) {
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
     }
     
 
@@ -71,17 +74,8 @@ selectGrps <- function(mat, grps, percent, n = 1) {
     }))
     
     sel = rowSums(test) >= n
-    if (se) {
-        mat.filtered <- SummarizedExperiment::SummarizedExperiment(
-            mat[sel,],
-            colData = SummarizedExperiment::colData(mat.orig),
-            rowData = SummarizedExperiment::rowData(mat.orig)[sel,,drop = FALSE]
-        )
-    } else {
-        mat.filtered <- mat[sel, ]
-    }
     
-    return(mat.filtered)
+    return(mat.filtered[sel,])
 }
 
 
@@ -89,7 +83,7 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #'
 #' @usage selectTimes(mat, timepoint, order, percent, w)
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
 #' treatments.
 #' @param timepoint a timepoint as factor with a length equal to the
@@ -124,8 +118,8 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #'                                     timepoint, timepointOrder, 0.5,
 #'                                     w = length(table(timepoint)))
 #' 
-#' # For SummarizedExperiment objects
-#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' # For PhosphoExperiment objects
+#' # mat = PhosR::PhosphoExperiment(
 #' #     assay = phospho.liver.Ins.TC.sim,
 #' #     colData = S4Vectors::DataFrame(
 #' #         timepoint = timepoint
@@ -144,7 +138,7 @@ selectGrps <- function(mat, grps, percent, n = 1) {
 #' 
 #' @export
 #'
-selectTimes <- function(mat, timepoint, order, percent, w = 1) {
+selectTimes <- function(mat, assay = NULL, timepoint, order, percent, w = 1) {
     if (missing(mat))
         stop("Parameter mat is missing!")
     if (missing(timepoint))
@@ -157,11 +151,13 @@ selectTimes <- function(mat, timepoint, order, percent, w = 1) {
         stop("Parameter percent must be a numeric value between 0 and 1")
     
     
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
-        mat.orig = mat
-        mat = SummarizedExperiment::assay(mat)
-        se = TRUE
+    mat.orig = mat
+    if (methods::is(mat, "PhosphoExperiment")) {
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
     }
     
     # split the matrix by groups and organise them to a list
@@ -174,7 +170,7 @@ selectTimes <- function(mat, timepoint, order, percent, w = 1) {
 
     if ((w == 1) | (w == length(order))) {
         sel = rowSums(test) >= w
-        mat.filtered <- mat[sel, ]
+        mat.filtered <- mat.orig[sel, ]
     } else if (w > length(order)) {
         stop("w is greater than the number of time points.
 Please try a smaller w.")
@@ -183,15 +179,9 @@ Please try a smaller w.")
         sel = Reduce(union, lapply(seq_len(idx), function(i) {
             which(rowSums(test[, seq(i, i+w-1),drop = FALSE]) == w)
         }))
-        mat.filtered <- mat[sel, ]
+        mat.filtered <- mat.orig[sel, ]
     }
-    if (se) {
-        mat.filtered = SummarizedExperiment::SummarizedExperiment(
-            mat.filtered,
-            colData = SummarizedExperiment::colData(mat.orig),
-            rowData = SummarizedExperiment::rowData(mat.orig)[sel,,drop = FALSE]
-        )
-    }
+    
     
     return(mat.filtered)
 }
@@ -205,7 +195,7 @@ Please try a smaller w.")
 #'
 #' @usage selectOverallPercent(mat, percent=NULL, n=NULL)
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
 #' treatments.
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
@@ -232,14 +222,8 @@ Please try a smaller w.")
 #' 
 #' @export
 #'
-selectOverallPercent <- function(mat, percent = NULL, n = NULL) {
-    mat.filtered <- mat
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
-        mat.orig = mat
-        se = TRUE
-        mat.filtered = SummarizedExperiment::assay(mat)
-    }
+selectOverallPercent <- function(mat, percent = NULL, n = NULL) { 
+
 
     if (missing(mat))
         stop("Parameter mat is missing!")
@@ -248,25 +232,28 @@ selectOverallPercent <- function(mat, percent = NULL, n = NULL) {
     if (is.null(percent) & is.null(n))
         stop("specify either percentage of number of quantified values for a
 given phosphosite to be retained.")
-
+    
+    mat.orig = mat
+    if (methods::is(mat, "PhosphoExperiment")) {
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
+    }
+    
     if (!is.null(percent) & is.null(n)) {
         sel = rowSums(!is.na(mat))/ncol(mat) >= percent
-        mat.filtered <- mat[sel, ]
+        mat.filtered <- mat.orig[sel, ]
     } else if (is.null(percent) & !is.null(n)) {
         sel = rowSums(!is.na(mat)) >= n
-        mat.filtered <- mat[sel, ]
+        mat.filtered <- mat.orig[sel, ]
     } else {
         sel = (rowSums(!is.na(mat))/ncol(mat) >=
                 percent) & (rowSums(!is.na(mat)) >= n)
-        mat.filtered <- mat[sel, ]
+        mat.filtered <- mat.orig[sel, ]
     }
-    if (se) {
-        mat.filtered = SummarizedExperiment::SummarizedExperiment(
-            mat.filtered,
-            colData = SummarizedExperiment::colData(mat.orig),
-            rowData = SummarizedExperiment::rowData(mat.orig)[sel,,drop = FALSE]
-        )
-    }
+    
     
     return(mat.filtered)
 }

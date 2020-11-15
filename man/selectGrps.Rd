@@ -7,7 +7,7 @@
 selectGrps(mat, grps, percent, n)
 }
 \arguments{
-\item{mat}{a matrix (SummarizedExperiment object) with rows correspond to 
+\item{mat}{a matrix (PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples in replicates for different 
 treatments.}
 
@@ -35,8 +35,8 @@ grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
 
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
 
-# For SummarizedExperiment objects
-# mat = SummarizedExperiment::SummarizedExperiment(
+# For PhosphoExperiment objects
+# mat = PhosR::PhosphoExperiment(
 #     assay = phospho.cells.Ins,
 #     colData = S4Vectors::DataFrame(
 #         groups = grps

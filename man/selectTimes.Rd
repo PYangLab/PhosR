@@ -7,7 +7,7 @@
 selectTimes(mat, timepoint, order, percent, w)
 }
 \arguments{
-\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+\item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples in replicates for different 
 treatments.}
 
@@ -50,8 +50,8 @@ phospho.liver.Ins.TC.sim = selectTimes(phospho.liver.Ins.TC.sim,
                                     timepoint, timepointOrder, 0.5,
                                     w = length(table(timepoint)))
 
-# For SummarizedExperiment objects
-# mat = SummarizedExperiment::SummarizedExperiment(
+# For PhosphoExperiment objects
+# mat = PhosR::PhosphoExperiment(
 #     assay = phospho.liver.Ins.TC.sim,
 #     colData = S4Vectors::DataFrame(
 #         timepoint = timepoint
