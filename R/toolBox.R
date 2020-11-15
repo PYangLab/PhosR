@@ -526,7 +526,7 @@ meanAbundance <- function(mat, grps) {
     # meanMat <- sapply(split(seq_len(ncol(mat)), grps),
     # function(i) rowMeans(mat[,i]))[,unique(grps)]
     meanMat = mapply(function(i, mat) {
-        rowMeans(mat[, i])
+        rowMeans(mat[, i], na.rm = TRUE)
     }, split(seq_len(ncol(mat)), grps), MoreArgs = list(mat = mat))[,
         unique(grps)]
     return(meanMat)
