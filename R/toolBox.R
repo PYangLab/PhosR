@@ -95,7 +95,7 @@ medianScale <- function(mat, scale) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -152,9 +152,9 @@ standardise <- function(mat) {
 #' data('phospho_liverInsTC_RUV_sample')
 #' data('phospho_L6_ratio')
 #'
-#' site1 <- gsub('~[STY]', '~',
-#'             sapply(strsplit(rownames(phospho.L6.ratio), '~'),
-#'                     function(x){paste(toupper(x[2]), x[3], sep='~')}))
+#' site1 <- gsub('~[STY]', ';',
+#'             sapply(strsplit(rownames(phospho.L6.ratio), ';'),
+#'                     function(x){paste(toupper(x[2]), x[3], sep=';')}))
 #' site2 <- rownames(phospho.liver.Ins.TC.ratio.RUV)
 #'
 #' # step 2: rank by fold changes
@@ -224,7 +224,7 @@ mUnion <- function(x, y, ...) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -249,10 +249,10 @@ mUnion <- function(x, y, ...) {
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
 #'                     function(x)x[4])
 #'
 #' numMotif = 5
@@ -325,7 +325,7 @@ minmax <- function(mat) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -342,9 +342,9 @@ minmax <- function(mat) {
 #'
 #'
 #' # divides the phospho.L6.ratio data into groups by phosphosites
-#' L6.sites <- gsub(' ', '', gsub('~[STY]', '~',
-#'                 sapply(strsplit(rownames(phospho.L6.ratio.RUV), '~'),
-#'                 function(x){paste(toupper(x[2]), x[3], sep='~')})))
+#' L6.sites <- gsub(' ', '', gsub('~[STY]', ';',
+#'                 sapply(strsplit(rownames(phospho.L6.ratio.RUV), ';'),
+#'                 function(x){paste(toupper(x[2]), x[3], sep=';')})))
 #' phospho.L6.ratio.sites <- t(sapply(split(data.frame(phospho.L6.ratio.RUV),
 #'                                         L6.sites), colMeans))
 #'
@@ -445,7 +445,7 @@ phosCollapse <- function(mat, id, stat, by = "min") {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -498,7 +498,7 @@ matANOVA <- function(mat, grps) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),

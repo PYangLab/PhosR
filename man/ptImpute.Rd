@@ -12,14 +12,15 @@ ptImpute(
     m = 1.6, 
     s = 0.6, 
     paired = TRUE, 
-    verbose = TRUE
+    verbose = TRUE,
+    assay
 )
 }
 \arguments{
-\item{mat1}{a matrix (or SummarizedExperiment object) with rows correspond to
+\item{mat1}{a matrix (or PhosphoExperiment object) with rows correspond to
 phosphosites and columns correspond to replicates within treatment1.}
 
-\item{mat2}{a matrix (or SummarizedExperiment object) with rows correspond to
+\item{mat2}{a matrix (or PhosphoExperiment object) with rows correspond to
 phosphosites and columns correspond to replicates within treatment2.}
 
 \item{percent1}{a percent indicating minimum quantified percentages required
@@ -38,6 +39,9 @@ treatment2 (default) or treatment2 only (if paired=FALSE).}
 
 \item{verbose}{Default to \code{TRUE} to show messages during the progress.
 All messages will be suppressed if set to \code{FALSE}}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 }
 \value{
 An imputed matrix
@@ -70,8 +74,8 @@ phospho.cells.Ins.impute[,seq(6)], percent1 = 0.6, percent2 = 0,
     paired = FALSE)
 
 
-# For SummarizedExperiment objects
-# mat = SummarizedExperiment::SummarizedExperiment(
+# For PhosphoExperiment objects
+# mat = PhosphoExperiment(
 #     assay = phospho.cells.Ins.impute,
 #     colData = S4Vectors::DataFrame(
 #         groups = grps

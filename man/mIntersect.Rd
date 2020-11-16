@@ -22,9 +22,9 @@ A recusive loop for intersecting multiple sets.
 data('phospho_liverInsTC_RUV_sample')
 data('phospho_L6_ratio')
 
-site1 <- gsub('~[STY]', '~',
-            sapply(strsplit(rownames(phospho.L6.ratio), '~'),
-                    function(x){paste(toupper(x[2]), x[3], sep='~')}))
+site1 <- gsub('~[STY]', ';',
+            sapply(strsplit(rownames(phospho.L6.ratio), ';'),
+                    function(x){paste(toupper(x[2]), x[3], sep=';')}))
 site2 <- rownames(phospho.liver.Ins.TC.ratio.RUV)
 
 # step 2: rank by fold changes

@@ -4,7 +4,7 @@
 \alias{selectTimes}
 \title{selectTimes}
 \usage{
-selectTimes(mat, timepoint, order, percent, w)
+selectTimes(mat, timepoint, order, percent, w, assay)
 }
 \arguments{
 \item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
@@ -20,6 +20,9 @@ number of columns of mat.}
 with missing value larger than percent per timepoint.}
 
 \item{w}{a timepoint window for selection of phosphosites to remove.}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 }
 \value{
 a filtered matrix. If param \code{mat} is a SummarizedExperiment 

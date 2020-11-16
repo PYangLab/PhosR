@@ -23,7 +23,7 @@ data('phospho_L6_ratio')
 data('KinaseMotifs')
 
 # Extracting first 10 sequences for demonstration purpose
-seqs = unlist(lapply(strsplit(rownames(phospho.L6.ratio), "~"),
+seqs = unlist(lapply(strsplit(rownames(phospho.L6.ratio), ";"),
                     function(i) {i[4]}))
 seqs = seqs[seq(10)]
 

@@ -24,11 +24,11 @@ The PhosphoExperiment class
 \examples{
 library(PhosR)
 quant <- as.matrix(PhosR::phospho.L6.ratio)
-uniprot <- as.character(sapply(strsplit(rownames(quant),"~"), function(x) x[[2]]))
-symbol <- as.character(sapply(strsplit(rownames(quant),"~"), function(x) x[[2]]))
-site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),"~"), function(x) x[[3]])))
-res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),"~"), function(x) x[[3]])))
-seq <- as.character(sapply(strsplit(rownames(quant),"~"), function(x) x[[4]]))
+uniprot <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
+symbol <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
+site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
+res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
+seq <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[4]]))
 phosData <- PhosphoExperiment(assays = list(Quantification = quant), UniprotID = uniprot)
 
 }

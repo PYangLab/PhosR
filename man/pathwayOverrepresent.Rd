@@ -40,7 +40,7 @@ grps = gsub('_.+', '', colnames(phospho.L6.ratio))
 
 # Cleaning phosphosite label
 phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
                                 function(x){paste(toupper(x[2]), x[3], '',
                                                 sep=';')}))
 phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -57,9 +57,9 @@ phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
 
 
 # divides the phospho.L6.ratio data into groups by phosphosites
-L6.sites <- gsub(' ', '', gsub('~[STY]', '~',
-    sapply(strsplit(rownames(phospho.L6.ratio.RUV), '~'),
-        function(x){paste(toupper(x[2]), x[3], sep='~')})))
+L6.sites <- gsub(' ', '', gsub('~[STY]', ';',
+    sapply(strsplit(rownames(phospho.L6.ratio.RUV), ';'),
+        function(x){paste(toupper(x[2]), x[3], sep=';')})))
 phospho.L6.ratio.sites <- t(sapply(split(data.frame(phospho.L6.ratio.RUV),
                                         L6.sites), colMeans))
 

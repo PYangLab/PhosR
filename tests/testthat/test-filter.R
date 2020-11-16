@@ -46,7 +46,10 @@ test_that(
     mat2 = mat
     mat2[51:100, c(1:4,7:11)] = NA
     mat_expected = mat[1:50,]
-    expect_identical(selectGrps(mat2, grps, 0.5, 1), mat_expected)
+    expect_identical(
+      selectGrps(mat = mat2, grps = grps, percent = 0.5, n = 1), 
+      mat_expected
+    )
   }
 )
 
@@ -58,7 +61,10 @@ test_that(
     
     mat2 = mat
     mat2[51:100, c(1:3,7:9)] = NA
-    expect_identical(selectGrps(mat2, grps, 0.5, 1), mat2)
+    expect_identical(
+      selectGrps(mat = mat2, grps = grps, percent = 0.5, n = 1), 
+      mat2
+    )
   }
 )
 

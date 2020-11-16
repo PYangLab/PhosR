@@ -28,7 +28,7 @@ grps = gsub('_.+', '', colnames(phospho.L6.ratio))
 
 # Cleaning phosphosite label
 phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
                                 function(x){paste(toupper(x[2]), x[3], '',
                                                 sep=';')}))
 phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -54,7 +54,7 @@ aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
 phosphoL6.reg <- phosphoL6[(aov < 0.05) &
                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)
-rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 
 

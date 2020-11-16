@@ -5,10 +5,20 @@
 \alias{RUVproteome}
 \title{RUV for phosphoproteomics data normalisation}
 \usage{
-RUVphospho(mat, M, ctl, k = NULL, m = 1.6, s = 0.6, keepImpute = FALSE, ...)
+RUVphospho(
+  mat,
+  M,
+  ctl,
+  k = NULL,
+  m = 1.6,
+  s = 0.6,
+  keepImpute = FALSE,
+  assay = NULL,
+  ...
+)
 }
 \arguments{
-\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+\item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples.}
 
 \item{M}{is the design matrix as defined in RUVIII.}
@@ -24,6 +34,9 @@ RUVIII).}
 sampling values.}
 
 \item{keepImpute}{a boolean to keep the missing value in the returned matrix.}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 
 \item{...}{additional parameters that may be passed to RUVIII.}
 }
@@ -47,7 +60,7 @@ grps = gsub('_.+', '', colnames(phospho.L6.ratio))
 
 # Cleaning phosphosite label
 phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
                                 function(x){paste(toupper(x[2]), x[3], '',
                                                 sep=';')}))
 phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -62,8 +75,8 @@ ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
 phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
                                 ctl = ctl)
 
-# For SummarizedExperiment objects
-# mat = SummarizedExperiment::SummarizedExperiment(
+# For PhosphoExperiment objects
+# mat = PhosphoExperiment(
 #     assay = phospho.L6.ratio
 # )
 # phospho.L6.ratio.RUV = RUVphospho(mat, M = design, k = 3,

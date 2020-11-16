@@ -4,7 +4,7 @@
 \alias{selectOverallPercent}
 \title{Select phosphosite by percentage of quantification}
 \usage{
-selectOverallPercent(mat, percent=NULL, n=NULL)
+selectOverallPercent(mat, percent, n, assay)
 }
 \arguments{
 \item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
@@ -17,6 +17,9 @@ analysis.}
 
 \item{n}{an integer indicating n or more quantified values required for
 retaining a phosphosite for subsequent analysis.}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 }
 \value{
 a filtered matrix
