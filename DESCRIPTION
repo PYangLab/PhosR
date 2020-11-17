@@ -45,6 +45,7 @@ Suggests:
     testthat,
     knitr,
     GGally,
+    rgl,
     network,
     reshape2,
     ClueR,
