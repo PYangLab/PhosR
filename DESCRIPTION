@@ -46,6 +46,7 @@ Suggests:
     knitr,
     GGally,
     rgl,
+    sna,
     network,
     reshape2,
     ClueR,
