@@ -39,7 +39,7 @@ scImpute <- function(mat, percent, grps, assay = NULL) {
         stop("Parameter mat is missing!")
     }
     if (missing(percent)) {
-        stop("Parameter percent is percent!")
+        stop("Parameter percent is missing!")
     }
     if (missing(grps)) {
         stop("Parameter grps is missing!")
