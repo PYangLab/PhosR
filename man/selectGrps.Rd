@@ -4,7 +4,7 @@
 \alias{selectGrps}
 \title{Select by treatment groups (replicate block)}
 \usage{
-selectGrps(mat, grps, percent, n)
+selectGrps(mat, grps, percent, n, assay)
 }
 \arguments{
 \item{mat}{a matrix (PhosphoExperiment object) with rows correspond to 
@@ -18,6 +18,9 @@ values in any treatment group.}
 
 \item{n}{an integer indicating n or more replicates pass the percentage
 filtering for a phosphosite to be included.}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 }
 \value{
 a filtered matrix with at least 'percent' quantification

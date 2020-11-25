@@ -26,7 +26,7 @@ grps = gsub('_.+', '', colnames(phospho.L6.ratio))
 
 # Cleaning phosphosite label
 phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
                                 function(x){paste(toupper(x[2]), x[3], '',
                                                 sep=';')}))
 phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),

@@ -5,13 +5,15 @@
 #' if there are n or more quantified values of that phosphosite in that
 #' condition.
 #'
-#' @usage scImpute(mat, percent, grps)
+#' @usage scImpute(mat, percent, grps, assay)
 #'
 #' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to replicates within a condition.
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
 #' values in any treatment group.
 #' @param grps a string specifying the grouping (replciates).
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return An imputed matrix. If param \code{mat} is a PhosphoExperiment 
 #' object, a PhosphoExperiment object will be returned.
@@ -32,7 +34,7 @@
 #' @importFrom methods is
 #' 
 #' @export
-scImpute <- function(mat, percent, grps) {
+scImpute <- function(mat, percent, grps, assay = NULL) {
     if (missing(mat)) {
         stop("Parameter mat is missing!")
     }
@@ -50,6 +52,7 @@ scImpute <- function(mat, percent, grps) {
     }
     
     mat.orig = mat
+    pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
         if (is.null(assay)) {
             mat = SummarizedExperiment::assay(mat)
@@ -62,7 +65,7 @@ scImpute <- function(mat, percent, grps) {
     mat.imputed <- do.call(cbind, lapply(tmp, stImp, percent = percent))[,
         colnames(mat)]
     
-    if (se) {
+    if (pe) {
         SummarizedExperiment::assay(mat.orig, "imputed") = mat.imputed
         mat.imputed = mat.orig
     }
@@ -89,13 +92,15 @@ stImp <- function(mat, percent) {
 #'
 #' Tail-based imputation approach as implemented in Perseus.
 #'
-#' @usage tImpute(mat, m, s)
+#' @usage tImpute(mat, m, s, assay)
 #'
 #' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples.
 #' @param m a numeric number for controlling mean downshifting.
 #' @param s a numeric number for controlling standard deviation of downshifted
 #' sampling values.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return An imputed matrix. If param \code{mat} is a SummarizedExperiment 
 #' object, a SummarizedExperiment object will be returned.
@@ -113,7 +118,7 @@ stImp <- function(mat, percent) {
 #' @importFrom methods is
 #'
 #' @export
-tImpute <- function(mat, assay = NULL, m = 1.6, s = 0.6) {
+tImpute <- function(mat, m = 1.6, s = 0.6, assay = NULL) {
     if (missing(mat)) {
         stop("Paramter mat is missing!")
     }
@@ -165,7 +170,8 @@ tImpute <- function(mat, assay = NULL, m = 1.6, s = 0.6) {
 #'     m = 1.6, 
 #'     s = 0.6, 
 #'     paired = TRUE, 
-#'     verbose = TRUE
+#'     verbose = TRUE,
+#'     assay
 #' )
 #'
 #' @param mat1 a matrix (or PhosphoExperiment object) with rows correspond to
@@ -183,6 +189,8 @@ tImpute <- function(mat, assay = NULL, m = 1.6, s = 0.6) {
 #' treatment2 (default) or treatment2 only (if paired=FALSE).
 #' @param verbose Default to \code{TRUE} to show messages during the progress.
 #' All messages will be suppressed if set to \code{FALSE}
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #' 
 #' 
 #' @return An imputed matrix
@@ -225,7 +233,7 @@ tImpute <- function(mat, assay = NULL, m = 1.6, s = 0.6) {
 #' @export
 #'
 ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
-    s = 0.6, paired = TRUE, verbose = TRUE) {
+    s = 0.6, paired = TRUE, verbose = TRUE, assay = NULL) {
     if (missing(mat1))
         stop("Paramter mat1 is missing!")
     if (missing(mat2))

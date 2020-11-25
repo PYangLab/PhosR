@@ -6,16 +6,20 @@
 #'
 #' @author Pengyi Yang, Taiyun Kim
 #'
-#' @usage selectGrps(mat, grps, percent, n)
+#' @usage selectGrps(mat, grps, percent, n, assay)
 #'
 #' @param mat a matrix (PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
 #' treatments. 
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #' @param grps a string specifying the grouping (replicates).
 #' @param percent a percent from 0 to 1, specifying the percentage of quantified
 #'  values in any treatment group.
 #' @param n an integer indicating n or more replicates pass the percentage
 #' filtering for a phosphosite to be included.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return a filtered matrix with at least 'percent' quantification
 #' in one or more conditions. If an input \code{mat} is a SummarizedExperiment 
@@ -41,7 +45,7 @@
 #'
 #' @export
 #'
-selectGrps <- function(mat, assay = NULL, grps, percent, n = 1) {
+selectGrps <- function(mat, grps, percent, n = 1, assay = NULL) {
     if (missing(mat))
         stop("Parameter mat is missing!")
     if (missing(grps))
@@ -81,7 +85,7 @@ selectGrps <- function(mat, assay = NULL, grps, percent, n = 1) {
 
 #' @title selectTimes
 #'
-#' @usage selectTimes(mat, timepoint, order, percent, w)
+#' @usage selectTimes(mat, timepoint, order, percent, w, assay)
 #'
 #' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
@@ -92,6 +96,8 @@ selectGrps <- function(mat, assay = NULL, grps, percent, n = 1) {
 #' @param percent a percent (decimal) from 0 to 1, to filter phosphosites with
 #' with missing value larger than percent per timepoint.
 #' @param w a timepoint window for selection of phosphosites to remove.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return a filtered matrix. If param \code{mat} is a SummarizedExperiment 
 #' object, a SummarizedExperiment object will be returned.
@@ -138,7 +144,7 @@ selectGrps <- function(mat, assay = NULL, grps, percent, n = 1) {
 #' 
 #' @export
 #'
-selectTimes <- function(mat, assay = NULL, timepoint, order, percent, w = 1) {
+selectTimes <- function(mat, timepoint, order, percent, w = 1, assay = NULL) {
     if (missing(mat))
         stop("Parameter mat is missing!")
     if (missing(timepoint))
@@ -193,7 +199,7 @@ Please try a smaller w.")
 #' @description Select phosphosites that have been quantified in more than a
 #' given percentage of samples
 #'
-#' @usage selectOverallPercent(mat, percent=NULL, n=NULL)
+#' @usage selectOverallPercent(mat, percent, n, assay)
 #'
 #' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples in replicates for different 
@@ -203,6 +209,8 @@ Please try a smaller w.")
 #' analysis.
 #' @param n an integer indicating n or more quantified values required for
 #' retaining a phosphosite for subsequent analysis.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return a filtered matrix
 #'
@@ -222,7 +230,7 @@ Please try a smaller w.")
 #' 
 #' @export
 #'
-selectOverallPercent <- function(mat, percent = NULL, n = NULL) { 
+selectOverallPercent <- function(mat, percent = NULL, n = NULL, assay = NULL) { 
 
 
     if (missing(mat))

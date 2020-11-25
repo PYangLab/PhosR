@@ -22,7 +22,7 @@ data("phospho_L6_ratio")
 # We will create a frequency matrix of Tfg S198 phosphosite.
 rownames(phospho.L6.ratio)[1]
 substrate.seq = unlist(lapply(strsplit(rownames(phospho.L6.ratio)[1],
-                                    split = "~"), function(i) i[4]))
+                                    split = ";"), function(i) i[4]))
 freq.mat = createFrequencyMat(substrate.seq)
 
 }

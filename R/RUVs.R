@@ -7,7 +7,7 @@
 #' applying RUVIII. It will then return the normalised values for quantified
 #' phosphosites and remove imputed values.
 #'
-#' @param mat a matrix (or SummarizedExperiment object) with rows correspond to 
+#' @param mat a matrix (or PhosphoExperiment object) with rows correspond to 
 #' phosphosites and columns correspond to samples.
 #' @param M is the design matrix as defined in RUVIII.
 #' @param ctl is the stable phosphosites (or negative controls as defined in
@@ -18,6 +18,8 @@
 #' sampling values.
 #' @param keepImpute a boolean to keep the missing value in the returned matrix.
 #' @param ... additional parameters that may be passed to RUVIII.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return A normalised matrix.
 #'
@@ -30,7 +32,7 @@
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -45,8 +47,8 @@
 #' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
 #'                                 ctl = ctl)
 #' 
-#' # For SummarizedExperiment objects
-#' # mat = SummarizedExperiment::SummarizedExperiment(
+#' # For PhosphoExperiment objects
+#' # mat = PhosphoExperiment(
 #' #     assay = phospho.L6.ratio
 #' # )
 #' # phospho.L6.ratio.RUV = RUVphospho(mat, M = design, k = 3,
@@ -60,7 +62,7 @@
 #'
 #' @export
 RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
-    keepImpute = FALSE, ...) {
+    keepImpute = FALSE, assay = NULL, ...) {
     if (missing(mat))
         stop("Parameter mat is missing!")
     if (missing(M))
@@ -68,15 +70,19 @@ RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
     if (missing(ctl))
         stop("Parameter ctl is missing!")
     
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
+    pe = FALSE
+    if (methods::is(mat, "PhosphoExperiment")) {
+        pe = TRUE
         mat.orig = mat
-        mat = as.matrix(SummarizedExperiment::assay(mat))
-        se = TRUE
+        if (is.null(assay)) {
+            mat = as.matrix(SummarizedExperiment::assay(mat))
+        } else {
+            mat = as.matrix(SummarizedExperiment::assay(mat, assay))
+        }
     }
     mat = RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
         keepImpute = keepImpute, ...)
-    if (se) {
+    if (pe) {
         SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
         mat = mat.orig
     }
@@ -87,18 +93,22 @@ RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
 #' @importFrom ruv RUVIII
 #' @export RUVproteome
 RUVproteome <- function(mat, M, ctl, k = NULL, m = 1.8, s = 0.3,
-    keepImpute = FALSE, ...) {
-    se = FALSE
-    if (methods::is(mat, "SummarizedExperiment")) {
+    keepImpute = FALSE, assay = NULL, ...) {
+    pe = FALSE
+    if (methods::is(mat, "PhosphoExperiment")) {
         mat.orig = mat
-        mat = as.matrix(SummarizedExperiment::assay(mat))
-        se = TRUE
+        if (is.null(assay)) {
+            mat = as.matrix(SummarizedExperiment::assay(mat))
+        } else {
+            mat = as.matrix(SummarizedExperiment::assay(mat, assay))
+        }
+        pe = TRUE
     }
     
     mat = RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
         keepImpute = keepImpute, ...)
     
-    if (se) {
+    if (pe) {
         SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
         mat = mat.orig
     }

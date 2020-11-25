@@ -4,16 +4,19 @@
 \alias{tImpute}
 \title{Tail-based impute}
 \usage{
-tImpute(mat, m, s)
+tImpute(mat, m, s, assay)
 }
 \arguments{
-\item{mat}{a matrix (or SummarizedExperiment object) with rows correspond to 
+\item{mat}{a matrix (or PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples.}
 
 \item{m}{a numeric number for controlling mean downshifting.}
 
 \item{s}{a numeric number for controlling standard deviation of downshifted
 sampling values.}
+
+\item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
+object.}
 }
 \value{
 An imputed matrix. If param \code{mat} is a SummarizedExperiment 

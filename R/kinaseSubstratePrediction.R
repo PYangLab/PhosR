@@ -48,7 +48,7 @@
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -74,10 +74,10 @@
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
 #'                     function(x)x[4])
 #'
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
@@ -192,7 +192,7 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -218,7 +218,7 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
 #'
@@ -288,7 +288,7 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -314,10 +314,10 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
 #'                     function(x)x[4])
 #'
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
@@ -371,7 +371,7 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -397,10 +397,10 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
 #'                     function(x)x[4])
 #'
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
@@ -474,7 +474,7 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #'
 #' # Cleaning phosphosite label
 #' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), '~'),
+#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
 #'                                 function(x){paste(toupper(x[2]), x[3], '',
 #'                                                 sep=';')}))
 #' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
@@ -500,10 +500,10 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), '~'),
+#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
 #'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
 #'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), '~'),
+#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
 #'                     function(x)x[4])
 #'
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
