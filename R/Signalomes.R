@@ -9,6 +9,8 @@
 #' @param predMatrix output of kinaseSubstratePred function
 #' @param exprsMat a matrix with rows corresponding to phosphosites and columns
 #' corresponding to samples
+#' @param PhosphoExperiment PhosphoExperiment object containing a matrix with rows corresponding to phosphosites and columns
+#' corresponding to samples
 #' @param KOI a character vector that contains kinases of interest for which
 #' expanded signalomes will be generated
 #' @param threskinaseNetwork threshold used to select interconnected kinases for
@@ -81,6 +83,7 @@
 #'                                 exprsMat=L6.phos.std,
 #'                                 KOI=kinaseOI)
 #' @export
+
 Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     signalomeCutoff = 0.5, verbose = TRUE) {
     ############## generate objects required for signalome function
