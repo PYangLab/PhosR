@@ -15,7 +15,8 @@ PhosphoExperiment(
   GeneSymbol = c(),
   Site = c(),
   Residue = c(),
-  Sequence = c()
+  Sequence = c(),
+  Localisation = c()
 )
 }
 \description{
