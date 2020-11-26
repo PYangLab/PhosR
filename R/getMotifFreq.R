@@ -11,8 +11,8 @@
 #' data("phospho_L6_ratio.pe")
 #' 
 #' # We will create a frequency matrix of Tfg S198 phosphosite.
-#' rownames(phospho.L6.ratio.pe)[1]
-#' substrate.seq = phospho.L6.ratio.pe@Sequence[1]
+#' idx = which(rownames(phospho.L6.ratio.pe) == "TFG;S198;")
+#' substrate.seq = phospho.L6.ratio.pe@Sequence[idx]
 #' freq.mat = createFrequencyMat(substrate.seq)
 #'
 #' @export
