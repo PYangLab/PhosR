@@ -8,6 +8,8 @@
 #' @param scale a boolean flag indicating whether to scale the samples.
 #' @param grps a string or factor specifying the grouping (replciates).
 #' @param reorder whehther to reorder by factor.
+#' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
+#' object.
 #'
 #' @return A median scaled matrix
 #'
@@ -36,8 +38,18 @@
 #'
 #' @export
 #'
-medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE) {
-
+medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE, 
+                          assay = NULL) {
+    pe = FALSE
+    if (methods::is(mat, "PhosphoExperiment")) {
+        pe = TRUE
+        mat.orig = mat
+        if (is.null(assay)) {
+            mat = SummarizedExperiment::assay(mat)
+        } else {
+            mat = SummarizedExperiment::assay(mat, assay)
+        }
+    }
     mat.medianScaled <- NULL
     if (!is.null(grps)) {
         tmp <- lapply(split(seq_len(ncol(mat)), grps), function(i) mat[,
@@ -50,6 +62,11 @@ medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE) {
         }
     } else {
         mat.medianScaled <- medianScale(mat, scale = scale)
+    }
+    
+    if (pe) {
+        SummarizedExperiment::assay(mat.orig, "scaled") = mat.medianScaled
+        mat.medianScaled = mat.orig
     }
 
     return(mat.medianScaled)
@@ -88,34 +105,28 @@ medianScale <- function(mat, scale) {
 #'
 #' @examples
 #'
-#' data('phospho_L6_ratio')
+#' data('phospho_L6_ratio.pe')
 #' data('SPSs')
 #'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-#'
-#' # Cleaning phosphosite label
-#' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-#'                                 function(x){paste(toupper(x[2]), x[3], '',
-#'                                                 sep=';')}))
-#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-#'                             colMeans))
-#' phospho.site.names = split(phospho.site.names, L6.sites)
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 #'
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)
 #'
 #' # phosphoproteomics data normalisation using RUV
-#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-#'                                 ctl = ctl)
+#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#'                  ";",
+#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  ";", sep = "")
+#' ctl = which(L6.sites %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+#'                                   M = design, k = 3, ctl = ctl)
 #' phosphoL6 = phospho.L6.ratio.RUV
-#' rownames(phosphoL6) = phospho.site.names
 #'
 #' # filter for up-regulated phosphosites
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-#'                                 colnames(phosphoL6)))
-#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
+#' aov <- matANOVA(mat=phosphoL6, grps = grps)
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
@@ -217,43 +228,37 @@ mUnion <- function(x, y, ...) {
 #'
 #' @examples
 #'
-#' data('phospho_L6_ratio')
+#' data('phospho.L6.ratio.pe')
 #' data('SPSs')
+#' data('PhosphoSitePlus')
 #'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-#'
-#' # Cleaning phosphosite label
-#' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-#'                                 function(x){paste(toupper(x[2]), x[3], '',
-#'                                                 sep=';')}))
-#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-#'                             colMeans))
-#' phospho.site.names = split(phospho.site.names, L6.sites)
-#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
+#' 
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)
-#'
+#' 
 #' # phosphoproteomics data normalisation using RUV
-#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-#'                                 ctl = ctl)
-#'
+#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#'                  ";",
+#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  ";", sep = "")
+#' ctl = which(L6.sites %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+#'                                   M = design, k = 3,ctl = ctl)
+#' 
 #' phosphoL6 = phospho.L6.ratio.RUV
-#' rownames(phosphoL6) = phospho.site.names
+#' rownames(phosphoL6) <- rownames(phospho.L6.ratio.pe)
 #'
 #' # filter for up-regulated phosphosites
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-#'                                 colnames(phosphoL6)))
-#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
+#' aov <- matANOVA(mat=phosphoL6, grps = grps)
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
-#'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+#'                         (rowSums(phosphoL6.mean > 0.5) > 0), drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
-#' rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
-#'     function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
-#'
-#' L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
-#'                     function(x)x[4])
+#' 
+#' idx <- match(rownames(L6.phos.std), L6.sites)
+#' L6.phos.seq <- phospho.L6.ratio.pe@Sequence[idx]
 #'
 #' numMotif = 5
 #' numSub = 1
@@ -318,38 +323,26 @@ minmax <- function(mat) {
 #' @examples
 #' library(limma)
 #'
-#' data('phospho_L6_ratio')
+#' data('phospho_L6_ratio.pe')
 #' data('SPSs')
 #'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 #'
-#' # Cleaning phosphosite label
-#' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-#'                                 function(x){paste(toupper(x[2]), x[3], '',
-#'                                                 sep=';')}))
-#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-#'                             colMeans))
-#' phospho.site.names = split(phospho.site.names, L6.sites)
+#; L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#'                  ";",
+#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  ";", sep = "")
 #'
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)
 #'
-#' # phosphoproteomics data normalisation using RUV
-#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-#'                                 ctl = ctl)
-#'
-#'
-#' # divides the phospho.L6.ratio data into groups by phosphosites
-#' L6.sites <- gsub(' ', '', gsub('~[STY]', ';',
-#'                 sapply(strsplit(rownames(phospho.L6.ratio.RUV), ';'),
-#'                 function(x){paste(toupper(x[2]), x[3], sep=';')})))
-#' phospho.L6.ratio.sites <- t(sapply(split(data.frame(phospho.L6.ratio.RUV),
-#'                                         L6.sites), colMeans))
+#' ctl = which(L6.sites %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+#'                                   M = design, k = 3, ctl = ctl)
 #'
 #' # fit linear model for each phosphosite
-#' f <- gsub('_exp\\d', '', colnames(phospho.L6.ratio.RUV))
+#' f <- grps
 #' X <- model.matrix(~ f - 1)
 #' fit <- lmFit(phospho.L6.ratio.RUV, X)
 #'
@@ -438,36 +431,31 @@ phosCollapse <- function(mat, id, stat, by = "min") {
 #' @return A vector of multiple testing adjusted p-values
 #'
 #' @examples
-#' data('phospho_L6_ratio')
+#' data('phospho.L6.ratio.pe')
 #' data('SPSs')
+#' data('PhosphoSitePlus')
 #'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-#'
-#' # Cleaning phosphosite label
-#' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-#'                                 function(x){paste(toupper(x[2]), x[3], '',
-#'                                                 sep=';')}))
-#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-#'                             colMeans))
-#' phospho.site.names = split(phospho.site.names, L6.sites)
-#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
+#' 
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)
-#'
+#' 
 #' # phosphoproteomics data normalisation using RUV
-#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-#'                                 ctl = ctl)
-#'
-#'
+#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#'                  ";",
+#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  ";", sep = "")
+#' ctl = which(L6.sites %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+#'                                   M = design, k = 3,ctl = ctl)
+#' 
 #' phosphoL6 = phospho.L6.ratio.RUV
-#' rownames(phosphoL6) = phospho.site.names
+#' rownames(phosphoL6) <- rownames(phospho.L6.ratio.pe)
 #'
 #' # filter for up-regulated phosphosites
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-#'                                 colnames(phosphoL6)))
-#' aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
+#' aov <- matANOVA(mat=phosphoL6, grps = grps)
 #'
 #' @export
 matANOVA <- function(mat, grps) {
@@ -491,35 +479,30 @@ matANOVA <- function(mat, grps) {
 #' @return a matrix with mean expression from replicates
 #'
 #' @examples
-#' data('phospho_L6_ratio')
+#' data('phospho.L6.ratio.pe')
 #' data('SPSs')
+#' data('PhosphoSitePlus')
 #'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-#'
-#' # Cleaning phosphosite label
-#' phospho.site.names = rownames(phospho.L6.ratio)
-#' L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-#'                                 function(x){paste(toupper(x[2]), x[3], '',
-#'                                                 sep=';')}))
-#' phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-#'                             colMeans))
-#' phospho.site.names = split(phospho.site.names, L6.sites)
-#'
+#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
+#' 
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)
-#'
+#' 
 #' # phosphoproteomics data normalisation using RUV
-#' ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-#'                                 ctl = ctl)
-#'
-#'
+#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#'                  ";",
+#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  ";", sep = "")
+#' ctl = which(L6.sites %in% SPSs)
+#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+#'                                   M = design, k = 3,ctl = ctl)
+#' 
 #' phosphoL6 = phospho.L6.ratio.RUV
-#' rownames(phosphoL6) = phospho.site.names
+#' rownames(phosphoL6) <- rownames(phospho.L6.ratio.pe)
 #'
 #' # filter for up-regulated phosphosites
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-#'                                 colnames(phosphoL6)))
+#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 #'
 #' @export
 meanAbundance <- function(mat, grps) {
