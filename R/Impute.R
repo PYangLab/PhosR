@@ -62,9 +62,10 @@ scImpute <- function(mat, percent, grps, assay = NULL) {
         stop("Parameter percent must be a numeric value between 0 and 1")
     }
     
-    mat.orig = mat
     pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
+        pe = TRUE
+        mat.orig = mat
         if (is.null(assay)) {
             mat = SummarizedExperiment::assay(mat)
         } else {
