@@ -29,6 +29,17 @@
 #'     scImpute(phospho.cells.Ins.filtered,
 #'     0.5,
 #'     grps)[,colnames(phospho.cells.Ins.filtered)]
+#'     
+#' # for PhosphoExperiment Object
+#' data('phospho.cells.Ins.sample.pe')
+#' grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins.pe))
+#' phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 0.5, n=1)
+#'
+#' set.seed(123)
+#' phospho.cells.Ins.impute <-
+#'     scImpute(phospho.cells.Ins.filtered,
+#'     0.5,
+#'     grps)[,colnames(phospho.cells.Ins.filtered)]
 #' 
 #' @importFrom SummarizedExperiment assay
 #' @importFrom methods is
@@ -39,7 +50,7 @@ scImpute <- function(mat, percent, grps, assay = NULL) {
         stop("Parameter mat is missing!")
     }
     if (missing(percent)) {
-        stop("Parameter percent is percent!")
+        stop("Parameter percent is missing!")
     }
     if (missing(grps)) {
         stop("Parameter grps is missing!")
@@ -51,9 +62,10 @@ scImpute <- function(mat, percent, grps, assay = NULL) {
         stop("Parameter percent must be a numeric value between 0 and 1")
     }
     
-    mat.orig = mat
     pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
+        pe = TRUE
+        mat.orig = mat
         if (is.null(assay)) {
             mat = SummarizedExperiment::assay(mat)
         } else {
@@ -110,6 +122,14 @@ stImp <- function(mat, percent) {
 #' data('phospho.cells.Ins.sample')
 #' grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
 #' phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
+#'
+#' set.seed(123)
+#' phospho.cells.Ins.impute <- tImpute(phospho.cells.Ins.filtered)
+#' 
+#' # For PhosphoExperiment Object
+#' data('phospho.cells.Ins.sample.pe')
+#' grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins.pe))
+#' phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 0.5, n=1)
 #'
 #' set.seed(123)
 #' phospho.cells.Ins.impute <- tImpute(phospho.cells.Ins.filtered)
