@@ -155,12 +155,12 @@
 #' @docType data
 "phospho.L6.ratio"
 
-#' @title phospho.L6.ratio.pe
+#' @title phospho_L6_ratio_pe
 #'
 #' @description L6 myotube phosphoproteome dataset
 #' (accession number: PXD019127).
 #'
-#' @usage data(phospho.L6.ratio.pe)
+#' @usage data(phospho_L6_ratio_pe)
 #'
 #' @source PRIDE accesion number: PXD001792
 #'
