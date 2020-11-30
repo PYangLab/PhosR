@@ -239,7 +239,7 @@ par(mfrow=c(1,2))
 plotQC(phospho.cells.Ins.filtered@assays@data$Quantification, labels=colnames(phospho.cells.Ins.filtered.pe), 
         panel = "quantify", cols = cols)
 plotQC(phospho.cells.Ins.ms@assays@data$scaled, 
-       labels=colnames(phospho.cells.Ins.ms.pe), panel = "quantify", ols = cols)
+       labels=colnames(phospho.cells.Ins.ms.pe), panel = "quantify", cols = cols)
 ```
 
 By setting `panel = 2`, we can visualise the results of unsupervised 
