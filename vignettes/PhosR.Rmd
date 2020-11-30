@@ -118,8 +118,8 @@ insulin.
 We will take the grouping information from colnames of our matrix.
 
 ```{r}
-data("phospho.cells.Ins.sample")
-grps = gsub("_[0-9]{1}", "", colnames(phospho.cells.Ins))
+data("phospho.cells.Ins.pe")
+grps = gsub("_[0-9]{1}", "", colnames(phospho.cells.Ins.pe))
 ```
 
 For each cell line, there are two conditions (Control vs Insulin-stimulated) 
@@ -135,7 +135,7 @@ gsub("Intensity.", "", grps)[seq(13,24)]
 Note that there are in total 24 samples and 5000 phosphosites profiled.
 
 ```{r}
-dim(phospho.cells.Ins)
+dim(phospho.cells.Ins.pe)
 ```
 
 ### Filtering of phosphosites
@@ -146,7 +146,8 @@ conditions are retained. For this filtering step, we use the `selectGrps`
 function. The filtering leaves us with 1772 phosphosites.
 
 ```{r}
-phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps = grps, percent = 0.5, n=1) 
+phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps = grps, 
+                                         percent = 0.5, n=1)  
 dim(phospho.cells.Ins.filtered)
 ```
 
@@ -156,7 +157,8 @@ The filtering threshold can therefore be optimised for each dataset.
 ```{r}
 # In cases where you have fewer replicates ( e.g.,triplicates), you may want to 
 # select phosphosites quantified in 70% of replicates. 
-phospho.cells.Ins.filtered1 <- selectGrps(phospho.cells.Ins, grps = grps, percent = 0.7, n=1) 
+phospho.cells.Ins.filtered1 <- selectGrps(phospho.cells.Ins.pe, grps = grps, 
+                                          percent = 0.7, n=1) 
 dim(phospho.cells.Ins.filtered1)
 ```
 
@@ -218,7 +220,8 @@ Lastly, we perform normalisation of the filtered and imputed phosphoproteomic
 data. 
 
 ```{r}
-phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute, scale = FALSE)
+phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute, assay = "imputed", 
+                                      scale = FALSE)
 ```
 
 ### Quantification plots
@@ -233,10 +236,10 @@ set `panel = 1` to visualise barplots of samples.
 ```{r}
 cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 par(mfrow=c(1,2))
-plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
+plotQC(phospho.cells.Ins.filtered@assays@data$Quantification, labels=colnames(phospho.cells.Ins.filtered.pe), 
         panel = "quantify", cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "quantify", 
-        cols = cols)
+plotQC(phospho.cells.Ins.ms@assays@data$scaled, 
+       labels=colnames(phospho.cells.Ins.ms.pe), panel = "quantify", ols = cols)
 ```
 
 By setting `panel = 2`, we can visualise the results of unsupervised 
@@ -246,10 +249,12 @@ from the same conditions cluster together.
 
 ```{r}
 par(mfrow=c(1,2))
-plotQC(phospho.cells.Ins.filtered, labels=colnames(phospho.cells.Ins.filtered), 
-        panel = "dendrogram", cols = cols)
-plotQC(phospho.cells.Ins.ms, labels=colnames(phospho.cells.Ins.ms), panel = "dendrogram", 
-        cols = cols)
+plotQC(phospho.cells.Ins.filtered@assays@data$Quantification, 
+       labels=colnames(phospho.cells.Ins.filtered.pe), panel = "dendrogram", 
+       cols = cols)
+plotQC(phospho.cells.Ins.ms@assays@data$scaled, 
+       labels=colnames(phospho.cells.Ins.ms.pe), 
+       panel = "dendrogram", cols = cols)
 ```
 
 We can now move onto the next step in the `PhosR` workflow: integration of 
@@ -282,7 +287,7 @@ datasets used). The `SPSs` will be used as our `negative control` during RUV
 normalisation.
 
 ```{r}
-data("phospho_L6_ratio")
+data("phospho_L6_ratio.pe")
 data("SPSs")
 ```
 
@@ -294,15 +299,15 @@ AICAR or Insulin (Ins), which are both important modulators of the insulin
 signalling pathway, or both (AICARIns) before phosphoproteomic analysis. 
 
 ```{r}
-colnames(phospho.L6.ratio)[grepl("AICAR_", colnames(phospho.L6.ratio))]
-colnames(phospho.L6.ratio)[grepl("^Ins_", colnames(phospho.L6.ratio))]
-colnames(phospho.L6.ratio)[grepl("AICARIns_", colnames(phospho.L6.ratio))]
+colnames(phospho.L6.ratio.pe)[grepl("AICAR_", colnames(phospho.L6.ratio.pe))]
+colnames(phospho.L6.ratio.pe)[grepl("^Ins_", colnames(phospho.L6.ratio.pe))]
+colnames(phospho.L6.ratio.pe)[grepl("AICARIns_", colnames(phospho.L6.ratio.pe))]
 ```
 
 Note that we have in total 6654 quantified phosphosites and 12 samples in total.
 
 ```{r}
-dim(phospho.L6.ratio)
+dim(phospho.L6.ratio.pe)
 ```
 
 We have already performed the revelant processing steps to generate a dense 
@@ -310,35 +315,24 @@ matrix. Please refer to `imputation` page to perform filtering and imputation of
 phosphosites in order to generate a matrix without any missing values. 
 
 ```{r}
-sum(is.na(phospho.L6.ratio))
+sum(is.na(phospho.L6.ratio.pe@assays@data$Quantification))
 ```
 
-We will clean up the phosphosite labels, which currently contain many 
-unnecessary information for our current analysis (e.g., phosphosite sequence).
+We will extract phosphosite labels
 
 ```{r}
-# Cleaning phosphosite label
-phospho.site.names = rownames(phospho.L6.ratio)
-head(phospho.site.names)
-```
-
-We will almost remove any duplicate sites.
-
-```{r}
-L6.sites = gsub(" ", "", sapply(strsplit(rownames(phospho.L6.ratio), ";"),
-                                function(x){paste(toupper(x[2]), x[3], "", 
-                                                    sep=";")}))
-phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites), 
-                            colMeans))
-head(rownames(phospho.L6.ratio))
-phospho.site.names = split(phospho.site.names, L6.sites)
+L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)x),
+                 ";",
+                 sapply(phospho.L6.ratio.pe@Residue, function(x)x),
+                 sapply(phospho.L6.ratio.pe@Site, function(x)x),
+                 ";", sep = "")
 ```
 
 Lastly, we will take the grouping information from `colnames` of our matrix.
 
 ```{r}
 # take the grouping information
-grps = gsub("_.+", "", colnames(phospho.L6.ratio))
+grps = gsub("_.+", "", colnames(phospho.L6.ratio.pe))
 grps
 ```
 
@@ -360,7 +354,7 @@ cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 par(mfrow=c(1,1))
-plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
+plotQC(phospho.L6.ratio.pe@assays@data$Quantification, panel = "dendrogram", cols=colorCodes)
 ```
 
 We can also visualise the samples in PCA space by setting `panel = 4`. The PCA 
@@ -372,7 +366,7 @@ and those from batches 3 and 4.
 
 ```{r}
 par(mfrow=c(1,1))
-plotQC(phospho.L6.ratio, cols=colorCodes, labels = colnames(phospho.L6.ratio), 
+plotQC(phospho.L6.ratio.pe@assays@data$Quantification, cols=colorCodes, labels = colnames(phospho.L6.ratio.pe), 
         panel = "pca", ylim=c(-20, 20), xlim=c(-30, 30), 
         main = "Before batch correction")
 ```
@@ -398,10 +392,12 @@ inputs to `RUVphospho`:
     2) `k` parameter is an integer denoting the expected number of experimental 
     (e.g., treatment) groups within the data
 
+The normaliase result can be accessed by `phospho.L6.ratio.pe@assay@data$normalised`
+
 ```{r}
 # phosphoproteomics data normalisation and batch correction using RUV
-ctl = which(rownames(phospho.L6.ratio) %in% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(mat = phospho.L6.ratio, M = design, k = 3, 
+ctl = which(L6.sites %in% SPSs)
+phospho.L6.ratio.pe = RUVphospho(mat = phospho.L6.ratio.pe, M = design, k = 3, 
                                     ctl = ctl)
 ```
 
@@ -415,17 +411,17 @@ in `PhosR` facilitates effective batch correction.
 ```{r}
 # plot after batch correction
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
-plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel="dendrogram")
+plotQC(phospho.L6.ratio.pe@assays@data$Quantification, panel = "dendrogram", cols=colorCodes)
+plotQC(phospho.L6.ratio.pe@assays@data$normalised, cols=colorCodes, 
+        labels = colnames(phospho.L6.ratio.pe), panel="dendrogram")
 ```
 
 ```{r}
 par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), main="Before Batch correction")
-plotQC(phospho.L6.ratio.RUV, cols=colorCodes, 
-        labels = colnames(phospho.L6.ratio), panel="pca", ylim=c(-20, 20), 
+plotQC(phospho.L6.ratio.pe@assays@data$Quantification, panel = "pca", cols=colorCodes, 
+        labels = colnames(phospho.L6.ratio.pe), main="Before Batch correction")
+plotQC(phospho.L6.ratio.pe@assays@data$normalised, cols=colorCodes, 
+        labels = colnames(phospho.L6.ratio.pe), panel="pca", ylim=c(-20, 20), 
         xlim=c(-30, 30), main="After Batch correction")
 ```
 
@@ -486,19 +482,17 @@ and rank-based gene set test) gene-centric pathway enrichment analysis
 respectively.
 
 ```{r}
-# divides the phospho.L6.ratio data into groups by phosphosites
-L6.sites <- gsub(" ", "", gsub("~[STY]", "~", 
-                                sapply(strsplit(rownames(phospho.L6.ratio.RUV), 
-                                                "~"), 
-                                    function(x){paste(toupper(x[2]), x[3], 
-                                                        sep="~")})))
-phospho.L6.ratio.sites <- t(sapply(split(data.frame(phospho.L6.ratio.RUV),
-                                        L6.sites), colMeans))
+# extract phosphosites
+L6.sites <- paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)x),
+                 ";",
+                 sapply(phospho.L6.ratio.pe@Residue, function(x)x),
+                 sapply(phospho.L6.ratio.pe@Site, function(x)x),
+                 ";", sep = "")
 
 # fit linear model for each phosphosite
-f <- gsub("_exp\\d", "", colnames(phospho.L6.ratio.RUV))
+f <- gsub("_exp\\d", "", colnames(phospho.L6.ratio.pe))
 X <- model.matrix(~ f - 1)
-fit <- lmFit(phospho.L6.ratio.RUV, X)
+fit <- lmFit(phospho.L6.ratio.pe@assays@data$normalised, X)
 
 # extract top-ranked phosphosites for each condition compared to basal
 table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)
@@ -523,7 +517,10 @@ DE2.RUV <- c(sum(table.AICARInsVSIns[,"adj.P.Val"] < 0.05),
 o <- rownames(table.AICARInsVSIns)
 Tc <- cbind(table.Ins[o,"logFC"], table.AICAR[o,"logFC"], 
             table.AICARIns[o,"logFC"])
-rownames(Tc) = gsub("(.*)(;[A-Z])([0-9]+)(;)", "\\1;\\3;", o)
+
+rownames(Tc) <- L6.sites[match(o, rownames(phospho.L6.ratio.pe))]
+rownames(Tc) <- gsub("(.*)(;[A-Z])([0-9]+)(;)", "\\1;\\3;", rownames(Tc))
+
 colnames(Tc) <- c("Ins", "AICAR", "AICAR+Ins")
 
 # summary phosphosite-level information to proteins for performing downstream 
@@ -666,7 +663,7 @@ intermediate insulin signalling in mouse liver upon insulin stimulation to
 demonstrate the time-course phosphoproteomic data analyses.
 
 ```{r}
-data("phospho_liverInsTC_RUV_sample")
+data("phospho_liverInsTC_RUV_pe")
 ```
 
 ## Gene-centric analyses of the liver phosphoproteome data
@@ -676,17 +673,15 @@ to proteomics data. It can also be applied to phosphoproteomic data by using the
 `phosCollapse` function to summarise phosphosite information to proteins.
 
 ```{r}
-rownames(phospho.liver.Ins.TC.ratio.RUV) <- 
-    sapply(strsplit(rownames(phospho.liver.Ins.TC.ratio.RUV), ";"), 
-        function(x)paste(x[1], x[2], "", sep=";"))
-
 # take grouping information
-grps <- sapply(strsplit(colnames(phospho.liver.Ins.TC.ratio.RUV), "_"), 
+grps <- sapply(strsplit(colnames(phospho.liver.Ins.TC.ratio.RUV,pe), "_"), 
             function(x)x[3])
 
 # select differentially phosphorylated sites
-sites.p <- matANOVA(phospho.liver.Ins.TC.ratio.RUV, grps)
-phospho.LiverInsTC <- meanAbundance(phospho.liver.Ins.TC.ratio.RUV, grps)
+sites.p <- matANOVA(phospho.liver.Ins.TC.ratio.RUV.pe@assays@data$Quantification, 
+                    grps)
+phospho.LiverInsTC <- meanAbundance(
+  phospho.liver.Ins.TC.ratio.RUV.pe@assays@data$Quantification, grps)
 sel <- which((sites.p < 0.05) & (rowSums(abs(phospho.LiverInsTC) > 1) != 0))
 phospho.LiverInsTC.sel <- phospho.LiverInsTC[sel,]
 
@@ -714,7 +709,7 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(123)
-best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
+best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
 
 # Finding enriched pathways from each cluster
 # ps <- sapply(best$enrichList, function(x){
@@ -753,7 +748,7 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(1)
-best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE)
+best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
 
 # Finding enriched pathways from each cluster
 best$enrichList
@@ -811,7 +806,7 @@ We will use `phospho.L6.ratio.RUV` matrix from
 
 
 ```{r}
-phosphoL6 = phospho.L6.ratio.RUV
+phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
 ```
 
 ## Generation of kinase-substrate relationship scores
@@ -820,8 +815,6 @@ Next, we will filtered for dynamically regulated phosphosites and then
 standardise the filtered matrix. 
 
 ```{r}
-rownames(phosphoL6) = phospho.site.names
-
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub("_.+", "", 
                                                         colnames(phosphoL6)))
