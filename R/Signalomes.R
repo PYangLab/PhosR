@@ -8,8 +8,6 @@
 #' @param KSR kinase-substrate relationship scoring results
 #' @param predMatrix output of kinaseSubstratePred function
 #' @param exprsMat a matrix with rows corresponding to phosphosites and columns
-#' corresponding to samples or PhosphoExperiment object containing a matrix with 
-#' rows corresponding to phosphosites and columns
 #' corresponding to samples
 #' @param KOI a character vector that contains kinases of interest for which
 #' expanded signalomes will be generated
