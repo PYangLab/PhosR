@@ -1,42 +1,17 @@
-#' Plot signalome map
-#'
 #' @usage plotSignalomeMap(signalomes, color)
 #'
 #' @param signalomes output from `Signalomes` function
-#' @param color a string specifying the color vector for kinases.
+#' @param color a string specifying the color vector for kinases
 #'
 #' @return a ggplot object
 #'
 #' @examples
-#' data('phospho.L6.ratio.pe')
-#' data('SPSs')
-#' data('PhosphoSitePlus')
-#'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
-#' 
-#' # Construct a design matrix by condition
-#' design = model.matrix(~ grps - 1)
-#' 
-#' # phosphoproteomics data normalisation using RUV
-#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
-#'                  ";",
-#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
-#'                  ";", sep = "")
-#' ctl = which(L6.sites %in% SPSs)
-#' phospho.L6.ratio.pe = RUVphospho(phospho.L6.ratio.pe,
-#'                                  M = design, k = 3,ctl = ctl)
-#' 
-#' phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 #'
 #' @importFrom ggplot2 ggplot
 #' @importFrom tidyr spread
 #' @importFrom reshape2 melt
 #' @importFrom dplyr count
 #' 
-#' 
-#'
 #' @export
 plotSignalomeMap <- function(signalomes, color) {
     
@@ -76,9 +51,6 @@ plotSignalomeMap <- function(signalomes, color) {
     
 }
 
-
-#' Plot kinase network map
-#'
 #' @usage plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
 #'
 #' @param KSR kinase-substrate relationship scoring results
@@ -94,28 +66,7 @@ plotSignalomeMap <- function(signalomes, color) {
 #' @importFrom GGally ggnet2
 #' 
 #' @examples
-#' data('phospho.L6.ratio.pe')
-#' data('SPSs')
-#' data('PhosphoSitePlus')
-#'
-#' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 #' 
-#' # Construct a design matrix by condition
-#' design = model.matrix(~ grps - 1)
-#' 
-#' # phosphoproteomics data normalisation using RUV
-#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
-#'                  ";",
-#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
-#'                  ";", sep = "")
-#' ctl = which(L6.sites %in% SPSs)
-#' phospho.L6.ratio.pe = RUVphospho(phospho.L6.ratio.pe,
-#'                                  M = design, k = 3,ctl = ctl)
-#' 
-#' phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
-#' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
-#'
 #' @export
 plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
     
