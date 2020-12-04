@@ -4,6 +4,10 @@ template:
 navbar:
   title: ~
   left:
+    - text: PhosR
+      menu: 
+        - text: Introduction
+          href: articles/PhosR.html
     - text: Preprocessing
       menu:
         - text: Imputation
@@ -14,7 +18,7 @@ navbar:
       menu:
         - text: Pathway analysis
           href: articles/webOnly/pathway_analysis.html
-        - text: site-, gene-centric analysis
+        - text: Site- and gene-centric analysis
           href: articles/webOnly/site_gene_analysis.html
         - text: Signalomes
           href: articles/webOnly/signalomes.html

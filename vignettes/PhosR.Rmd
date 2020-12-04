@@ -674,7 +674,7 @@ to proteomics data. It can also be applied to phosphoproteomic data by using the
 
 ```{r}
 # take grouping information
-grps <- sapply(strsplit(colnames(phospho.liver.Ins.TC.ratio.RUV,pe), "_"), 
+grps <- sapply(strsplit(colnames(phospho.liver.Ins.TC.ratio.RUV.pe), "_"), 
             function(x)x[3])
 
 # select differentially phosphorylated sites
@@ -709,7 +709,8 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(123)
-best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
+best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
+#best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
 
 # Finding enriched pathways from each cluster
 # ps <- sapply(best$enrichList, function(x){
@@ -748,7 +749,8 @@ myplot <- ggplot(data, aes(x=Freq, y=Success)) +
 myplot
 
 set.seed(1)
-best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
+best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE)
+#best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
 
 # Finding enriched pathways from each cluster
 best$enrichList
