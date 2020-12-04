@@ -1,4 +1,3 @@
-
 #' @title Plot signalome map
 #'
 #' @usage plotSignalomeMap(signalomes, color)
@@ -31,6 +30,13 @@
 #' phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 #'
+#' @importFrom ggplot2 ggplot
+#' @importFrom tidyr spread
+#' @importFrom reshape2 melt
+#' @importFrom dplyr count
+#' 
+#' 
+#'
 #' @export
 plotSignalomeMap <- function(signalomes, color) {
     
@@ -55,7 +61,7 @@ plotSignalomeMap <- function(signalomes, color) {
     dftoPlot_balloon_bycluster <- reshape2::melt(as.matrix(dftoPlot_balloon_bycluster))
     colnames(dftoPlot_balloon_bycluster) <- c("cluster", "ind", "n")
     
-    ggplot(dftoPlot_balloon_bycluster, aes(x = ind, y = cluster)) + 
+    ggplot2::ggplot(dftoPlot_balloon_bycluster, aes(x = ind, y = cluster)) + 
         geom_point(aes(col=ind, size=n)) + 
         scale_color_manual(values=color) + 
         scale_size_continuous(range = c(2, 17)) + 
@@ -75,10 +81,17 @@ plotSignalomeMap <- function(signalomes, color) {
 #'
 #' @usage plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
 #'
-#' @param signalomes output from `Signalomes` function
-#' @param color a string specifying the color vector for kinases.
-#'
-#' @return a ggplot object
+#' @param KSR kinase-substrate relationship scoring results
+#' @param predMatrix output of kinaseSubstratePred function
+#' @param threshold threshold used to select interconnected kinases for
+#'  the expanded signalomes
+#'  
+#' @return a graphical plot
+#' 
+#' @importFrom network network
+#' @importFrom reshape2 melt
+#' @importFrom stats cor
+#' @importFrom GGally ggnet2
 #' 
 #' @examples
 #' data('phospho.L6.ratio.pe')
