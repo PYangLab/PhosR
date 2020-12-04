@@ -1,4 +1,4 @@
-#' @title Plot signalome map
+#' Plot signalome map
 #'
 #' @usage plotSignalomeMap(signalomes, color)
 #'
@@ -77,7 +77,7 @@ plotSignalomeMap <- function(signalomes, color) {
 }
 
 
-#' @title Plot kinase network map
+#' Plot kinase network map
 #'
 #' @usage plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
 #'
