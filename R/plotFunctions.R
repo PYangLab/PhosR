@@ -15,28 +15,28 @@
 #' @export
 plotSignalomeMap <- function(signalomes, color) {
     
-    dftoPlot_signalome <- stack(signalomes$kinaseSubstrates)
+    df <- stack(signalomes$kinaseSubstrates)
     modules <- signalomes$proteinModule
     names(modules) <- sapply(strsplit(as.character(names(signalomes$proteinModules)), ";"), "[[", 1)
-    dftoPlot_signalome$cluster <- modules[dftoPlot_signalome$values]
+    df$cluster <- modules[df$values]
     
-    dftoPlot_balloon_bycluster <- dftoPlot_signalome
-    dftoPlot_balloon_bycluster <- na.omit(dftoPlot_balloon_bycluster) %>% dplyr::count(cluster, ind)
-    dftoPlot_balloon_bycluster$ind <- as.factor(dftoPlot_balloon_bycluster$ind)
-    dftoPlot_balloon_bycluster$cluster <- as.factor(dftoPlot_balloon_bycluster$cluster)
-    dftoPlot_balloon_bycluster <- tidyr::spread(dftoPlot_balloon_bycluster, ind, n)[,-1]
-    dftoPlot_balloon_bycluster[is.na(dftoPlot_balloon_bycluster)] <- 0
-    
-    dftoPlot_balloon_bycluster <- do.call(rbind, lapply(1:nrow(dftoPlot_balloon_bycluster), function(x) {
+    df_balloon <- df
+    df_balloon <- na.omit(df_balloon) %>% dplyr::count(cluster, ind)
+    df_balloon$ind <- as.factor(df_balloon$ind)
+    df_balloon$cluster <- as.factor(df_balloon$cluster)
+    df_balloon <- tidyr::spread(df_balloon, ind, n)[,-1]
+    df_balloon[is.na(df_balloon)] <- 0
+
+    df_balloon <- do.call(rbind, lapply(1:nrow(df_balloon), function(x) {
         
-        res <- sapply(dftoPlot_balloon_bycluster[x,], function(y) y/sum(dftoPlot_balloon_bycluster[x,])*100)
+        res <- sapply(df_balloon[x,], function(y) y/sum(df_balloon[x,])*100)
         
     }))
     
-    dftoPlot_balloon_bycluster <- reshape2::melt(as.matrix(dftoPlot_balloon_bycluster))
-    colnames(dftoPlot_balloon_bycluster) <- c("cluster", "ind", "n")
+    df_balloon <- reshape2::melt(as.matrix(df_balloon))
+    colnames(df_balloon) <- c("cluster", "ind", "n")
     
-    ggplot2::ggplot(dftoPlot_balloon_bycluster, aes(x = ind, y = cluster)) + 
+    g <- ggplot2::ggplot(df_balloon, aes(x = ind, y = cluster)) + 
         geom_point(aes(col=ind, size=n)) + 
         scale_color_manual(values=color) + 
         scale_size_continuous(range = c(2, 17)) + 
@@ -48,6 +48,7 @@ plotSignalomeMap <- function(signalomes, color) {
             axis.title = element_blank(),   
             panel.grid.major.x = element_blank(),  
             panel.grid.minor.x = element_blank()) 
+    g
     
 }
 
@@ -70,35 +71,32 @@ plotSignalomeMap <- function(signalomes, color) {
 #' @export
 plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
     
-    threskinaseNetwork = threshold
-    signalomeKinase <- colnames(predMatrix)
-    kinase_cor <- stats::cor(KSR$combinedScoreMatrix)
+    cor_mat <- stats::cor(KSR$combinedScoreMatrix)
     
-    cor_kinase_mat <- kinase_cor
-    diag(cor_kinase_mat) <- 0
-    kinase_network <- lapply(1:ncol(cor_kinase_mat), function(x) names(which(cor_kinase_mat[,x] > threskinaseNetwork))) 
-    names(kinase_network) <- colnames(cor_kinase_mat)
+    diag(cor_mat) <- 0
+    kinase_network <- lapply(1:ncol(cor_mat), function(x) names(which(cor_mat[,x] > threshold))) 
+    names(kinase_network) <- colnames(cor_mat)
     
-    cor_kinase_mat <- apply(cor_kinase_mat, 2, function(x) x  > threskinaseNetwork)
-    cor_kinase_mat[cor_kinase_mat == F] <- 0
-    cor_kinase_mat[cor_kinase_mat == T] <- 1
+    cor_mat <- apply(cor_mat, 2, function(x) x  > threshold)
+    cor_mat[cor_mat == F] <- 0
+    cor_mat[cor_mat == T] <- 1
     
-    links <- reshape2::melt(cor_kinase_mat)
+    links <- reshape2::melt(cor_mat)
     links <- links[links$value == 1,]
-    res <- sapply(1:length(links$Var1), function(x) { kinase_cor[rownames(kinase_cor) == links$Var1[x], colnames(kinase_cor) == links$Var2[x]]
+    res <- sapply(1:length(links$Var1), function(x) { cor_mat[rownames(cor_mat) == links$Var1[x], colnames(cor_mat) == links$Var2[x]]
     })
     links$cor <- res
     colnames(links) <- c("source", "target", "binary", "cor")
     
-    network <- network::network(cor_kinase_mat, directed=F)
-    GGally::ggnet2(network, 
+    g <- GGally::ggnet2(network::network(cor_mat, directed=F), 
                    node.size=10, 
                    node.color=color, 
                    edge.size = 0.5, 
                    size = "degree",
                    size.cut=3,
-                   label=colnames(cor_kinase_mat),
+                   label=colnames(cor_mat),
                    label.size=2,
                    mode="circle",
                    label.color="black")
+    g
 }
