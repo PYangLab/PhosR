@@ -33,12 +33,12 @@ getSPS <- function(phosData = ..., conds = ..., num = 100, residueInfo = FALSE) 
             sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), phosData[[i]]@Site, sep = ";")
         }
         sites.unique[[i]] <- unique(sites[[i]])
-        nrep <- ncol(phosData[[i]]@Quantification)/conds[i]
+        nrep <- ncol(phosData[[i]]@data$Quantification)/conds[i]
         if (nrep == 1) {
-            mat.mean <- phosData[[i]]@Quantification # if no replicates
+            mat.mean <- phosData[[i]]@data$Quantification # if no replicates
         } else {
             grps <- rep(seq_len(conds[i]), each = nrep)
-            mat.mean <- PhosR::meanAbundance(phosData[[i]]@Quantification, grps)
+            mat.mean <- PhosR::meanAbundance(phosData[[i]]@data$Quantification, grps)
         }
         
         sites.mean <- t(sapply(split(data.frame(mat.mean), sites[[i]]), colMeans))

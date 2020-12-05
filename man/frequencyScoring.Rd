@@ -19,12 +19,11 @@ Frequency scoring
 }
 \examples{
 
-data('phospho_L6_ratio')
+data('phospho_L6_ratio.pe')
 data('KinaseMotifs')
 
 # Extracting first 10 sequences for demonstration purpose
-seqs = unlist(lapply(strsplit(rownames(phospho.L6.ratio), ";"),
-                    function(i) {i[4]}))
+seqs = phospho.L6.ratio.pe@Sequence
 seqs = seqs[seq(10)]
 
 # extracting flanking sequences
@@ -34,7 +33,7 @@ seqWin = mapply(function(x) {
 }, seqs)
 
 # The first 10 for demonstration purpose
-phospho.L6.ratio = phospho.L6.ratio[seq(10),]
+phospho.L6.ratio = phospho.L6.ratio.pe@assays@data$Quantification[seq(10),]
 
 # minimum number of sequences used for compiling motif for each kinase.
 numMotif=5

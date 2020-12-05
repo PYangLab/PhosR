@@ -1,3 +1,5 @@
+#' Plot signalome map
+#'
 #' @usage plotSignalomeMap(signalomes, color)
 #'
 #' @param signalomes output from `Signalomes` function
@@ -52,6 +54,8 @@ plotSignalomeMap <- function(signalomes, color) {
     
 }
 
+#' Plot kinase network
+#'
 #' @usage plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
 #'
 #' @param KSR kinase-substrate relationship scoring results

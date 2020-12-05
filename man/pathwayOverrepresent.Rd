@@ -35,36 +35,23 @@ library(annotate)
 
 
 data('SPSs')
+data('phospho.L6.ratio.pe')
+grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
-grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-
-# Cleaning phosphosite label
-phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-                                function(x){paste(toupper(x[2]), x[3], '',
-                                                sep=';')}))
-phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-                            colMeans))
-phospho.site.names = split(phospho.site.names, L6.sites)
+                 ";",
+                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 ";", sep = "")
 
 # Construct a design matrix by condition
 design = model.matrix(~ grps - 1)
 
-# phosphoproteomics data normalisation using RUV
-ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-                                ctl = ctl)
-
-
-# divides the phospho.L6.ratio data into groups by phosphosites
-L6.sites <- gsub(' ', '', gsub('~[STY]', ';',
-    sapply(strsplit(rownames(phospho.L6.ratio.RUV), ';'),
-        function(x){paste(toupper(x[2]), x[3], sep=';')})))
-phospho.L6.ratio.sites <- t(sapply(split(data.frame(phospho.L6.ratio.RUV),
-                                        L6.sites), colMeans))
-
+ctl = which(L6.sites \%in\% SPSs)
+phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+                                  M = design, k = 3, ctl = ctl)
+                                  
 # fit linear model for each phosphosite
-f <- gsub('_exp\\\\d', '', colnames(phospho.L6.ratio.RUV))
+f <- grps
 X <- model.matrix(~ f - 1)
 fit <- lmFit(phospho.L6.ratio.RUV, X)
 

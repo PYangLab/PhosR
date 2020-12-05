@@ -7,8 +7,8 @@
 standardise(mat)
 }
 \arguments{
-\item{mat}{a matrix with rows correspond to phosphosites and columns
-correspond to samples.}
+\item{mat}{a matrix (or a PhosphoExperiment object) with rows correspond 
+to phosphosites and columns correspond to samples.}
 }
 \value{
 A standardised matrix
@@ -18,34 +18,29 @@ Standardisation by z-score transformation.
 }
 \examples{
 
-data('phospho_L6_ratio')
+data('phospho_L6_ratio.pe')
 data('SPSs')
 
-grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-
-# Cleaning phosphosite label
-phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-                                function(x){paste(toupper(x[2]), x[3], '',
-                                                sep=';')}))
-phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-                            colMeans))
-phospho.site.names = split(phospho.site.names, L6.sites)
+grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
 # Construct a design matrix by condition
 design = model.matrix(~ grps - 1)
 
 # phosphoproteomics data normalisation using RUV
-ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-                                ctl = ctl)
-phosphoL6 = phospho.L6.ratio.RUV
-rownames(phosphoL6) = phospho.site.names
+L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+                 ";",
+                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 ";", sep = "")
+ctl = which(L6.sites \%in\% SPSs)
+phospho.L6.ratio.pe = RUVphospho(phospho.L6.ratio.pe,
+                                 M = design, k = 3,ctl = ctl)
+
+phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
 
 # filter for up-regulated phosphosites
-phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-                                colnames(phosphoL6)))
-aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
+aov <- matANOVA(mat=phosphoL6, grps = grps)
 phosphoL6.reg <- phosphoL6[(aov < 0.05) &
                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)

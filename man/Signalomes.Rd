@@ -36,53 +36,47 @@ A function to generate signalomes
 }
 \examples{
 
-data('phospho_L6_ratio')
+data('phospho_L6_ratio.pe')
 data('SPSs')
 
-grps = gsub('_.+', '', colnames(phospho.L6.ratio))
-
-# Cleaning phosphosite label
-phospho.site.names = rownames(phospho.L6.ratio)
-L6.sites = gsub(' ', '', sapply(strsplit(rownames(phospho.L6.ratio), ';'),
-                                function(x){paste(toupper(x[2]), x[3], '',
-                                                sep=';')}))
-phospho.L6.ratio = t(sapply(split(data.frame(phospho.L6.ratio), L6.sites),
-                            colMeans))
-phospho.site.names = split(phospho.site.names, L6.sites)
+grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
 # Construct a design matrix by condition
 design = model.matrix(~ grps - 1)
 
 # phosphoproteomics data normalisation using RUV
-ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
-                                ctl = ctl)
+
+L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+                 ";",
+                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
+                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 ";", sep = "")
+ctl = which(L6.sites \%in\% SPSs)
+phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
+                                  M = design, k = 3, ctl = ctl)
 
 phosphoL6 = phospho.L6.ratio.RUV
-rownames(phosphoL6) = phospho.site.names
 
 # filter for up-regulated phosphosites
-phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub('_.+', '',
-                                colnames(phosphoL6)))
-aov <- matANOVA(mat=phosphoL6, grps=gsub('_.+', '', colnames(phosphoL6)))
+phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
+aov <- matANOVA(mat=phosphoL6, grps=grps)
 phosphoL6.reg <- phosphoL6[(aov < 0.05) &
-                        (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
+                               (rowSums(phosphoL6.mean > 0.5) > 0),, drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)
-rownames(L6.phos.std) <- sapply(strsplit(rownames(L6.phos.std), ';'),
-    function(x){gsub(' ', '', paste(toupper(x[2]), x[3], '', sep=';'))})
+idx <- match(rownames(L6.phos.std), rownames(phospho.L6.ratio.pe))
+rownames(L6.phos.std) <- L6.sites[idx]
 
-L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ';'),
-                    function(x)x[4])
+L6.phos.seq <- phospho.L6.ratio.pe@Sequence[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
-    L6.phos.seq, numMotif = 5, numSub = 1)
+                                    L6.phos.seq, numMotif = 5, numSub = 1)
 set.seed(1)
 L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
 
 kinaseOI = c('PRKAA1', 'AKT1')
 
 Signalomes_results <- Signalomes(KSR=L6.matrices,
-                                predMatrix=L6.predMat,
-                                exprsMat=L6.phos.std,
-                                KOI=kinaseOI)
+                                 predMatrix=L6.predMat,
+                                 exprsMat=L6.phos.std,
+                                 KOI=kinaseOI)
 }

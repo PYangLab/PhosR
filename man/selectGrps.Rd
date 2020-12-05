@@ -23,9 +23,10 @@ filtering for a phosphosite to be included.}
 object.}
 }
 \value{
-a filtered matrix with at least 'percent' quantification
-in one or more conditions. If an input \code{mat} is a SummarizedExperiment 
-object, filtered SummarizedExperiment object will be returned.
+a filtered matrix (or a PhosphoExperiment Oject) with at least 
+'percent' quantification in one or more conditions. If an input \code{mat} is 
+a SummarizedExperiment object, filtered SummarizedExperiment object will be 
+returned.
 }
 \description{
 Select phosphosites that have been quantified in a given
@@ -35,17 +36,12 @@ in n groups.
 \examples{
 data('phospho.cells.Ins.sample')
 grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
-
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
 
-# For PhosphoExperiment objects
-# mat = PhosR::PhosphoExperiment(
-#     assay = phospho.cells.Ins,
-#     colData = S4Vectors::DataFrame(
-#         groups = grps
-#     )
-# )
-# phospho.cells.Ins.filtered = selectGrps(mat, mat$groups, 0.5, n=1)
+For PhosphoExperiment object
+data('phospho.cells.Ins.pe')
+grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins.pe))
+phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 0.5, n=1)
 
 }
 \author{
