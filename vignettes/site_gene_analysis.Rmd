@@ -1,0 +1,127 @@
+---
+title: 'Site- and gene-centric analysis'
+output: rmarkdown::html_vignette
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    warning = FALSE,
+    message = FALSE,
+    comment = "#>"
+)
+```
+
+# Introduction
+
+While 1, 2, and 3D pathway analyses are useful for data generated from experiments with different treatment/conditions, analysis designed for time-course data may be better suited to analysis experiments that profile multiple time points.
+
+Here, we will apply `ClueR` which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis ([Yang et al. 2015])(https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403).
+
+# Loading packages and data
+
+We will load the PhosR package with few other packages we will use for this tutorial.
+```{r}
+suppressPackageStartupMessages({
+  library(parallel)
+  library(ggplot2)
+  library(ClueR)
+  library(reactome.db)
+  library(org.Mm.eg.db)
+  library(annotate)
+  library(PhosR)
+})
+```
+
+We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.
+```{r}
+data("phospho_liverInsTC_RUV_pe")
+ppe <- phospho.liver.Ins.TC.ratio.RUV.pe
+ppe
+```
+
+# Gene-centric analyses of the liver phosphoproteome data
+
+Let us start with gene-centric analysis. Such analysis can be directly applied to proteomics data. It can also be applied to phosphoproteomic data by using the `phosCollapse` function to summarise phosphosite information to proteins.
+
+```{r}
+# take grouping information
+grps <- sapply(strsplit(colnames(ppe), "_"), 
+            function(x)x[3])
+
+# select differentially phosphorylated sites
+sites.p <- matANOVA(ppe@assays@data$Quantification, 
+                    grps)
+ppm <- meanAbundance(ppe@assays@data$Quantification, grps)
+sel <- which((sites.p < 0.05) & (rowSums(abs(ppm) > 1) != 0))
+ppm_filtered <- ppm[sel,]
+
+# summarise phosphosites information into gene level
+ppm_gene <- phosCollapse(ppm_filtered, 
+            gsub(";.+", "", rownames(ppm_filtered)), 
+                stat = apply(abs(ppm_filtered), 1, max), by = "max")
+
+# perform ClueR to identify optimal number of clusters
+pathways = as.list(reactomePATHID2EXTID)
+
+pathways = pathways[which(grepl("R-MMU", names(pathways), ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Mm.eg"))
+    toupper(unique(gene_name))
+})
+
+RNGkind("L'Ecuyer-CMRG")
+set.seed(123)
+c1 <- runClue(ppm_gene, annotation=pathways, 
+            kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
+            pvalueCutoff = 0.05, alpha = 0.5)
+
+# Visualise the evaluation results
+data <- data.frame(Success=as.numeric(c1$evlMat), Freq=rep(seq(2,10), each=5))
+myplot <- ggplot(data, aes(x=Freq, y=Success)) + 
+    geom_boxplot(aes(x = factor(Freq), fill="gray")) +
+    stat_smooth(method="loess", colour="red", size=3, span = 0.5) +
+    xlab("# of cluster") + 
+    ylab("Enrichment score") + 
+    theme_classic()
+myplot
+
+set.seed(123)
+best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
+```
+
+# Site-centric analyses of the liver phosphoproteome data
+
+Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.
+
+```{r}
+RNGkind("L'Ecuyer-CMRG")
+set.seed(1)
+PhosphoSite.mouse2 = mapply(function(kinase) {
+  gsub("(.*)(;[A-Z])([0-9]+;)", "\\1;\\3", kinase)
+}, PhosphoSite.mouse)
+
+# perform ClueR to identify optimal number of clusters
+c3 <- runClue(ppm_filtered, annotation=PhosphoSite.mouse2, kRange = 2:10, rep = 5, effectiveSize = c(5, 100), pvalueCutoff = 0.05, alpha = 0.5)
+
+# Visualise the evaluation results
+data <- data.frame(Success=as.numeric(c3$evlMat), Freq=rep(2:10, each=5))
+myplot <- ggplot(data, aes(x=Freq, y=Success)) + geom_boxplot(aes(x = factor(Freq), fill="gray"))+
+  stat_smooth(method="loess", colour="red", size=3, span = 0.5) + xlab("# of cluster")+ ylab("Enrichment score")+theme_classic()
+myplot
+
+set.seed(1)
+best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE)
+
+# Finding enriched pathways from each cluster
+best$enrichList
+```
+
+# SessionInfo
+
+```{r}
+sessionInfo()
+```
+
+

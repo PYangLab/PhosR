@@ -13,15 +13,15 @@ navbar:
         - text: Imputation
           href: articles/imputation.html
         - text: Batch correction
-          href: articles/webOnly/batch_correction.html
+          href: articles/batch_correction.html
     - text: Downstream analysis
       menu:
         - text: Pathway analysis
           href: articles/pathway_analysis.html
         - text: Site- and gene-centric analysis
-          href: articles/webOnly/site_gene_analysis.html
+          href: articles/site_gene_analysis.html
         - text: Signalomes
-          href: articles/webOnly/signalomes.html
+          href: articles/signalomes.html
     - text: Functions
       href: reference/index.html
   right:
