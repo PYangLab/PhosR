@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create frequency matrix — createFrequencyMat • PhosR</title>
+<title>phospho_L6_ratio_pe — phospho.L6.ratio.pe • PhosR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Create frequency matrix — createFrequencyMat" />
-<meta property="og:description" content="Create frequency matrix" />
+<meta property="og:title" content="phospho_L6_ratio_pe — phospho.L6.ratio.pe" />
+<meta property="og:description" content="L6 myotube phosphoproteome dataset
+(accession number: PXD019127)." />
 
 
 
@@ -147,40 +148,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create frequency matrix</h1>
+    <h1>phospho_L6_ratio_pe</h1>
     
-    <div class="hidden name"><code>createFrequencyMat.Rd</code></div>
+    <div class="hidden name"><code>phospho.L6.ratio.pe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create frequency matrix</p>
+    <p>L6 myotube phosphoproteome dataset
+(accession number: PXD019127).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>createFrequencyMat</span><span class='op'>(</span><span class='va'>substrates.seq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>phospho_L6_ratio_pe</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>substrates.seq</th>
-      <td><p>A substrate sequence</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A frequency matrix of amino acid from substrates.seq.</p>
+    <p>An PhosphoExperiment object</p>
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"phospho_L6_ratio.pe"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: data set ‘phospho_L6_ratio.pe’ not found</span></div><div class='input'>
-<span class='co'># We will create a frequency matrix of Tfg S198 phosphosite.</span>
-<span class='va'>idx</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span> <span class='op'>==</span> <span class='st'>"TFG;S198;"</span><span class='op'>)</span>
-<span class='va'>substrate.seq</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio.pe</span><span class='op'>@</span><span class='va'>Sequence</span><span class='op'>[</span><span class='va'>idx</span><span class='op'>]</span>
-<span class='va'>freq.mat</span> <span class='op'>=</span> <span class='fu'>createFrequencyMat</span><span class='op'>(</span><span class='va'>substrate.seq</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in substrates.seq.split[[1]]: subscript out of bounds</span></div><div class='input'>
-</div></pre>
+    <p>PRIDE accesion number: PXD001792</p>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

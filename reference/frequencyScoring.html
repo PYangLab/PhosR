@@ -177,12 +177,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'phospho_L6_ratio'</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'KinaseMotifs'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'phospho_L6_ratio.pe'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: data set ‘phospho_L6_ratio.pe’ not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'KinaseMotifs'</span><span class='op'>)</span>
 
 <span class='co'># Extracting first 10 sequences for demonstration purpose</span>
-<span class='va'>seqs</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>, <span class='st'>";"</span><span class='op'>)</span>,
-                    <span class='kw'>function</span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>i</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>]</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>seqs</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio.pe</span><span class='op'>@</span><span class='va'>Sequence</span>
 <span class='va'>seqs</span> <span class='op'>=</span> <span class='va'>seqs</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span>
 
 <span class='co'># extracting flanking sequences</span>
@@ -192,7 +191,7 @@
 <span class='op'>}</span>, <span class='va'>seqs</span><span class='op'>)</span>
 
 <span class='co'># The first 10 for demonstration purpose</span>
-<span class='va'>phospho.L6.ratio</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,<span class='op'>]</span>
+<span class='va'>phospho.L6.ratio</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio.pe</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Quantification</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,<span class='op'>]</span>
 
 <span class='co'># minimum number of sequences used for compiling motif for each kinase.</span>
 <span class='va'>numMotif</span><span class='op'>=</span><span class='fl'>5</span>
