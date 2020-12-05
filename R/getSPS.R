@@ -12,7 +12,7 @@
 #' @examples
 #'
 #' data("phospho_L6_ratio_pe")
-#' data("phospho.liver.Ins.TC.ratio.RUV.pe")
+#' data("phospho_liverInsTC_RUV_pe")
 #' 
 #' ppe1 <- phospho.L6.ratio.pe
 #' ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
