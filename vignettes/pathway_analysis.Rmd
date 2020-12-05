@@ -1,0 +1,201 @@
+---
+title: "Pathway analysis with PhosR"
+author:
+- name: Taiyun Kim, Hani Jieun Kim, Di Xiao
+
+date: "`r BiocStyle::doc_date()`"
+output:
+  BiocStyle::html_document:
+    toc_newpage: true
+    fig_retina: NULL
+    #toc: true
+    #toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Downstream analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    warning = FALSE,
+    message = FALSE,
+    comment = "#>"
+)
+```
+
+# Introduction
+
+Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis on the gene level, `PhosR` implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as ‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
+
+This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank--based gene set tests and also provide an example of how `directPA` can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) https://academic.oup.com/bioinformatics/article/30/6/808/286146. 
+
+# Loading packages and data
+
+First, we will load the PhosR package with few other packages will use for the demonstration purpose.
+
+We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome under three different treatment conditions and a basal condition, and three conditions are (1) AMPK agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).
+
+```{r}
+suppressPackageStartupMessages({
+  library(calibrate)
+  library(limma)
+  library(directPA)
+  library(org.Rn.eg.db)
+  library(reactome.db)
+  library(annotate)
+  library(PhosR)
+})
+```
+
+```{r}
+data("PhosphoSitePlus")
+```
+
+We will use `ppe_RUV` matrix from [batch_correction](../docs/webOnly/batch_correction.html).
+
+```{r, include = FALSE}
+data("phospho_L6_ratio")
+data("SPSs")
+
+##### Run batch correction
+ppe <- phospho.L6.ratio.pe
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+                 sapply(ppe@Residue, function(x)x),
+                 sapply(ppe@Site, function(x)x),
+                 ";", sep = "")
+grps = gsub("_.+", "", colnames(ppe))
+design = model.matrix(~ grps - 1)
+ctl = which(sites %in% SPSs)
+ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
+```
+
+# 1-dimensional enrichment analysis 
+
+To enable enrichment analyses on both gene and phosphosite levels, PhosR implements a simple method called `phosCollapse` which reduces phosphosite level of information to the proteins for performing downstream gene-centric analyses. We will utilise two functions, `pathwayOverrepresent` and `pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation and rank-based gene set test) gene-centric pathway enrichment analysis respectively.
+
+```{r}
+# extract phosphosites
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+                 sapply(ppe@Residue, function(x)x),
+                 sapply(ppe@Site, function(x)x),
+                 ";", sep = "")
+
+# fit linear model for each phosphosite
+f <- gsub("_exp\\d", "", colnames(ppe))
+X <- model.matrix(~ f - 1)
+fit <- lmFit(ppe@assays@data$normalised, X)
+
+# extract top-ranked phosphosites for each condition compared to basal
+table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)
+table.Ins <- topTable(eBayes(fit), number=Inf, coef = 3)
+table.AICARIns <- topTable(eBayes(fit), number=Inf, coef = 2)
+
+DE1.RUV <- c(sum(table.AICAR[,"adj.P.Val"] < 0.05), sum(table.Ins[,"adj.P.Val"] < 0.05), sum(table.AICARIns[,"adj.P.Val"] < 0.05))
+
+# extract top-ranked phosphosites for each group comparison
+contrast.matrix1 <- makeContrasts(fAICARIns-fIns, levels=X)  # defining group comparisons
+contrast.matrix2 <- makeContrasts(fAICARIns-fAICAR, levels=X)  # defining group comparisons
+fit1 <- contrasts.fit(fit, contrast.matrix1)
+fit2 <- contrasts.fit(fit, contrast.matrix2)
+table.AICARInsVSIns <- topTable(eBayes(fit1), number=Inf)
+table.AICARInsVSAICAR <- topTable(eBayes(fit2), number=Inf)
+
+DE2.RUV <- c(sum(table.AICARInsVSIns[,"adj.P.Val"] < 0.05), sum(table.AICARInsVSAICAR[,"adj.P.Val"] < 0.05))
+
+o <- rownames(table.AICARInsVSIns)
+Tc <- cbind(table.Ins[o,"logFC"], table.AICAR[o,"logFC"], table.AICARIns[o,"logFC"])
+
+rownames(Tc) <- sites[match(o, rownames(ppe))]
+rownames(Tc) <- gsub("(.*)(;[A-Z])([0-9]+)(;)", "\\1;\\3;", rownames(Tc))
+
+colnames(Tc) <- c("Ins", "AICAR", "AICAR+Ins")
+
+# summary phosphosite-level information to proteins for performing downstream gene-centric analyses.
+Tc.gene <- phosCollapse(Tc, id=gsub(";.+", "", rownames(Tc)), 
+                        stat=apply(abs(Tc), 1, max), by = "max")
+geneSet <- names(sort(Tc.gene[,1], 
+                        decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
+```
+
+# Prepare Reactome annotation
+```{r}
+pathways = as.list(reactomePATHID2EXTID)
+
+path_names = as.list(reactomePATHID2NAME)
+name_id = match(names(pathways), names(path_names))
+names(pathways) = unlist(path_names)[name_id]
+
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), ignore.case = TRUE))]
+#pathways = pathways[which(grepl("R-RNO", names(pathways), ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
+    toupper(unique(gene_name))
+})
+```
+
+```{r}
+# 1D gene-centric pathway analysis
+path1 <- pathwayOverrepresent(geneSet, annotation=pathways, 
+                                universe = rownames(Tc.gene), alter = "greater")
+path2 <- pathwayRankBasedEnrichment(Tc.gene[,1], 
+                                    annotation=pathways, 
+                                    alter = "greater")
+```
+
+Next, we will compare enrichment of pathways (in negative log10 p-values) between the two 1-dimensional pathway enrichment analysis. On the scatter plot, the x-axis and y-axis refer to the p-values derived from the rank-based gene set test and over-representation test, respectively. We find several expected pathways, while these highly enriched pathways are largely in agreement between the two types of enrichment analyses.
+
+```{r}
+lp1 <- -log10(as.numeric(path2[names(pathways),1]))
+lp2 <- -log10(as.numeric(path1[names(pathways),1]))
+plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)", xlab="Rank-based enrichment (-log10 pvalue)", main="Comparison of 1D pathway analyses", xlim = c(0, 10))
+
+# select highly enriched pathways
+sel <- which(lp1 > 1.5 & lp2 > 0.9)
+textxy(lp1[sel], lp2[sel], gsub("_", " ", gsub("REACTOME_", "", names(pathways)))[sel])
+```
+
+# 2- and 3-dimensional signalling pathway analysis
+
+One key aspect in studying signalling pathways is to identify key kinases that are involved in signalling cascades. To identify these kinases, we make use of kinase-substrate annotation databases such as `PhosphoSitePlus` and `Phospho.ELM`. These databases are included in the `PhosR` and `directPA` packages already. To access them, simply load the package and access the data by *data("PhosphoSitePlus")* and *data("PhosphoELM")*.
+
+The 2- and 3-dimensional analyses enable the investigation of kinases regulated by different combinations of treatments. We will introduce more advanced methods implemented in the R package `directPA` for performing “2 and 3-dimentional” direction site-centric kinase activity analyses.
+
+```{r}
+# 2D direction site-centric kinase activity analyses
+par(mfrow=c(1,2))
+dpa1 <- directPA(Tc[,c(1,3)], direction=0, 
+                 annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}), 
+                 main="Direction pathway analysis")
+dpa2 <- directPA(Tc[,c(1,3)], direction=pi*7/4, 
+                 annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}), 
+                 main="Direction pathway analysis")
+
+# top activated kinases
+dpa1$pathways[1:5,]
+dpa2$pathways[1:5,]
+```
+
+There is also a function called `perturbPlot2d` implemented in `kinasePA` for testing and visualising activity of all kinases on all possible directions. Below are the demonstration from using this function. 
+
+```{r}
+z1 <- perturbPlot2d(Tc=Tc[,c(1,2)], 
+                    annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
+                    cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
+                    main="Kinase perturbation analysis")
+z2 <- perturbPlot2d(Tc=Tc[,c(1,3)], annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
+                    cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
+                    main="Kinase perturbation analysis")
+z3 <- perturbPlot2d(Tc=Tc[,c(2,3)], annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
+                    cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
+                    main="Kinase perturbation analysis")
+```
+
+# SessionInfo
+
+```{r}
+sessionInfo()
+```
+
