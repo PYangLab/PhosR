@@ -22,10 +22,8 @@ author:
 date: "`r BiocStyle::doc_date()`"
 output:
   BiocStyle::html_document:
-    toc_newpage: true
-    fig_retina: NULL
-    #toc: true
-    #toc_float: true
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{Preprocessing}
   %\VignetteEngine{knitr::rmarkdown}
