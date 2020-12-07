@@ -247,11 +247,10 @@ plotQC(ppe_imputed_scaled@assays@data$scaled,
 
 By setting *panel = "dendrogram"*, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together. 
 ```{r}
-par(mfrow=c(1,2))
-plotQC(ppe_filtered@assays@data$Quantification, 
+p1 = plotQC(ppe_filtered@assays@data$Quantification, 
        labels=colnames(ppe_filtered), panel = "dendrogram", 
        cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$scaled, 
+p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), 
        panel = "dendrogram", cols = cols)
 ggpubr::ggarrange(p1, p2, nrow = 1)
@@ -332,16 +331,14 @@ There are a number of ways to diagnose batch effect. In `PhosR`, we make use of 
 By setting *panel = "dendrogram"*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
-cs = rainbow(length(unique(grps)))
-colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
-plotQC(ppe, panel = "dendrogram", cols=colorCodes, labels = colnames(ppe))+ 
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=grps, labels = colnames(ppe))+ 
   ggplot2::ggtitle("Before batch correction")
 ```
 
 We can also visualise the samples in PCA space by setting *panel = "pca"*. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the *AICAR* treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
 ```{r}
-plotQC(ppe, cols=colorCodes, labels = colnames(ppe), panel = "pca") +
+plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "pca") +
   ggplot2::ggtitle("Before batch correction")
 ```
 
@@ -383,10 +380,12 @@ ggpubr::ggarrange(p1, p2, nrow = 1)
 ```{r}
 p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", 
     cols=grps, labels = colnames(phospho.L6.ratio.pe)) +
-    ggtitle("Before Batch correction")
+    ggplot2::ggtitle("Before Batch correction") +
+    ggplot2::theme(legend.position = "none")
 p2 = plotQC(ppe@assays@data$normalised, cols=grps, 
     labels = colnames(phospho.L6.ratio.pe), panel="pca") +
-    ggtitle("After Batch correction")
+    ggplot2::ggtitle("After Batch correction") +
+    ggplot2::theme(legend.position = "none")
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
