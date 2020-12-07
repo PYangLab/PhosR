@@ -108,8 +108,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pathway analysis with PhosR</h1>
-                        <h4 class="author">Taiyun Kim, Hani Jieun Kim, Di Xiao</h4>
-                        
+            
             <h4 class="date">7 December 2020</h4>
       
       
@@ -122,14 +121,14 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis on the gene level, <code>PhosR</code> implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as ‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.</p>
-<p>This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank–based gene set tests and also provide an example of how <code>directPA</code> can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) <a href="https://academic.oup.com/bioinformatics/article/30/6/808/286146" class="uri">https://academic.oup.com/bioinformatics/article/30/6/808/286146</a>.</p>
+<p>Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis at the gene level, <code>PhosR</code> implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.</p>
+<p>This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank–based gene set tests and also provide an example of how <code>directPA</code> can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses <a href="https://academic.oup.com/bioinformatics/article/30/6/808/286146">Yang et al. 2014</a>.</p>
 </div>
 <div id="loading-packages-and-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loading-packages-and-data" class="anchor"></a>Loading packages and data</h1>
 <p>First, we will load the PhosR package with few other packages will use for the demonstration purpose.</p>
-<p>We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome under three different treatment conditions and a basal condition, and three conditions are (1) AMPK agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).</p>
+<p>We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome from three different treatment conditions: (1) AMPK agonist AICAR, (2) insulin (Ins), and (3) in combination (AICAR+Ins).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">calibrate</span><span class="op">)</span>
@@ -142,26 +141,26 @@
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"PhosphoSitePlus"</span><span class="op">)</span></code></pre></div>
-<p>We will use <code>ppe_RUV</code> matrix from <a href="../docs/webOnly/batch_correction.html">batch_correction</a>.</p>
+<p>We will use the <code>ppe_RUV</code> matrix from <a href="https://pyanglab.github.io/PhosR/articles/batch_correction.html">batch_correction</a>.</p>
 </div>
 <div id="dimensional-enrichment-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#dimensional-enrichment-analysis" class="anchor"></a>1-dimensional enrichment analysis</h1>
 <p>To enable enrichment analyses on both gene and phosphosite levels, PhosR implements a simple method called <code>phosCollapse</code> which reduces phosphosite level of information to the proteins for performing downstream gene-centric analyses. We will utilise two functions, <code>pathwayOverrepresent</code> and <code>pathwayRankBasedEnrichment</code>, to demonstrate 1-dimensional (over-representation and rank-based gene set test) gene-centric pathway enrichment analysis respectively.</p>
+<p>First, extract phosphosite information from the ppe object.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># extract phosphosites</span>
-<span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,
+<code class="sourceCode R"><span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,
                  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Residue</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,
                  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Site</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,
-                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-
-<span class="co"># fit linear model for each phosphosite</span>
-<span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_exp\\d"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span>
+                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
+<p>Then fit a linear model for each phosphosite.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_exp\\d"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span>
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">f</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html">lmFit</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, <span class="va">X</span><span class="op">)</span>
-
-<span class="co"># extract top-ranked phosphosites for each condition compared to basal</span>
-<span class="va">table.AICAR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html">topTable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, number<span class="op">=</span><span class="cn">Inf</span>, coef <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html">lmFit</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, <span class="va">X</span><span class="op">)</span></code></pre></div>
+<p>Extract top-differentially regulated phosphosites for each condition compared to basal.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">table.AICAR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html">topTable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, number<span class="op">=</span><span class="cn">Inf</span>, coef <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="va">table.Ins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html">topTable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, number<span class="op">=</span><span class="cn">Inf</span>, coef <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="va">table.AICARIns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/toptable.html">topTable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>, number<span class="op">=</span><span class="cn">Inf</span>, coef <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
@@ -183,18 +182,21 @@
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sites</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">o</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"(.*)(;[A-Z])([0-9]+)(;)"</span>, <span class="st">"\\1;\\3;"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ins"</span>, <span class="st">"AICAR"</span>, <span class="st">"AICAR+Ins"</span><span class="op">)</span>
-
-<span class="co"># summary phosphosite-level information to proteins for performing downstream gene-centric analyses.</span>
-<span class="va">Tc.gene</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phosCollapse.html">phosCollapse</a></span><span class="op">(</span><span class="va">Tc</span>, id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span><span class="op">)</span>, 
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ins"</span>, <span class="st">"AICAR"</span>, <span class="st">"AICAR+Ins"</span><span class="op">)</span></code></pre></div>
+<p>Summarize phosphosite-level information to proteins for the downstream gene-centric analysis.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Tc.gene</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phosCollapse.html">phosCollapse</a></span><span class="op">(</span><span class="va">Tc</span>, id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span><span class="op">)</span>, 
                         stat<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span>
 <span class="va">geneSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">Tc.gene</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, 
-                        decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Tc.gene</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+                        decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Tc.gene</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">geneSet</span><span class="op">)</span>
+<span class="co">#&gt; [1] "PPP1R13L" "SYNPO2L"  "AHNAK"    "USP10"    "SENP7"    "ATG2A"</span></code></pre></div>
 </div>
-<div id="prepare-reactome-annotation" class="section level1">
+<div id="prepare-the-reactome-annotation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#prepare-reactome-annotation" class="anchor"></a>Prepare Reactome annotation</h1>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<a href="#prepare-the-reactome-annotation" class="anchor"></a>Prepare the Reactome annotation</h1>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">reactomePATHID2EXTID</span><span class="op">)</span>
 
 <span class="va">path_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">reactomePATHID2NAME</span><span class="op">)</span>
@@ -202,21 +204,20 @@
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">path_names</span><span class="op">)</span><span class="op">[</span><span class="va">name_id</span><span class="op">]</span>
 
 <span class="va">pathways</span> <span class="op">=</span> <span class="va">pathways</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Rattus norvegicus"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#pathways = pathways[which(grepl("R-RNO", names(pathways), ignore.case = TRUE))]</span>
 
 <span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">pathways</span>, <span class="kw">function</span><span class="op">(</span><span class="va">path</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">gene_name</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/annotate/man/getSYMBOL.html">getSYMBOL</a></span><span class="op">(</span><span class="va">path</span>, data <span class="op">=</span> <span class="st">"org.Rn.eg"</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">gene_name</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># 1D gene-centric pathway analysis</span>
-<span class="va">path1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pathwayOverrepresent.html">pathwayOverrepresent</a></span><span class="op">(</span><span class="va">geneSet</span>, annotation<span class="op">=</span><span class="va">pathways</span>, 
+<p>Perform 1D gene-centric pathway analysis</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">path1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pathwayOverrepresent.html">pathwayOverrepresent</a></span><span class="op">(</span><span class="va">geneSet</span>, annotation<span class="op">=</span><span class="va">pathways</span>, 
                                 universe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Tc.gene</span><span class="op">)</span>, alter <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span>
 <span class="va">path2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pathwayRankBasedEnrichment.html">pathwayRankBasedEnrichment</a></span><span class="op">(</span><span class="va">Tc.gene</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, 
                                     annotation<span class="op">=</span><span class="va">pathways</span>, 
                                     alter <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></code></pre></div>
 <p>Next, we will compare enrichment of pathways (in negative log10 p-values) between the two 1-dimensional pathway enrichment analysis. On the scatter plot, the x-axis and y-axis refer to the p-values derived from the rank-based gene set test and over-representation test, respectively. We find several expected pathways, while these highly enriched pathways are largely in agreement between the two types of enrichment analyses.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp1</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">path2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="va">lp2</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">path1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lp1</span>, <span class="va">lp2</span>, ylab<span class="op">=</span><span class="st">"Overrepresentation (-log10 pvalue)"</span>, xlab<span class="op">=</span><span class="st">"Rank-based enrichment (-log10 pvalue)"</span>, main<span class="op">=</span><span class="st">"Comparison of 1D pathway analyses"</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
@@ -224,14 +225,14 @@
 <span class="co"># select highly enriched pathways</span>
 <span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">lp1</span> <span class="op">&gt;</span> <span class="fl">1.5</span> <span class="op">&amp;</span> <span class="va">lp2</span> <span class="op">&gt;</span> <span class="fl">0.9</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/calibrate/man/textxy.html">textxy</a></span><span class="op">(</span><span class="va">lp1</span><span class="op">[</span><span class="va">sel</span><span class="op">]</span>, <span class="va">lp2</span><span class="op">[</span><span class="va">sel</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">" "</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"REACTOME_"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">sel</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
 <div id="and-3-dimensional-signalling-pathway-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#and-3-dimensional-signalling-pathway-analysis" class="anchor"></a>2- and 3-dimensional signalling pathway analysis</h1>
 <p>One key aspect in studying signalling pathways is to identify key kinases that are involved in signalling cascades. To identify these kinases, we make use of kinase-substrate annotation databases such as <code>PhosphoSitePlus</code> and <code>Phospho.ELM</code>. These databases are included in the <code>PhosR</code> and <code>directPA</code> packages already. To access them, simply load the package and access the data by <em>data(“PhosphoSitePlus”)</em> and <em>data(“PhosphoELM”)</em>.</p>
 <p>The 2- and 3-dimensional analyses enable the investigation of kinases regulated by different combinations of treatments. We will introduce more advanced methods implemented in the R package <code>directPA</code> for performing “2 and 3-dimentional” direction site-centric kinase activity analyses.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># 2D direction site-centric kinase activity analyses</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">dpa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/directPA/man/directPA.html">directPA</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, direction<span class="op">=</span><span class="fl">0</span>, 
@@ -240,8 +241,8 @@
 <span class="va">dpa2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/directPA/man/directPA.html">directPA</a></span><span class="op">(</span><span class="va">Tc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, direction<span class="op">=</span><span class="va">pi</span><span class="op">*</span><span class="fl">7</span><span class="op">/</span><span class="fl">4</span>, 
                  annotation<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">PhosphoSite.rat</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";[STY]"</span>, <span class="st">";"</span>, <span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>, 
                  main<span class="op">=</span><span class="st">"Direction pathway analysis"</span><span class="op">)</span></code></pre></div>
-<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># top activated kinases</span>
 <span class="va">dpa1</span><span class="op">$</span><span class="va">pathways</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>
@@ -259,27 +260,27 @@
 <span class="co">#&gt; CDK5    0.2607434  5   </span>
 <span class="co">#&gt; MAPK1   0.2767886  9</span></code></pre></div>
 <p>There is also a function called <code>perturbPlot2d</code> implemented in <code>kinasePA</code> for testing and visualising activity of all kinases on all possible directions. Below are the demonstration from using this function.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">z1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/directPA/man/perturbPlot2d.html">perturbPlot2d</a></span><span class="op">(</span>Tc<span class="op">=</span><span class="va">Tc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>, 
                     annotation<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">PhosphoSite.rat</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";[STY]"</span>, <span class="st">";"</span>, <span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>,
                     cex<span class="op">=</span><span class="fl">1</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, 
                     main<span class="op">=</span><span class="st">"Kinase perturbation analysis"</span><span class="op">)</span></code></pre></div>
-<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">z2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/directPA/man/perturbPlot2d.html">perturbPlot2d</a></span><span class="op">(</span>Tc<span class="op">=</span><span class="va">Tc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, annotation<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">PhosphoSite.rat</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";[STY]"</span>, <span class="st">";"</span>, <span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>,
                     cex<span class="op">=</span><span class="fl">1</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, 
                     main<span class="op">=</span><span class="st">"Kinase perturbation analysis"</span><span class="op">)</span></code></pre></div>
-<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-13-2.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">z3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/directPA/man/perturbPlot2d.html">perturbPlot2d</a></span><span class="op">(</span>Tc<span class="op">=</span><span class="va">Tc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, annotation<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">PhosphoSite.rat</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";[STY]"</span>, <span class="st">";"</span>, <span class="va">x</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>,
                     cex<span class="op">=</span><span class="fl">1</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, 
                     main<span class="op">=</span><span class="st">"Kinase perturbation analysis"</span><span class="op">)</span></code></pre></div>
-<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-10-3.png" width="700"></p>
+<p><img src="pathway_analysis_files/figure-html/unnamed-chunk-13-3.png" width="700"></p>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.0.3 (2020-10-10)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
@@ -301,7 +302,7 @@
 <span class="co">#&gt;  [4] reactome.db_1.74.0   org.Rn.eg.db_3.12.0  AnnotationDbi_1.52.0</span>
 <span class="co">#&gt;  [7] IRanges_2.24.0       S4Vectors_0.28.0     Biobase_2.50.0      </span>
 <span class="co">#&gt; [10] BiocGenerics_0.36.0  directPA_1.5         limma_3.46.0        </span>
-<span class="co">#&gt; [13] calibrate_1.7.7      MASS_7.3-53          BiocStyle_2.18.1    </span>
+<span class="co">#&gt; [13] calibrate_1.7.7      MASS_7.3-53         </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] bitops_1.0-6                matrixStats_0.57.0         </span>
@@ -315,38 +316,38 @@
 <span class="co">#&gt; [17] bit_4.0.4                   compiler_4.0.3             </span>
 <span class="co">#&gt; [19] textshaping_0.2.1           network_1.16.1             </span>
 <span class="co">#&gt; [21] desc_1.2.0                  DelayedArray_0.16.0        </span>
-<span class="co">#&gt; [23] bookdown_0.21               scales_1.1.1               </span>
-<span class="co">#&gt; [25] pkgdown_1.6.1               systemfonts_0.3.2          </span>
-<span class="co">#&gt; [27] stringr_1.4.0               digest_0.6.27              </span>
-<span class="co">#&gt; [29] rmarkdown_2.5               XVector_0.30.0             </span>
-<span class="co">#&gt; [31] pkgconfig_2.0.3             htmltools_0.5.0            </span>
-<span class="co">#&gt; [33] MatrixGenerics_1.2.0        ruv_0.9.7.1                </span>
-<span class="co">#&gt; [35] rlang_0.4.9                 GlobalOptions_0.1.2        </span>
-<span class="co">#&gt; [37] RSQLite_2.2.1               shape_1.4.5                </span>
-<span class="co">#&gt; [39] generics_0.1.0              dendextend_1.14.0          </span>
-<span class="co">#&gt; [41] dplyr_1.0.2                 RCurl_1.98-1.2             </span>
-<span class="co">#&gt; [43] magrittr_2.0.1              GenomeInfoDbData_1.2.4     </span>
-<span class="co">#&gt; [45] Matrix_1.2-18               Rcpp_1.0.5                 </span>
-<span class="co">#&gt; [47] munsell_0.5.0               viridis_0.5.1              </span>
-<span class="co">#&gt; [49] lifecycle_0.2.0             stringi_1.5.3              </span>
-<span class="co">#&gt; [51] yaml_2.2.1                  SummarizedExperiment_1.20.0</span>
-<span class="co">#&gt; [53] zlibbioc_1.36.0             plyr_1.8.6                 </span>
-<span class="co">#&gt; [55] grid_4.0.3                  blob_1.2.1                 </span>
-<span class="co">#&gt; [57] crayon_1.3.4                lattice_0.20-41            </span>
-<span class="co">#&gt; [59] circlize_0.4.11             knitr_1.30                 </span>
-<span class="co">#&gt; [61] pillar_1.4.7                igraph_1.2.6               </span>
-<span class="co">#&gt; [63] GenomicRanges_1.42.0        reshape2_1.4.4             </span>
-<span class="co">#&gt; [65] glue_1.4.2                  evaluate_0.14              </span>
-<span class="co">#&gt; [67] pcaMethods_1.82.0           BiocManager_1.30.10        </span>
-<span class="co">#&gt; [69] vctrs_0.3.5                 tidyr_1.1.2                </span>
-<span class="co">#&gt; [71] gtable_0.3.0                purrr_0.3.4                </span>
-<span class="co">#&gt; [73] reshape_0.8.8               assertthat_0.2.1           </span>
-<span class="co">#&gt; [75] ggplot2_3.3.2               xfun_0.19                  </span>
-<span class="co">#&gt; [77] xtable_1.8-4                e1071_1.7-4                </span>
-<span class="co">#&gt; [79] ragg_0.4.0                  class_7.3-17               </span>
-<span class="co">#&gt; [81] viridisLite_0.3.0           tibble_3.0.4               </span>
-<span class="co">#&gt; [83] pheatmap_1.0.12             memoise_1.1.0              </span>
-<span class="co">#&gt; [85] ellipsis_0.3.1</span></code></pre></div>
+<span class="co">#&gt; [23] scales_1.1.1                pkgdown_1.6.1              </span>
+<span class="co">#&gt; [25] systemfonts_0.3.2           stringr_1.4.0              </span>
+<span class="co">#&gt; [27] digest_0.6.27               rmarkdown_2.5              </span>
+<span class="co">#&gt; [29] XVector_0.30.0              pkgconfig_2.0.3            </span>
+<span class="co">#&gt; [31] htmltools_0.5.0             MatrixGenerics_1.2.0       </span>
+<span class="co">#&gt; [33] ruv_0.9.7.1                 rlang_0.4.9                </span>
+<span class="co">#&gt; [35] GlobalOptions_0.1.2         RSQLite_2.2.1              </span>
+<span class="co">#&gt; [37] shape_1.4.5                 generics_0.1.0             </span>
+<span class="co">#&gt; [39] dendextend_1.14.0           dplyr_1.0.2                </span>
+<span class="co">#&gt; [41] RCurl_1.98-1.2              magrittr_2.0.1             </span>
+<span class="co">#&gt; [43] GenomeInfoDbData_1.2.4      Matrix_1.2-18              </span>
+<span class="co">#&gt; [45] Rcpp_1.0.5                  munsell_0.5.0              </span>
+<span class="co">#&gt; [47] viridis_0.5.1               lifecycle_0.2.0            </span>
+<span class="co">#&gt; [49] stringi_1.5.3               yaml_2.2.1                 </span>
+<span class="co">#&gt; [51] SummarizedExperiment_1.20.0 zlibbioc_1.36.0            </span>
+<span class="co">#&gt; [53] plyr_1.8.6                  grid_4.0.3                 </span>
+<span class="co">#&gt; [55] blob_1.2.1                  crayon_1.3.4               </span>
+<span class="co">#&gt; [57] lattice_0.20-41             circlize_0.4.11            </span>
+<span class="co">#&gt; [59] knitr_1.30                  pillar_1.4.7               </span>
+<span class="co">#&gt; [61] igraph_1.2.6                GenomicRanges_1.42.0       </span>
+<span class="co">#&gt; [63] reshape2_1.4.4              glue_1.4.2                 </span>
+<span class="co">#&gt; [65] evaluate_0.14               pcaMethods_1.82.0          </span>
+<span class="co">#&gt; [67] BiocManager_1.30.10         vctrs_0.3.5                </span>
+<span class="co">#&gt; [69] tidyr_1.1.2                 gtable_0.3.0               </span>
+<span class="co">#&gt; [71] purrr_0.3.4                 reshape_0.8.8              </span>
+<span class="co">#&gt; [73] assertthat_0.2.1            ggplot2_3.3.2              </span>
+<span class="co">#&gt; [75] xfun_0.19                   xtable_1.8-4               </span>
+<span class="co">#&gt; [77] e1071_1.7-4                 ragg_0.4.0                 </span>
+<span class="co">#&gt; [79] class_7.3-17                viridisLite_0.3.0          </span>
+<span class="co">#&gt; [81] tibble_3.0.4                pheatmap_1.0.12            </span>
+<span class="co">#&gt; [83] memoise_1.1.0               ellipsis_0.3.1             </span>
+<span class="co">#&gt; [85] BiocStyle_2.18.1</span></code></pre></div>
 </div>
   </div>
 

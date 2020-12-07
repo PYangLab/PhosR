@@ -109,6 +109,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Signalome construction with PhosR</h1>
             
+            <h4 class="date">7 December 2020</h4>
       
       
       <div class="hidden name"><code>signalomes.Rmd</code></div>
@@ -145,7 +146,7 @@
 <div id="setting-up-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
-<p>As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the <code>ppe_RUV</code> matrix as in <a href="../docs/webOnly/batch_correction.html">batch_correction</a>.</p>
+<p>As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the <code>ppe_RUV</code> matrix as in <a href="https://pyanglab.github.io/PhosR/articles/batch_correction.html">batch_correction</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"phospho_L6_ratio"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"SPSs"</span><span class="op">)</span>
@@ -184,7 +185,7 @@
 <code class="sourceCode R"><span class="va">L6.matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kinaseSubstrateScore.html">kinaseSubstrateScore</a></span><span class="op">(</span>substrate.list <span class="op">=</span> <span class="va">PhosphoSite.mouse</span>, 
                                     mat <span class="op">=</span> <span class="va">L6.phos.std</span>, seqs <span class="op">=</span> <span class="va">L6.phos.seq</span>, 
                                     numMotif <span class="op">=</span> <span class="fl">5</span>, numSub <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p><img src="signalomes_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="signalomes_files/figure-html/unnamed-chunk-7-1.png" width="480"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">L6.predMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kinaseSubstratePred.html">kinaseSubstratePred</a></span><span class="op">(</span><span class="va">L6.matrices</span>, top<span class="op">=</span><span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </code></pre></div>
@@ -222,7 +223,7 @@
 <p>Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotKinaseNetwork.html">plotKinaseNetwork</a></span><span class="op">(</span>KSR <span class="op">=</span> <span class="va">L6.matrices</span>, predMatrix <span class="op">=</span> <span class="va">L6.predMat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="va">kinase_all_color</span><span class="op">)</span></code></pre></div>
-<p><img src="signalomes_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
+<p><img src="signalomes_files/figure-html/unnamed-chunk-10-1.png" width="480"></p>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
@@ -289,17 +290,18 @@
 <span class="co">#&gt;  [77] reshape2_1.4.4              stats4_4.0.3               </span>
 <span class="co">#&gt;  [79] rle_0.9.2                   glue_1.4.2                 </span>
 <span class="co">#&gt;  [81] evaluate_0.14               data.table_1.13.2          </span>
-<span class="co">#&gt;  [83] pcaMethods_1.82.0           vctrs_0.3.5                </span>
-<span class="co">#&gt;  [85] cellranger_1.1.0            gtable_0.3.0               </span>
-<span class="co">#&gt;  [87] purrr_0.3.4                 tidyr_1.1.2                </span>
-<span class="co">#&gt;  [89] reshape_0.8.8               assertthat_0.2.1           </span>
-<span class="co">#&gt;  [91] openxlsx_4.2.3              xfun_0.19                  </span>
-<span class="co">#&gt;  [93] broom_0.7.2                 e1071_1.7-4                </span>
-<span class="co">#&gt;  [95] coda_0.19-4                 rstatix_0.6.0              </span>
-<span class="co">#&gt;  [97] ragg_0.4.0                  class_7.3-17               </span>
-<span class="co">#&gt;  [99] viridisLite_0.3.0           tibble_3.0.4               </span>
-<span class="co">#&gt; [101] pheatmap_1.0.12             memoise_1.1.0              </span>
-<span class="co">#&gt; [103] IRanges_2.24.0              ellipsis_0.3.1</span></code></pre></div>
+<span class="co">#&gt;  [83] pcaMethods_1.82.0           BiocManager_1.30.10        </span>
+<span class="co">#&gt;  [85] vctrs_0.3.5                 cellranger_1.1.0           </span>
+<span class="co">#&gt;  [87] gtable_0.3.0                purrr_0.3.4                </span>
+<span class="co">#&gt;  [89] tidyr_1.1.2                 reshape_0.8.8              </span>
+<span class="co">#&gt;  [91] assertthat_0.2.1            openxlsx_4.2.3             </span>
+<span class="co">#&gt;  [93] xfun_0.19                   broom_0.7.2                </span>
+<span class="co">#&gt;  [95] e1071_1.7-4                 coda_0.19-4                </span>
+<span class="co">#&gt;  [97] rstatix_0.6.0               ragg_0.4.0                 </span>
+<span class="co">#&gt;  [99] class_7.3-17                viridisLite_0.3.0          </span>
+<span class="co">#&gt; [101] tibble_3.0.4                pheatmap_1.0.12            </span>
+<span class="co">#&gt; [103] memoise_1.1.0               IRanges_2.24.0             </span>
+<span class="co">#&gt; [105] ellipsis_0.3.1              BiocStyle_2.18.1</span></code></pre></div>
 </div>
   </div>
 
