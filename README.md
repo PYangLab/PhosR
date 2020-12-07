@@ -30,6 +30,7 @@ Please note that the vignette generated in the link below is using the full data
 Our vignette prepared for BioC (`PhosR.Rmd`) utilises the subset of these datasets and the results may not be identical.
 
 * Introduction
+     * [Full vignette](https://pyanglab.github.io/PhosR/articles/PhosR.html)
 * Processing of phosphoproteomic data 
      * [Imputation](https://pyanglab.github.io/PhosR/articles/imputation.html)
      * [Batch correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html)
