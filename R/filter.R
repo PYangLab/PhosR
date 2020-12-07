@@ -261,3 +261,75 @@ given phosphosite to be retained.")
     
     return(mat.filtered)
 }
+
+
+#' @title Select phosphosites by localisation score
+#'
+#' @description Select phosphosites with a localisation score higher than the pre-defined probability score (default score = 0.75)
+#'
+#' @usage selectLocalisedSites(mat, localisation_scores=NULL, prob=0.75)
+#'
+#' @param mat a matrix (or PhosphoExperiment object) with rows corresponding to 
+#' phosphosites and columns corresponding to samples in replicates for different 
+#' treatments.
+#' @param prob a percent from 0 to 1, specifying the localisation probability of quantified
+#' values in across all samples for retaining a phosphosite for subsequent
+#' analysis.
+#'
+#' @return a filtered matrix
+#'
+#' @examples
+#'
+#' data('phospho.cells.Ins.sample')
+#' ppe <- phospho.cells.Ins.pe
+#' ppe_mat <- as.data.frame(SummarizedExperiment::assay(ppe))
+#' # Before filtering
+#' dim(ppe)
+#' dim(ppe_mat)
+#' 
+#' # Generate arbitrary localisation probabilities for each phosphosite
+#' set.seed(2020)
+#' localisation_scores <- round(rnorm(nrow(ppe), 0.8, 0.05), 2)
+#' table(localisation_scores >= 0.75)
+#' 
+#' # Filter
+#' ppe@Localisation <- localisation_scores
+#' ppe_filtered <- selectLocalisedSites(ppe, prob=0.75)
+#' ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, prob=0.75)
+#' 
+#' # After filtering
+#' dim(ppe_filtered)
+#' dim(ppe_mat_filtered)
+#' 
+#' @importFrom SummarizedExperiment assay
+#' @importFrom methods is
+#' 
+#' @export
+#'
+#'
+ 
+ selectLocalisedSites <- function(mat, loc=NULL, prob = 0.75) { 
+    
+    if (missing(mat))
+        stop("Parameter mat is missing!")
+    if ((!is.null(prob)) && ((prob < 0) || (prob > 1)))
+        stop("Parameter prob must be a numeric value between 0 and 1")
+    if ((is.null(loc)) && is.null(mat@Localisation) && is.null(mat@Localisation) && sum(is.na(mat@Localisation)) > 0)
+         stop("Some or all localisation scores are missing")
+    if ((!is.null(loc)) && (length(loc) != nrow(mat)))
+         stop("Length of loc should equal to the number of rows in mat")
+     
+    mat.orig = mat
+    if (methods::is(mat, "PhosphoExperiment")) {
+            loc = mat@Localisation
+    } else {
+        if (is.null(loc))
+            stop("Localisation probabilty scores missing")
+    }
+    
+    sel = loc >= prob
+    mat.filtered <- mat.orig[sel,]
+    
+    
+    return(mat.filtered)
+}
