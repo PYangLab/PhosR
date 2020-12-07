@@ -125,22 +125,22 @@ A useful function in `PhosR` is to visualize the percentage of quantified sites 
 
 ```{r}
 cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
-par(mfrow=c(1,2))
-plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
+p1 = plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
         panel = "quantify", cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$scaled, 
+p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
+ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 By setting *panel = 2*, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together. 
 ```{r}
-par(mfrow=c(1,2))
-plotQC(ppe_filtered@assays@data$Quantification, 
+p1 = plotQC(ppe_filtered@assays@data$Quantification, 
        labels=colnames(ppe_filtered), panel = "dendrogram", 
        cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$scaled, 
+p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), 
        panel = "dendrogram", cols = cols)
+ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 We can now move onto the next step in the `PhosR` workflow: integration of datasets and batch correction.
