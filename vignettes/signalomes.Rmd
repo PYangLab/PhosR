@@ -1,6 +1,7 @@
 ---
 title: 'Signalome construction with PhosR'
 output: rmarkdown::html_vignette
+date: "`r BiocStyle::doc_date()`"
 ---
 
 ```{r, include = FALSE}
