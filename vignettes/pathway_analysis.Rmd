@@ -15,15 +15,15 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis on the gene level, `PhosR` implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as ‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
+Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis at the gene level, `PhosR` implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
 
-This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank--based gene set tests and also provide an example of how `directPA` can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) https://academic.oup.com/bioinformatics/article/30/6/808/286146. 
+This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank--based gene set tests and also provide an example of how `directPA` can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses [Yang et al. 2014](https://academic.oup.com/bioinformatics/article/30/6/808/286146).
 
 # Loading packages and data
 
 First, we will load the PhosR package with few other packages will use for the demonstration purpose.
 
-We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome under three different treatment conditions and a basal condition, and three conditions are (1) AMPK agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).
+We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome from three different treatment conditions: (1) AMPK agonist AICAR, (2) insulin (Ins), and (3) in combination (AICAR+Ins).
 
 ```{r}
 suppressPackageStartupMessages({
@@ -41,7 +41,7 @@ suppressPackageStartupMessages({
 data("PhosphoSitePlus")
 ```
 
-We will use `ppe_RUV` matrix from [batch_correction](../docs/webOnly/batch_correction.html).
+We will use the `ppe_RUV` matrix from [batch_correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html).
 
 ```{r, include = FALSE}
 data("phospho_L6_ratio")
@@ -63,19 +63,23 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
 To enable enrichment analyses on both gene and phosphosite levels, PhosR implements a simple method called `phosCollapse` which reduces phosphosite level of information to the proteins for performing downstream gene-centric analyses. We will utilise two functions, `pathwayOverrepresent` and `pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation and rank-based gene set test) gene-centric pathway enrichment analysis respectively.
 
+First, extract phosphosite information from the ppe object.
 ```{r}
-# extract phosphosites
 sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
                  sapply(ppe@Residue, function(x)x),
                  sapply(ppe@Site, function(x)x),
                  ";", sep = "")
+```
 
-# fit linear model for each phosphosite
+Then fit a linear model for each phosphosite.
+```{r}
 f <- gsub("_exp\\d", "", colnames(ppe))
 X <- model.matrix(~ f - 1)
 fit <- lmFit(ppe@assays@data$normalised, X)
+```
 
-# extract top-ranked phosphosites for each condition compared to basal
+Extract top-differentially regulated phosphosites for each condition compared to basal.
+```{r}
 table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)
 table.Ins <- topTable(eBayes(fit), number=Inf, coef = 3)
 table.AICARIns <- topTable(eBayes(fit), number=Inf, coef = 2)
@@ -99,15 +103,19 @@ rownames(Tc) <- sites[match(o, rownames(ppe))]
 rownames(Tc) <- gsub("(.*)(;[A-Z])([0-9]+)(;)", "\\1;\\3;", rownames(Tc))
 
 colnames(Tc) <- c("Ins", "AICAR", "AICAR+Ins")
+```
 
-# summary phosphosite-level information to proteins for performing downstream gene-centric analyses.
+Summarize phosphosite-level information to proteins for the downstream gene-centric analysis.
+```{r}
 Tc.gene <- phosCollapse(Tc, id=gsub(";.+", "", rownames(Tc)), 
                         stat=apply(abs(Tc), 1, max), by = "max")
 geneSet <- names(sort(Tc.gene[,1], 
                         decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
+
+head(geneSet)
 ```
 
-# Prepare Reactome annotation
+# Prepare the Reactome annotation
 ```{r}
 pathways = as.list(reactomePATHID2EXTID)
 
@@ -116,7 +124,6 @@ name_id = match(names(pathways), names(path_names))
 names(pathways) = unlist(path_names)[name_id]
 
 pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), ignore.case = TRUE))]
-#pathways = pathways[which(grepl("R-RNO", names(pathways), ignore.case = TRUE))]
 
 pathways = lapply(pathways, function(path) {
     gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
@@ -124,8 +131,8 @@ pathways = lapply(pathways, function(path) {
 })
 ```
 
+Perform 1D gene-centric pathway analysis
 ```{r}
-# 1D gene-centric pathway analysis
 path1 <- pathwayOverrepresent(geneSet, annotation=pathways, 
                                 universe = rownames(Tc.gene), alter = "greater")
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1], 

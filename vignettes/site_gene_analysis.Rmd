@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 While 1, 2, and 3D pathway analyses are useful for data generated from experiments with different treatment/conditions, analysis designed for time-course data may be better suited to analysis experiments that profile multiple time points.
 
-Here, we will apply `ClueR` which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis ([Yang et al. 2015])(https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403).
+Here, we will apply `ClueR` which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis [Yang et al. 2015](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403).
 
 # Loading packages and data
 

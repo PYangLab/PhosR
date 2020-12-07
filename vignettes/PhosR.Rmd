@@ -402,35 +402,25 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
 ### Introduction
 
-Most phosphoproteomic studies have adopted a phosphosite-level analysis of the 
-data. To enable phosphoproteomic data analysis on the gene level, `PhosR` 
-implements both site- and gene-centric analyses for detecting changes in kinase 
-activities and signalling pathways through traditional enrichment analyses 
-(over-representation or rank-based gene set test, together referred to as 
-‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
+Most phosphoproteomic studies have adopted a phosphosite-level analysis of the data. To enable phosphoproteomic data analysis at the gene level, `PhosR` implements both site- and gene-centric analyses for detecting changes in kinase activities and signalling pathways through traditional enrichment analyses (over-representation or rank-based gene set test, together referred to as‘1-dimensional enrichment analysis’) as well as 2- and 3-dimensional analyses.  
 
-This vignette will perform gene-centric pathway enrichment analyses on the 
-normalised myotube phosphoproteomic dataset using both over-representation and 
-rank--based gene set tests and also provide an example of how `directPA` can be 
-used to test which kinases are activated upon different stimulations in myotubes 
-using 2-dimensional analyses. ([Pengyi Yang et al. 2014]) 
-https://academic.oup.com/bioinformatics/article/30/6/808/286146. 
+This vignette will perform gene-centric pathway enrichment analyses on the normalised myotube phosphoproteomic dataset using both over-representation and rank--based gene set tests and also provide an example of how `directPA` can be used to test which kinases are activated upon different stimulations in myotubes using 2-dimensional analyses [Yang et al. 2014](https://academic.oup.com/bioinformatics/article/30/6/808/286146).
 
 ### Loading packages and data
 
-First, we will load the PhosR package with few other packages will use for the 
-demonstration purpose.
+First, we will load the PhosR package with few other packages will use for the demonstration purpose.
 
-We will use RUV normalised L6 phosphopreteome data for demonstration of 
-gene-centric pathway analysis. It contains phosphoproteome under three different
-treatment conditions and a basal condition, and three conditions are (1) AMPK 
-agonist AICAR, (2) insulin (Ins), (3) in combination (AICAR+Ins).
+We will use RUV normalised L6 phosphopreteome data for demonstration of gene-centric pathway analysis. It contains phosphoproteome from three different treatment conditions: (1) AMPK agonist AICAR, (2) insulin (Ins), and (3) in combination (AICAR+Ins).
 
 ```{r}
 suppressPackageStartupMessages({
-    library(calibrate)
-    library(limma)
-    library(directPA)
+  library(calibrate)
+  library(limma)
+  library(directPA)
+  library(org.Rn.eg.db)
+  library(reactome.db)
+  library(annotate)
+  library(PhosR)
 })
 ```
 
@@ -438,91 +428,98 @@ suppressPackageStartupMessages({
 data("PhosphoSitePlus")
 ```
 
-We will use `phospho.L6.ratio.RUV` matrix from 
-[Section 1.2 Batch correction](#Batch_correction).
+We will use the `ppe_RUV` matrix from [batch_correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html).
 
+```{r, include = FALSE}
+data("phospho_L6_ratio")
+data("SPSs")
+
+##### Run batch correction
+ppe <- phospho.L6.ratio.pe
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+                 sapply(ppe@Residue, function(x)x),
+                 sapply(ppe@Site, function(x)x),
+                 ";", sep = "")
+grps = gsub("_.+", "", colnames(ppe))
+design = model.matrix(~ grps - 1)
+ctl = which(sites %in% SPSs)
+ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
+```
 
 ### 1-dimensional enrichment analysis 
 
-To enable enrichment analyses on both gene and phosphosite levels, PhosR 
-implements a simple method called `phosCollapse` which reduces phosphosite 
-level of information to the proteins for performing downstream gene-centric 
-analyses. We will utilise two functions, `pathwayOverrepresent` and 
-`pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation 
-and rank-based gene set test) gene-centric pathway enrichment analysis 
-respectively.
+To enable enrichment analyses on both gene and phosphosite levels, PhosR implements a simple method called `phosCollapse` which reduces phosphosite level of information to the proteins for performing downstream gene-centric analyses. We will utilise two functions, `pathwayOverrepresent` and `pathwayRankBasedEnrichment`, to demonstrate 1-dimensional (over-representation and rank-based gene set test) gene-centric pathway enrichment analysis respectively.
 
+First, extract phosphosite information from the ppe object.
 ```{r}
-# extract phosphosites
-L6.sites <- paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)x),
-                 ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)x),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)x),
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+                 sapply(ppe@Residue, function(x)x),
+                 sapply(ppe@Site, function(x)x),
                  ";", sep = "")
+```
 
-# fit linear model for each phosphosite
-f <- gsub("_exp\\d", "", colnames(phospho.L6.ratio.pe))
+Then fit a linear model for each phosphosite.
+```{r}
+f <- gsub("_exp\\d", "", colnames(ppe))
 X <- model.matrix(~ f - 1)
-fit <- lmFit(phospho.L6.ratio.pe@assays@data$normalised, X)
+fit <- lmFit(ppe@assays@data$normalised, X)
+```
 
-# extract top-ranked phosphosites for each condition compared to basal
+Extract top-differentially regulated phosphosites for each condition compared to basal.
+```{r}
 table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)
 table.Ins <- topTable(eBayes(fit), number=Inf, coef = 3)
 table.AICARIns <- topTable(eBayes(fit), number=Inf, coef = 2)
 
-DE1.RUV <- c(sum(table.AICAR[,"adj.P.Val"] < 0.05), 
-            sum(table.Ins[,"adj.P.Val"] < 0.05), 
-            sum(table.AICARIns[,"adj.P.Val"] < 0.05))
+DE1.RUV <- c(sum(table.AICAR[,"adj.P.Val"] < 0.05), sum(table.Ins[,"adj.P.Val"] < 0.05), sum(table.AICARIns[,"adj.P.Val"] < 0.05))
 
 # extract top-ranked phosphosites for each group comparison
-contrast.matrix1 <- makeContrasts(fAICARIns-fIns, levels=X)  
-contrast.matrix2 <- makeContrasts(fAICARIns-fAICAR, levels=X)  
+contrast.matrix1 <- makeContrasts(fAICARIns-fIns, levels=X)  # defining group comparisons
+contrast.matrix2 <- makeContrasts(fAICARIns-fAICAR, levels=X)  # defining group comparisons
 fit1 <- contrasts.fit(fit, contrast.matrix1)
 fit2 <- contrasts.fit(fit, contrast.matrix2)
 table.AICARInsVSIns <- topTable(eBayes(fit1), number=Inf)
 table.AICARInsVSAICAR <- topTable(eBayes(fit2), number=Inf)
 
-DE2.RUV <- c(sum(table.AICARInsVSIns[,"adj.P.Val"] < 0.05), 
-            sum(table.AICARInsVSAICAR[,"adj.P.Val"] < 0.05))
+DE2.RUV <- c(sum(table.AICARInsVSIns[,"adj.P.Val"] < 0.05), sum(table.AICARInsVSAICAR[,"adj.P.Val"] < 0.05))
 
 o <- rownames(table.AICARInsVSIns)
-Tc <- cbind(table.Ins[o,"logFC"], table.AICAR[o,"logFC"], 
-            table.AICARIns[o,"logFC"])
+Tc <- cbind(table.Ins[o,"logFC"], table.AICAR[o,"logFC"], table.AICARIns[o,"logFC"])
 
-rownames(Tc) <- L6.sites[match(o, rownames(phospho.L6.ratio.pe))]
+rownames(Tc) <- sites[match(o, rownames(ppe))]
 rownames(Tc) <- gsub("(.*)(;[A-Z])([0-9]+)(;)", "\\1;\\3;", rownames(Tc))
 
 colnames(Tc) <- c("Ins", "AICAR", "AICAR+Ins")
+```
 
-# summary phosphosite-level information to proteins for performing downstream 
-# gene-centric analyses.
+Summarize phosphosite-level information to proteins for the downstream gene-centric analysis.
+```{r}
 Tc.gene <- phosCollapse(Tc, id=gsub(";.+", "", rownames(Tc)), 
                         stat=apply(abs(Tc), 1, max), by = "max")
 geneSet <- names(sort(Tc.gene[,1], 
                         decreasing = TRUE))[seq(round(nrow(Tc.gene) * 0.1))]
 
-# Preparing Reactome annotation for our pathways analysis
-suppressPackageStartupMessages({
-    library(org.Rn.eg.db)
-    library(reactome.db)
-    library(annotate)
-})
+head(geneSet)
+```
 
+### Prepare the Reactome annotation
+```{r}
 pathways = as.list(reactomePATHID2EXTID)
 
 path_names = as.list(reactomePATHID2NAME)
 name_id = match(names(pathways), names(path_names))
 names(pathways) = unlist(path_names)[name_id]
 
-pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), 
-    ignore.case = TRUE))]
+pathways = pathways[which(grepl("Rattus norvegicus", names(pathways), ignore.case = TRUE))]
 
 pathways = lapply(pathways, function(path) {
     gene_name = unname(getSYMBOL(path, data = "org.Rn.eg"))
     toupper(unique(gene_name))
 })
+```
 
-# 1D gene-centric pathway analysis
+Perform 1D gene-centric pathway analysis
+```{r}
 path1 <- pathwayOverrepresent(geneSet, annotation=pathways, 
                                 universe = rownames(Tc.gene), alter = "greater")
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1], 
@@ -530,76 +527,50 @@ path2 <- pathwayRankBasedEnrichment(Tc.gene[,1],
                                     alter = "greater")
 ```
 
-Next, we will compare enrichment of pathways (in negative log10 p-values) 
-between the two 1-dimensional pathway enrichment analysis. On the scatter plot, 
-the x-axis and y-axis refer to the p-values derived from the rank-based gene set
-test and over-representation test, respectively. We find several expected 
-pathways, while these highly enriched pathways are largely in agreement between 
-the two types of enrichment analyses.
+Next, we will compare enrichment of pathways (in negative log10 p-values) between the two 1-dimensional pathway enrichment analysis. On the scatter plot, the x-axis and y-axis refer to the p-values derived from the rank-based gene set test and over-representation test, respectively. We find several expected pathways, while these highly enriched pathways are largely in agreement between the two types of enrichment analyses.
 
 ```{r}
 lp1 <- -log10(as.numeric(path2[names(pathways),1]))
 lp2 <- -log10(as.numeric(path1[names(pathways),1]))
-plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)", 
-        xlab="Rank-based enrichment (-log10 pvalue)", 
-        main="Comparison of 1D pathway analyses", xlim = c(0, 10))
+plot(lp1, lp2, ylab="Overrepresentation (-log10 pvalue)", xlab="Rank-based enrichment (-log10 pvalue)", main="Comparison of 1D pathway analyses", xlim = c(0, 10))
 
 # select highly enriched pathways
 sel <- which(lp1 > 1.5 & lp2 > 0.9)
-textxy(lp1[sel], lp2[sel], gsub("_", " ", gsub("REACTOME_", "", 
-                                                names(pathways)))[sel])
+textxy(lp1[sel], lp2[sel], gsub("_", " ", gsub("REACTOME_", "", names(pathways)))[sel])
 ```
 
 ### 2- and 3-dimensional signalling pathway analysis
 
-One key aspect in studying signalling pathways is to identify key kinases that 
-are involved in signalling cascades. To identify these kinases, we make use of 
-kinase-substrate annotation databases such as `PhosphoSitePlus` and 
-`Phospho.ELM`. These databases are included in the `PhosR` and `directPA` 
-packages already. To access them, simply load the package and access the data 
-by `data("PhosphoSitePlus")` and `data("PhosphoELM")`.
+One key aspect in studying signalling pathways is to identify key kinases that are involved in signalling cascades. To identify these kinases, we make use of kinase-substrate annotation databases such as `PhosphoSitePlus` and `Phospho.ELM`. These databases are included in the `PhosR` and `directPA` packages already. To access them, simply load the package and access the data by *data("PhosphoSitePlus")* and *data("PhosphoELM")*.
 
-The 2- and 3-dimensional analyses enable the investigation of kinases regulated 
-by different combinations of treatments. We will introduce more advanced methods
-implemented in the R package `directPA` for performing “2 and 3-dimentional” 
-direction site-centric kinase activity analyses.
+The 2- and 3-dimensional analyses enable the investigation of kinases regulated by different combinations of treatments. We will introduce more advanced methods implemented in the R package `directPA` for performing “2 and 3-dimentional” direction site-centric kinase activity analyses.
 
 ```{r}
 # 2D direction site-centric kinase activity analyses
 par(mfrow=c(1,2))
 dpa1 <- directPA(Tc[,c(1,3)], direction=0, 
-                annotation=lapply(PhosphoSite.rat, 
-                                    function(x){gsub(";[STY]", ";", x)}), 
-                main="Direction pathway analysis")
+                 annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}), 
+                 main="Direction pathway analysis")
 dpa2 <- directPA(Tc[,c(1,3)], direction=pi*7/4, 
-                annotation=lapply(PhosphoSite.rat, 
-                                    function(x){gsub(";[STY]", ";", x)}), 
-                main="Direction pathway analysis")
+                 annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}), 
+                 main="Direction pathway analysis")
 
 # top activated kinases
-dpa1$pathways[seq(5),]
-dpa2$pathways[seq(5),]
-
+dpa1$pathways[1:5,]
+dpa2$pathways[1:5,]
 ```
 
-There is also a function called `perturbPlot2d` implemented in `kinasePA` for 
-testing and visualising activity of all kinases on all possible directions. 
-Below are the demonstration from using this function. 
+There is also a function called `perturbPlot2d` implemented in `kinasePA` for testing and visualising activity of all kinases on all possible directions. Below are the demonstration from using this function. 
 
 ```{r}
 z1 <- perturbPlot2d(Tc=Tc[,c(1,2)], 
-                    annotation=lapply(PhosphoSite.rat, 
-                                    function(x){gsub(";[STY]", ";", x)}),
+                    annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
                     cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
                     main="Kinase perturbation analysis")
-z2 <- perturbPlot2d(Tc=Tc[,c(1,3)], 
-                    annotation=lapply(PhosphoSite.rat, 
-                                    function(x){gsub(";[STY]", ";", x)}),
+z2 <- perturbPlot2d(Tc=Tc[,c(1,3)], annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
                     cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
                     main="Kinase perturbation analysis")
-z3 <- perturbPlot2d(Tc=Tc[,c(2,3)], 
-                    annotation=lapply(PhosphoSite.rat, 
-                                    function(x){gsub(";[STY]", ";", x)}),      
+z3 <- perturbPlot2d(Tc=Tc[,c(2,3)], annotation=lapply(PhosphoSite.rat, function(x){gsub(";[STY]", ";", x)}),
                     cex=1, xlim=c(-2, 4), ylim=c(-2, 4), 
                     main="Kinase perturbation analysis")
 ```
@@ -608,64 +579,66 @@ z3 <- perturbPlot2d(Tc=Tc[,c(2,3)],
 
 ### Introduction
 
-While 1, 2, and 3D pathway analyses are useful for data generated from 
-experiments with different treatment/conditions, analysis designed for 
-time-course data may be better suited to analysis experiments that profile 
-multiple time points.
+While 1, 2, and 3D pathway analyses are useful for data generated from experiments with different treatment/conditions, analysis designed for time-course data may be better suited to analysis experiments that profile multiple time points.
 
-Here, we will apply `ClueR` which is an R package specifically designed for 
-time-course proteomic and phosphoproteomic data analysis 
-([Pengyi Yang et al. 2015](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403)).
+Here, we will apply `ClueR` which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis [Yang et al. 2015](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403).
 
-## Loading packages and data
+### Loading packages and data
 
-We will load few other packages we will use for the demonstration purpose.
-
+We will load the PhosR package with few other packages we will use for this tutorial.
 ```{r}
 suppressPackageStartupMessages({
-    library(parallel)
-    library(ggplot2)
-    library(ClueR)
+  library(parallel)
+  library(ggplot2)
+  library(ClueR)
+  library(reactome.db)
+  library(org.Mm.eg.db)
+  library(annotate)
+  library(PhosR)
 })
 ```
 
-We will load a dataset integrated from two time-course datasets of early and 
-intermediate insulin signalling in mouse liver upon insulin stimulation to 
-demonstrate the time-course phosphoproteomic data analyses.
-
+We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.
 ```{r}
 data("phospho_liverInsTC_RUV_pe")
+ppe <- phospho.liver.Ins.TC.ratio.RUV.pe
+ppe
 ```
 
-## Gene-centric analyses of the liver phosphoproteome data
+### Gene-centric analyses of the liver phosphoproteome data
 
-Let us start with gene-centric analysis. Such analysis can be directly applied 
-to proteomics data. It can also be applied to phosphoproteomic data by using the
-`phosCollapse` function to summarise phosphosite information to proteins.
+Let us start with gene-centric analysis. Such analysis can be directly applied to proteomics data. It can also be applied to phosphoproteomic data by using the `phosCollapse` function to summarise phosphosite information to proteins.
 
 ```{r}
 # take grouping information
-grps <- sapply(strsplit(colnames(phospho.liver.Ins.TC.ratio.RUV.pe), "_"), 
+grps <- sapply(strsplit(colnames(ppe), "_"), 
             function(x)x[3])
 
 # select differentially phosphorylated sites
-sites.p <- matANOVA(phospho.liver.Ins.TC.ratio.RUV.pe@assays@data$Quantification, 
+sites.p <- matANOVA(ppe@assays@data$Quantification, 
                     grps)
-phospho.LiverInsTC <- meanAbundance(
-  phospho.liver.Ins.TC.ratio.RUV.pe@assays@data$Quantification, grps)
-sel <- which((sites.p < 0.05) & (rowSums(abs(phospho.LiverInsTC) > 1) != 0))
-phospho.LiverInsTC.sel <- phospho.LiverInsTC[sel,]
+ppm <- meanAbundance(ppe@assays@data$Quantification, grps)
+sel <- which((sites.p < 0.05) & (rowSums(abs(ppm) > 1) != 0))
+ppm_filtered <- ppm[sel,]
 
 # summarise phosphosites information into gene level
-phospho.liverInsTC.gene <- 
-    phosCollapse(phospho.LiverInsTC.sel, 
-            gsub(";.+", "", rownames(phospho.LiverInsTC.sel)), 
-                stat = apply(abs(phospho.LiverInsTC.sel), 1, max), by = "max")
+ppm_gene <- phosCollapse(ppm_filtered, 
+            gsub(";.+", "", rownames(ppm_filtered)), 
+                stat = apply(abs(ppm_filtered), 1, max), by = "max")
 
 # perform ClueR to identify optimal number of clusters
+pathways = as.list(reactomePATHID2EXTID)
+
+pathways = pathways[which(grepl("R-MMU", names(pathways), ignore.case = TRUE))]
+
+pathways = lapply(pathways, function(path) {
+    gene_name = unname(getSYMBOL(path, data = "org.Mm.eg"))
+    toupper(unique(gene_name))
+})
+
 RNGkind("L'Ecuyer-CMRG")
 set.seed(123)
-c1 <- runClue(phospho.liverInsTC.gene, annotation=pathways, 
+c1 <- runClue(ppm_gene, annotation=pathways, 
             kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
             pvalueCutoff = 0.05, alpha = 0.5)
 
@@ -681,47 +654,30 @@ myplot
 
 set.seed(123)
 best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
-#best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
-
-# Finding enriched pathways from each cluster
-# ps <- sapply(best$enrichList, function(x){
-#   l <- ifelse(nrow(x) < 3, nrow(x), 3)
-#   x[1:l,2]
-# })
-# par(mfrow = c(1,1))
-# barplot(-log10(as.numeric(unlist(ps))))
 ```
 
-## Site-centric analyses of the liver phosphoproteome data
+### Site-centric analyses of the liver phosphoproteome data
 
-Phosphosite-centric analyses will perform using kinase-substrate annotation 
-information from PhosphoSitePlus.
+Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.
 
 ```{r}
 RNGkind("L'Ecuyer-CMRG")
 set.seed(1)
 PhosphoSite.mouse2 = mapply(function(kinase) {
-    gsub("(.*)(;[A-Z])([0-9]+;)", "\\1;\\3", kinase)
+  gsub("(.*)(;[A-Z])([0-9]+;)", "\\1;\\3", kinase)
 }, PhosphoSite.mouse)
 
 # perform ClueR to identify optimal number of clusters
-c3 <- runClue(phospho.LiverInsTC.sel, annotation=PhosphoSite.mouse2, 
-            kRange = seq(2,10), rep = 5, effectiveSize = c(5, 100), 
-            pvalueCutoff = 0.05, alpha = 0.5)
+c3 <- runClue(ppm_filtered, annotation=PhosphoSite.mouse2, kRange = 2:10, rep = 5, effectiveSize = c(5, 100), pvalueCutoff = 0.05, alpha = 0.5)
 
 # Visualise the evaluation results
-data <- data.frame(Success=as.numeric(c3$evlMat), Freq=rep(seq(2,10), each=5))
-myplot <- ggplot(data, aes(x=Freq, y=Success)) + 
-    geom_boxplot(aes(x = factor(Freq), fill="gray")) +
-    stat_smooth(method="loess", colour="red", size=3, span = 0.5) + 
-    xlab("# of cluster") + 
-    ylab("Enrichment score") + 
-    theme_classic()
+data <- data.frame(Success=as.numeric(c3$evlMat), Freq=rep(2:10, each=5))
+myplot <- ggplot(data, aes(x=Freq, y=Success)) + geom_boxplot(aes(x = factor(Freq), fill="gray"))+
+  stat_smooth(method="loess", colour="red", size=3, span = 0.5) + xlab("# of cluster")+ ylab("Enrichment score")+theme_classic()
 myplot
 
 set.seed(1)
 best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE)
-#best <- clustOptimal(c3, rep=10, mfrow=c(2, 3), visualize = TRUE, pvalueCutoff=1)
 
 # Finding enriched pathways from each cluster
 best$enrichList
@@ -733,84 +689,75 @@ best$enrichList
 
 ### Introduction
 
-A key component of the `PhosR` package is to construct signalomes. The signalome
-construction is composed of two main steps: 1) kinase-substrate relationsip 
-scoring and 2) signalome construction. This involves a sequential workflow where
-the outputs of the first step are used as inputs of the latter step. 
+Lastly, a key component of the `PhosR` package is to construct signalomes. The signalome construction is composed of two main steps: 1) kinase-substrate relationsip scoring and 2) signalome construction. This involves a sequential workflow where the outputs of the first step are used as inputs of the latter step. 
 
-In brief, our kinase-substrate relationship scoring method 
-(`kinaseSubstrateScore` and `kinaseSubstratePred`) prioritises potential kinases
-that could be responsible for the phosphorylation change of phosphosite on the 
-basis of kinase recognition motif and phosphoproteomic dynamics. Using the 
-kinase-substrate relationships derived from the scoring methods, we reconstruct 
-signalome networks present in the data (`Signalomes`) wherin we highlight kinase
-regulation of discrete modules.
+In brief, our kinase-substrate relationship scoring method (`kinaseSubstrateScore` and `kinaseSubstratePred`) prioritises potential kinases that could be responsible for the phosphorylation change of phosphosite on the basis of kinase recognition motif and phosphoproteomic dynamics. Using the kinase-substrate relationships derived from the scoring methods, we reconstruct signalome networks present in the data (`Signalomes`) wherin we highlight kinase regulation of discrete modules.
 
-## Loading packages and data
+##3 Loading packages and data
 
-First, we will load few other packages that we will be using in this section of 
-the vignette.
+First, we will load the `PhosR` package along with few other packages that we will be using in this section of the vignette.
 
 ```{r}
 suppressPackageStartupMessages({
-    library(dplyr)
-    library(ggplot2)
-    library(GGally)
-    library(ggpubr)
-    library(calibrate)
+  library(PhosR)
+  library(dplyr)
+  library(ggplot2)
+  library(GGally)
+  library(ggpubr)
+  library(calibrate)
+  library(network)
 })
 ```
 
-We will also be needing data containing kinase-substrate annotations from 
-`PhosphoSitePlus`, kinase recognition motifs from `kinase motifs`, and 
-annotations of kinase families from `kinase family`. 
-
+We will also be needing data containing kinase-substrate annotations from `PhosphoSitePlus`, kinase recognition motifs from `kinase motifs`, and annotations of kinase families from `kinase family`. 
 ```{r}
 data("KinaseMotifs")
 data("KinaseFamily")
 ```
 
-## Setting up the data
+### Setting up the data
 
-
-We will use `phospho.L6.ratio.RUV` matrix from 
-[Section 1.2 Batch correction](#Batch_correction), and we will call it 
-`phosphoL6` from this point for simplicity.
-
+As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the `ppe_RUV` matrix as in [batch_correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html).
 
 ```{r}
-phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
+data("phospho_L6_ratio")
+data("SPSs")
+
+##### Run batch correction
+ppe <- phospho.L6.ratio.pe
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+                 sapply(ppe@Residue, function(x)x),
+                 sapply(ppe@Site, function(x)x),
+                 ";", sep = "")
+grps = gsub("_.+", "", colnames(ppe))
+design = model.matrix(~ grps - 1)
+ctl = which(sites %in% SPSs)
+ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
+
+phosphoL6 = ppe@assays@data$normalised
 ```
 
-## Generation of kinase-substrate relationship scores
+### Generation of kinase-substrate relationship scores
 
-Next, we will filtered for dynamically regulated phosphosites and then 
-standardise the filtered matrix. 
-
+Next, we will filtered for dynamically regulated phosphosites and then standardise the filtered matrix. 
 ```{r}
 # filter for up-regulated phosphosites
-phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub("_.+", "", 
-                                                        colnames(phosphoL6)))
+phosphoL6.mean <- meanAbundance(phosphoL6, grps = gsub("_.+", "", colnames(phosphoL6)))
 aov <- matANOVA(mat=phosphoL6, grps=gsub("_.+", "", colnames(phosphoL6)))
-phosphoL6.reg <- phosphoL6[(aov < 0.05) & 
-                            (rowSums(phosphoL6.mean > 0.5) > 0), ,drop = FALSE]
-L6.phos.std <- standardise(phosphoL6.reg) 
-rownames(L6.phos.std) <- 
-    sapply(strsplit(rownames(L6.phos.std), ";"), 
-        function(x){gsub(" ", "", paste(toupper(x[2]), x[3], "", sep=";"))})
+idx <- (aov < 0.05) & (rowSums(phosphoL6.mean > 0.5) > 0)
+phosphoL6.reg <- phosphoL6[idx, ,drop = FALSE]
+
+L6.phos.std <- standardise(phosphoL6.reg)
+rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
 ```
 
-We next extract the kinase recognition motifs from each of the phosphosites. 
-
+We next extract the kinase recognition motifs from each phosphosite. 
 ```{r}
-L6.phos.seq <- sapply(strsplit(rownames(phosphoL6.reg), ";"), function(x)x[4])
+L6.phos.seq <- ppe@Sequence[idx]
 ```
 
-Now that we have all the inputs for `kinaseSubstrateScore` and 
-`kinaseSubstratePred` ready, we can proceed to the generation of 
-kinase-substrate relationship scores.
-
-```{r}
+Now that we have all the inputs for `kinaseSubstrateScore` and `kinaseSubstratePred` ready, we can proceed to the generation of kinase-substrate relationship scores.
+```{r fig.height=15, fig.width=5}
 L6.matrices <- kinaseSubstrateScore(substrate.list = PhosphoSite.mouse, 
                                     mat = L6.phos.std, seqs = L6.phos.seq, 
                                     numMotif = 5, numSub = 1, verbose = FALSE)
@@ -818,14 +765,10 @@ set.seed(1)
 L6.predMat <- kinaseSubstratePred(L6.matrices, top=30, verbose = FALSE) 
 ```
 
-## Signalome construction
+### Signalome construction
 
-The signalome construction uses the outputs of `kinaseSubstrateScore` and 
-`kinaseSubstratePred` functions for the generation of a visualisation of the 
-kinase regulation of discrete regulatory protein modules present in our 
-phosphoproteomic data. 
-
-```{r}
+The signalome construction uses the outputs of `kinaseSubstrateScore` and `kinaseSubstratePred` functions for the generation of a visualisation of the kinase regulation of discrete regulatory protein modules present in our phosphoproteomic data. 
+```{r fig.height=10, fig.width=10}
 kinaseOI = c("PRKAA1", "AKT1")
 
 Signalomes_results <- Signalomes(KSR=L6.matrices, 
@@ -834,102 +777,24 @@ Signalomes_results <- Signalomes(KSR=L6.matrices,
                                 KOI=kinaseOI)
 ```
 
-## Generate signalome map
+### Generate signalome map
 
-We can also visualise the relative contribution of each kinase towards the 
-regulation of protein modules by plotting a balloon plot. In the balloon plot, 
-the size of the balloons denote the percentage magnitude of kinase regulation in
-each module. 
-
-```{r}
-my_color_palette <- 
-    grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Accent"))
+We can also visualise the relative contribution of each kinase towards the regulation of protein modules by plotting a balloon plot. In the balloon plot, the size of the balloons denote the percentage magnitude of kinase regulation in each module. 
+```{r fig.height=6, fig.width=15}
+### generate palette
+my_color_palette <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Accent"))
 kinase_all_color <- my_color_palette(ncol(L6.matrices$combinedScoreMatrix))
 names(kinase_all_color) <- colnames(L6.matrices$combinedScoreMatrix)
 kinase_signalome_color <- kinase_all_color[colnames(L6.predMat)]
 
-dftoPlot_signalome <- stack(Signalomes_results$kinaseSubstrates)
-modules <- Signalomes_results$proteinModule
-names(modules) <- 
-    sapply(strsplit(as.character(names(Signalomes_results$proteinModules)), 
-                    ";"), "[[", 1)
-dftoPlot_signalome$cluster <- modules[dftoPlot_signalome$values]
-
-dftoPlot_balloon_bycluster <- dftoPlot_signalome
-dftoPlot_balloon_bycluster <- na.omit(dftoPlot_balloon_bycluster) %>% 
-    dplyr::count(cluster, ind)
-dftoPlot_balloon_bycluster$ind <- as.factor(dftoPlot_balloon_bycluster$ind)
-dftoPlot_balloon_bycluster$cluster <- 
-    as.factor(dftoPlot_balloon_bycluster$cluster)
-dftoPlot_balloon_bycluster <- 
-    tidyr::spread(dftoPlot_balloon_bycluster, ind, n)[,-1]
-dftoPlot_balloon_bycluster[is.na(dftoPlot_balloon_bycluster)] <- 0
-
-dftoPlot_balloon_bycluster <- 
-    do.call(rbind, lapply(seq(nrow(dftoPlot_balloon_bycluster)), function(x) {
-        res <- sapply(dftoPlot_balloon_bycluster[x,], function(y) 
-            y/sum(dftoPlot_balloon_bycluster[x,])*100)
-}))
-
-dftoPlot_balloon_bycluster <- 
-    reshape2::melt(as.matrix(dftoPlot_balloon_bycluster))
-colnames(dftoPlot_balloon_bycluster) <- c("cluster", "ind", "n")
-
-ggplot(dftoPlot_balloon_bycluster, aes(x = ind, y = cluster)) + 
-    geom_point(aes(col=ind, size=n)) + 
-    scale_color_manual(values=kinase_signalome_color) + 
-    scale_size_continuous(range = c(2, 17)) + 
-    theme_classic() + 
-    theme(
-        aspect.ratio=0.25, 
-        legend.position = "bottom",
-        axis.line = element_blank(),            
-        axis.title = element_blank(),   
-        panel.grid.major.x = element_blank(),  
-        panel.grid.minor.x = element_blank()) 
+plotSignalomeMap(signalomes = Signalomes_results, color = kinase_signalome_color)
 ```
 
 ### Generate signalome network
 
-Finally, we can also plot the signalome network that illustrates the 
-connectivity between kinase signalome networks. 
-
-```{r}
-threskinaseNetwork = 0.9
-signalomeKinase <- colnames(L6.predMat)
-kinase_cor <- stats::cor(L6.matrices$combinedScoreMatrix)
-
-cor_kinase_mat <- kinase_cor
-diag(cor_kinase_mat) <- 0
-kinase_network <- lapply(seq(ncol(cor_kinase_mat)), function(x) 
-    names(which(cor_kinase_mat[,x] > threskinaseNetwork))) 
-names(kinase_network) <- colnames(cor_kinase_mat)
-
-cor_kinase_mat <- apply(cor_kinase_mat, 2, function(x) x  > threskinaseNetwork)
-cor_kinase_mat[cor_kinase_mat == FALSE] <- 0
-cor_kinase_mat[cor_kinase_mat == TRUE] <- 1
-
-library(network)
-links <- reshape2::melt(cor_kinase_mat)
-links <- links[links$value == 1,]
-res <- sapply(seq(length(links$Var1)), function(x) { 
-    kinase_cor[rownames(kinase_cor) == links$Var1[x], 
-        colnames(kinase_cor) == links$Var2[x]]
-})
-links$cor <- res
-colnames(links) <- c("source", "target", "binary", "cor")
-
-network <- network::network(cor_kinase_mat, directed=FALSE)
-GGally::ggnet2(network, 
-    node.size=10, 
-    node.color=kinase_all_color, 
-    edge.size = 0.5, 
-    size = "degree",
-    size.cut=3,
-    label=colnames(cor_kinase_mat),
-    label.size=2,
-    mode="circle",
-    label.color="black")
+Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks. 
+```{r fig.height=5, fig.width=5}
+plotKinaseNetwork(KSR = L6.matrices, predMatrix = L6.predMat, threshold = 0.9, color = kinase_all_color)
 ```
 
 
