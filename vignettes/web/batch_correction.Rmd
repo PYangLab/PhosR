@@ -115,15 +115,15 @@ As quality control, we will demonstrate and evaluate our normalisation method wi
 
 ```{r}
 # plot after batch correction
-p1 = plotQC(ppe@assays@data$Quantification, cols=colorCodes, labels = colnames(ppe), panel = "dendrogram" )
-p2 = plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel="dendrogram")
+p1 = plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "dendrogram" )
+p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="dendrogram")
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 ```{r}
-p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", cols=colorCodes, labels = colnames(ppe)) +
+p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", cols=grps, labels = colnames(ppe)) +
   ggplot2::ggtitle("Before Batch correction")
-p2 = plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel="pca") +
+p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="pca") +
   ggplot2::ggtitle("After Batch correction")
 ggpubr::ggarrange(p1, p2, nrow = 2)
 ```
