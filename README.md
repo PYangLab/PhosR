@@ -32,7 +32,7 @@ Our vignette prepared for BioC (`PhosR.Rmd`) utilisesthe subset of these dataset
 * Downstream analysis of phosphoproteomic data
      * Pathway analysis (https://PYangLab.github.io/PhosR/articles/pathway_analysis.html)
      * Site- and gene-centric analysis (https://PYangLab.github.io/PhosR/articles/site_gene_analysis.html)
-     * Kinase-substrate relationship scoring and signalome construction (https://PYangLab.github.io/PhosR/webOnly/signalomes.html)
+     * Kinase-substrate relationship scoring and signalome construction (https://PYangLab.github.io/PhosR/signalomes.html)
 
 ## Code relating to our preprint
 
