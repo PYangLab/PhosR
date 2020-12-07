@@ -83,7 +83,7 @@ L6.phos.seq <- ppe@Sequence[idx]
 ```
 
 Now that we have all the inputs for `kinaseSubstrateScore` and `kinaseSubstratePred` ready, we can proceed to the generation of kinase-substrate relationship scores.
-```{r fig.height=15, fig.width=5}
+```{r fig.height=8, fig.width=8}
 L6.matrices <- kinaseSubstrateScore(substrate.list = PhosphoSite.mouse, 
                                     mat = L6.phos.std, seqs = L6.phos.seq, 
                                     numMotif = 5, numSub = 1, verbose = FALSE)
@@ -119,7 +119,7 @@ plotSignalomeMap(signalomes = Signalomes_results, color = kinase_signalome_color
 # Generate signalome network
 
 Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks. 
-```{r fig.height=5, fig.width=5}
+```{r fig.height=5, fig.width=6}
 plotKinaseNetwork(KSR = L6.matrices, predMatrix = L6.predMat, threshold = 0.9, color = kinase_all_color)
 ```
 
