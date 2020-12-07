@@ -38,16 +38,24 @@
 #'
 #' @export
 #'
-medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE, 
+medianScaling <- function(mat, imputed = FALSE, scale = TRUE, grps = NULL, reorder = FALSE, 
                           assay = NULL) {
     pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
         pe = TRUE
         mat.orig = mat
         if (is.null(assay)) {
-            mat = SummarizedExperiment::assay(mat)
+            if (imputed == FALSE) {
+                mat = SummarizedExperiment::assay(mat)
+            } else {
+                mat = mat@assays@data$imputed
+            }
         } else {
+            if (imputed == FALSE) {
             mat = SummarizedExperiment::assay(mat, assay)
+            } else {
+                mat = mat@assays@data$imputed
+            }
         }
     }
     mat.medianScaled <- NULL
