@@ -1,6 +1,7 @@
 ---
 title: "Batch correction of phosphoproteomics dataset with PhosR"
 output: rmarkdown::html_vignette
+date: "`r BiocStyle::doc_date()`"
 ---
 
 ```{r, include = FALSE}
@@ -14,7 +15,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-A common but largely unaddressed challenge in phosphoproteomic data analysis is to correct for batch effect. Without correcting for batch effect, it is impossible to analyze datasets, derived in batches or from independent labs, in an integrative manner. To perform data integration and batch effect correction, we identified a set of stably phosphorylated sites (SPSs) across a panel of phosphoproteomic datasets and, using these SPSs, implemented a wrapper function of RUV-III from the `ruv` package called `RUVphospho`. 
+A common but largely unaddressed challenge in phosphoproteomic data analysis is to correct for batch effect. Without correcting for batch effect, it is often not possible to analyze datasets in an integrative manner. To perform data integration and batch effect correction, we identified a set of stably phosphorylated sites (SPSs) across a panel of phosphoproteomic datasets and, using these SPSs, implemented a wrapper function of RUV-III from the `ruv` package called `RUVphospho`. 
 
 Note that when the input data contains missing values, imputation should be performed before batch correction since RUV-III requires a complete data matrix. The imputed values are removed by default after normalisation but can be retained for downstream analysis if the users wish to use the imputed matrix. This vignette will provide an example of how PhosR can be used for batch correction. 
 
@@ -28,7 +29,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to our preprint for the full list of the datasets used). The `SPSs` will be used as our `negative control` during RUV normalisation.
+In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to [our preprint](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full) for the full list of the datasets used). The `SPSs` will be used as our `negative control` in RUV normalisation.
 
 ```{r}
 data("phospho_L6_ratio_pe")
@@ -52,12 +53,12 @@ Note that we have in total 6654 quantified phosphosites and 12 samples in total.
 dim(ppe)
 ```
 
-We have already performed the revelant processing steps to generate a dense matrix. Please refer to `imputation` page to perform filtering and imputation of phosphosites in order to generate a matrix without any missing values. 
+We have already performed the relevant processing steps to generate a dense matrix. Please refer to the `imputation` page to perform filtering and imputation of phosphosites in order to generate a matrix without any missing values. 
 ```{r}
 sum(is.na(ppe@assays@data$Quantification))
 ```
 
-We will extract phosphosite labels
+We will extract phosphosite labels.
 ```{r}
 sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
                  sapply(ppe@Residue, function(x)x),
@@ -74,9 +75,9 @@ grps
 
 # Diagnosing batch effect
 
-There are a number of ways to diagnose batch effect. In `PhosR`, we make use of two visualisation methods to detect batch effect: dendrogram of hierachical clustering and a principal component analysis (PCA) plot. We use the `plotQC` function we introduced in the *imputation* section of the vignette. 
+There are a number of ways to diagnose batch effect. In `PhosR`, we make use of two visualisation methods to detect batch effect: dendrogram of hierarchical clustering and a principal component analysis (PCA) plot. We use the `plotQC` function we introduced in the *imputation* section of the vignette. 
 
-By setting *panel = 2*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is strong batch effect by batch (denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
+By setting *panel = 2*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
 cs = rainbow(length(unique(grps)))
@@ -94,7 +95,7 @@ plotQC(ppe@assays@data$Quantification, cols=colorCodes, labels = colnames(ppe), 
 
 # Correcting batch effect
 
-We have now diagnosed that our dataset exhibits batch effect that is driven by experiment runs for samples treated with three different conditions. To address this batch effect, we correct for this unwanted variation in the data by utilising our novel SPSs as a negative control for `RUVphospho`.
+We have now diagnosed that our dataset exhibits batch effect that is driven by experiment runs for samples treated with three different conditions. To address this batch effect, we correct for this unwanted variation in the data by utilising our pre-defined SPSs as a negative control for `RUVphospho`.
 
 First, we construct a design matrix by condition.
 ```{r}
@@ -113,7 +114,7 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
 # Quality control
 
-As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again `plotQC`. Both the hierachical clustering and PCA results demonstrate the normalisation procedure in `PhosR` facilitates effective batch correction.
+As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again `plotQC`. Both the hierarchical clustering and PCA results demonstrate the normalisation procedure in `PhosR` facilitates effective batch correction.
 
 ```{r}
 # plot after batch correction
@@ -130,26 +131,53 @@ plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), pane
 
 # Generating SPSs
 
-We note that the current *SPS* are derived from phosphoproteomic datasets derived from mouse cells. To enable users working on phosphoproteomic datasets derived from other species, we have developed a function `getSPS` that takes in multiple phosphoproteomics datasets stored as phosphoExperiment objects to generate set of *SPS*. Users can use their in-house or public datasets derived from the same speciies to generate species-specific *SPS*, which they can use to normalise their data.
+We note that the current *SPS* are derived from phosphoproteomic datasets derived from mouse cells. To enable users working on phosphoproteomic datasets derived from other species, we have developed a function `getSPS` that takes in multiple phosphoproteomics datasets stored as phosphoExperiment objects to generate set of *SPS*. Users can use their in-house or public datasets derived from the same speciies to generate species-specific *SPS*, which they can use to normalise their data.Below demonstrate the usage of the `getSPS` function.
+
+First, load datasets to use for SPS generation.
 ```{r}
 data("phospho_L6_ratio_pe")
 data("phospho_liverInsTC_RUV_pe")
+data("phospho.cells.Ins.pe")
 
 ppe1 <- phospho.L6.ratio.pe
 ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
+ppe3 <- phospho.cells.Ins.pe
+```
 
-ppe.list <- list(ppe1, ppe2)
+Filter, impute, and transform ppe3 (other inputs have already been processed).
+```{r}
+grp3 = gsub('_[0-9]{1}', '', colnames(ppe3))
+ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
+ppe3 <- tImpute(ppe3)
+FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", colnames(ppe3))])
+Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", colnames(ppe3))])
+ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
+```
+
+Generate inputs of `getSPS`.
+```{r}
+ppe.list <- list(ppe1, ppe2, ppe3)
 cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-                  grp2 = str_sub(colnames(ppe2), end=-5))
+                  grp2 = str_sub(colnames(ppe2), end=-5),
+                  grp3 = str_sub(colnames(ppe3), end=-3))
+```
 
+Finally run `getSPS` to generate list of SPSs.
+```{r}
 inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
 
+head(inhouse_SPSs)
+```
+
+Run `RUVphospho` using the newly generateed SPSs. (**NOTE** that we do not expect the results to be reproducible as the exempler SPSs have been generated from dummy datasets that have been heavily filtered.)
+```{r}
 sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
                  sapply(ppe@Site, function(x)x), sep = "")
 
 ctl = which(sites %in% inhouse_SPSs)
 ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 ```
+
 
 # SessionInfo
 

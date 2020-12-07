@@ -1,3 +1,5 @@
+<img src="man/figures/PhosR_logo.png" align="right" width="200" height="250" />
+
 <!-- badges: start -->
 [![R build status](https://github.com/PYangLab/PhosR/workflows/R-CMD-check/badge.svg)](https://github.com/PYangLab/PhosR/actions)
 <!-- badges: end -->
@@ -14,6 +16,8 @@
 
 ## Installation
 
+Install the development version from GitHub using the `devtools` package:
+
 ```r
 library(devtools)
 devtools::install_github("PYangLab/PhosR")
@@ -21,11 +25,11 @@ devtools::install_github("PYangLab/PhosR")
 
 ## Vignette 
 
-<!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/webOnly/index.html-->
-Please note that the vignette generated in the link below is using the full dataset. 
-Our vignette prepared for BioC (`PhosR.Rmd`) utilisesthe subset of these datasets and the results may not be identical.
+<!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/PhosR.html-->
+Please find the links to our vignette below. Note that the vignette utilises subsets of the full phosphoproteomic datasets that were used in [our pre-print](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full), meaning that the results will not be identical and are for demonstration purposes only.
 
-
+* Introduction
+     * [Full vignette](https://pyanglab.github.io/PhosR/articles/PhosR.html)
 * Processing of phosphoproteomic data 
      * [Imputation](https://PYangLab.github.io/PhosR/articles/web/imputation.html)
      * [Batch correction](https://PYangLab.github.io/PhosR/articles/web/batch_correction.html)
@@ -37,6 +41,4 @@ Our vignette prepared for BioC (`PhosR.Rmd`) utilisesthe subset of these dataset
 
 ## Contact us
 
-If you have any enquiries, especially about performing PhosR to analyse your phosphoproteomic data, please contact taiyun.kim@sydney.edu.au or jieun.kim@sydney.edu.au. We are also happy to receive any suggestions and comments.
-
-
+If you have any enquiries, especially about performing PhosR to analyse your phosphoproteomic data, please contact taiyun.kim@sydney.edu.au or hani.kim@sydney.edu.au. We are also happy to receive any suggestions and comments.

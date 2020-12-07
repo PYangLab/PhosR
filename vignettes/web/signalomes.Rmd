@@ -1,6 +1,7 @@
 ---
 title: 'Signalome construction with PhosR'
 output: rmarkdown::html_vignette
+date: "`r BiocStyle::doc_date()`"
 ---
 
 ```{r, include = FALSE}
@@ -42,7 +43,7 @@ data("KinaseFamily")
 
 # Setting up the data
 
-As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the `ppe_RUV` matrix as in [batch_correction](../docs/webOnly/batch_correction.html).
+As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the `ppe_RUV` matrix as in [batch_correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html).
 
 ```{r}
 data("phospho_L6_ratio_pe")
@@ -82,7 +83,7 @@ L6.phos.seq <- ppe@Sequence[idx]
 ```
 
 Now that we have all the inputs for `kinaseSubstrateScore` and `kinaseSubstratePred` ready, we can proceed to the generation of kinase-substrate relationship scores.
-```{r}
+```{r fig.height=15, fig.width=5}
 L6.matrices <- kinaseSubstrateScore(substrate.list = PhosphoSite.mouse, 
                                     mat = L6.phos.std, seqs = L6.phos.seq, 
                                     numMotif = 5, numSub = 1, verbose = FALSE)
@@ -118,7 +119,7 @@ plotSignalomeMap(signalomes = Signalomes_results, color = kinase_signalome_color
 # Generate signalome network
 
 Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks. 
-```{r fig.height=5, fig.width=8}
+```{r fig.height=5, fig.width=5}
 plotKinaseNetwork(KSR = L6.matrices, predMatrix = L6.predMat, threshold = 0.9, color = kinase_all_color)
 ```
 

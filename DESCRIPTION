@@ -5,8 +5,7 @@ Version: 1.1.2
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut", "cre")),
-    person("Hani Jieun", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut"))
-    )
+    person("Hani Jieun", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut")))
 Description: PhosR is a package for the comprenhensive analysis of phosphoproteomic data.
     There are two major components to PhosR: processing and downstream analysis.
     PhosR consists of various processing tools for phosphoproteomics data

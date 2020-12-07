@@ -27,13 +27,26 @@ library(stringr)
 
 data("phospho_L6_ratio_pe")
 data("phospho_liverInsTC_RUV_pe")
+data("phospho.cells.Ins.pe")
 
 ppe1 <- phospho.L6.ratio.pe
 ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
+ppe3 <- phospho.cells.Ins.pe
+grp3 = gsub('_[0-9]{1}', '', colnames(ppe3))
 
-ppe.list <- list(ppe1, ppe2)
 cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-                  grp2 = stringr::str_sub(colnames(ppe2), end=-5))
+                  grp2 = stringr::str_sub(colnames(ppe2), end=-5),
+                  grp3 = grp3)
+
+ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
+ppe3 <- tImpute(ppe3)
+
+# convert matrix to ratio
+FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", colnames(ppe3))])
+Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", colnames(ppe3))])
+ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
+
+ppe.list <- list(ppe1, ppe2, ppe3)
 
 inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
 
