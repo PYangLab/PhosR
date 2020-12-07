@@ -11,17 +11,30 @@
 #'
 #' @examples
 #'
-#' data("phospho_L6_ratio_pe")
-#' data("phospho_liverInsTC_RUV_pe")
-#' 
-#' ppe1 <- phospho.L6.ratio.pe
-#' ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
-#' 
-#' ppe.list <- list(ppe1, ppe2)
-#' cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-#'                   grp2 = str_sub(colnames(ppe2), end=-5))
-#' 
-#' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
+data("phospho_L6_ratio_pe")
+data("phospho_liverInsTC_RUV_pe")
+data("phospho.cells.Ins.pe")
+
+ppe1 <- phospho.L6.ratio.pe
+ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
+ppe3 <- phospho.cells.Ins.pe
+grp3 = gsub('_[0-9]{1}', '', colnames(ppe3))
+
+cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
+                  grp2 = str_sub(colnames(ppe2), end=-5),
+                  grp3 = grp3)
+
+ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
+ppe3 <- tImpute(ppe3)
+
+# convert matrix to ratio
+FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", colnames(ppe3))])
+Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", colnames(ppe3))])
+ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
+
+ppe.list <- list(ppe1, ppe2, ppe3)
+
+inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
 #' 
 #' @export
 #' 
@@ -58,15 +71,21 @@ getSPS <- function(phosData = ..., conds = ..., num = 100, residueInfo = FALSE) 
         sites.mean <- t(sapply(split(as.data.frame(mat.mean), sites[[i]]), colMeans))
         # maximum fold change for each phosphosite
         sites.max <- apply(sites.mean, 1, function(x){x[which.max(abs(x))]})
-        mat.max[[i]] <- sites.max
+        mat.max[[i]] <- sort(abs(sites.max), decreasing = TRUE)
     }
     
     # identify the overlapped sites in all datasets, if it is more than 1000, find top 1000 overlapped phosphosites
     o <- as.data.frame(table(unlist(sites.unique)))
-    if (length(o$Freq == m) > 1000) {
+    
+    if (length(which(o$Freq > 1)) < 200) {
+        stop("Less than 200 overlapped sites")
+    } 
+    
+    if (length(which(o$Freq == m)) > 1000) {
         top <- as.character(o[which(o$Freq == m), 1])
     } else {
-        top <- as.character(o[order(o$Freq, decreasing = TRUE), 1][1:1000])
+        message("Warning: there aren't enough overlappling sites")
+        top <- as.character(o[which(o$Freq > 1), 1])
     }
     
     Ts <- data.frame(mat.max[[1]][top])
@@ -79,6 +98,7 @@ getSPS <- function(phosData = ..., conds = ..., num = 100, residueInfo = FALSE) 
     
     # overlapping
     Tt4 <- pchisq(-2*rowSums(log(Tc)), (n-1)*2, lower.tail = FALSE)
+    names(Tt4) <- top
     
     sites.sorted <- names(sort(Tt4, decreasing=TRUE))
     return(sites.sorted[1:num])
