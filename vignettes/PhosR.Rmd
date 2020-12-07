@@ -93,11 +93,35 @@ The raw data have been deposited to the [ProteomeXchange Consortium](http://prot
 
 # Setting up the PhosphoExperiment object
 
-To facilitate 
+To increase compatibility of PhosR functions with diverse processed datasets, we have implemented a `PhosphoExperiment` (ppe) object based on the `SummarizedExperiment` class. To create the `PhosphoExperiment` object, you will need a quantification matrix where columns refer to cells and rows refer to sites. 
 
 ```{r}
+data("phospho_L6_ratio")
 
+ppe <- PhosphoExperiment(assays = list(Quantification = as.matrix(phospho.L6.ratio)))
+class(ppe)
 ```
+
+Additional annotation labels for the sites should be provided alongside the matrix. For each phosphosite, these include gene symbol, residue, position of phosphosite residue in the amino acid chain, and flanking sequence information of the phosphosite. Additional information such as the localisation probability may also be included.
+```{r}
+ppe@GeneSymbol <- sapply(strsplit(rownames(ppe), ";"), "[[", 2)
+ppe@Residue <- gsub("[0-9]","", sapply(strsplit(rownames(ppe), ";"), "[[", 2))
+ppe@Site <- as.numeric(gsub("[A-Z]","", sapply(strsplit(rownames(ppe), ";"), "[[", 2)))
+ppe@Sequence <- sapply(strsplit(rownames(ppe), ";"), "[[", 4)
+```
+Collectively, we can set up our data as following.
+```{r}
+ppe <- PhosphoExperiment(assays = list(Quantification = as.matrix(phospho.L6.ratio)), 
+                  Site = as.numeric(gsub("[A-Z]","", sapply(strsplit(rownames(ppe), ";"), "[[", 2))),
+                  GeneSymbol = sapply(strsplit(rownames(ppe), ";"), "[[", 2),
+                  Residue = gsub("[0-9]","", sapply(strsplit(rownames(ppe), ";"), "[[", 2)),
+                  Sequence = sapply(strsplit(rownames(ppe), ";"), "[[", 4))
+```
+
+```{r}
+ppe
+```
+
 
 # Part A. Preprocessing
 
@@ -139,7 +163,6 @@ data("phospho.cells.Ins.pe")
 
 ppe <- phospho.cells.Ins.pe 
 class(ppe)
-
 ```
 
 A quick glance of the object.
@@ -222,13 +245,11 @@ ppe_imputed[,seq(13,18)] <- ptImpute(ppe_imputed[,seq(19,24)],
                                      ppe_imputed[,seq(13,18)], 
                                      percent1 = 0.6, percent2 = 0, 
                                      paired = FALSE)
-
-
 ```
 
 Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data. 
 ```{r}
-ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE)
+ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, imputed = TRUE)
 ```
 
 ### Quantification plots
@@ -238,11 +259,11 @@ A useful function in `PhosR` is to visualize the percentage of quantified sites 
 
 ```{r}
 cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
-par(mfrow=c(1,2))
-plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
+p1 = plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
         panel = "quantify", cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$imputed, 
+p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
+ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 By setting *panel = "dendrogram"*, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together. 
@@ -325,28 +346,20 @@ grps
 
 ### Diagnosing batch effect
 
-
 There are a number of ways to diagnose batch effect. In `PhosR`, we make use of two visualisation methods to detect batch effect: dendrogram of hierarchical clustering and a principal component analysis (PCA) plot. We use the `plotQC` function we introduced in the *imputation* section of the vignette. 
 
 
 By setting *panel = "dendrogram"*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
-
-par(mfrow=c(1,1))
-plotQC(ppe@assays@data$Quantification, 
-       panel = "dendrogram", 
-       cols = colorCodes)
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=grps, labels = colnames(ppe)) +
+  ggplot2::ggtitle("Before batch correction")
 ```
 
 We can also visualise the samples in PCA space by setting *panel = "pca"*. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the *AICAR* treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
 ```{r}
-par(mfrow=c(1,1))
-plotQC(ppe@assays@data$Quantification, 
-       panel = "pca", 
-       labels = colnames(ppe), 
-       ylim = c(-20, 20), xlim = c(-30, 30), 
-       cols = colorCodes)
+plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "pca") +
+  ggplot2::ggtitle("Before batch correction")
 ```
 
 ### Correcting batch effect
@@ -376,17 +389,19 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again `plotQC`. Both the hierarchical clustering and PCA results demonstrate the normalisation procedure in `PhosR` facilitates effective batch correction.
 
 ```{r}
-# plot before batch correction
-par(mfrow=c(1,2))
-plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=colorCodes, labels = colnames(ppe))
-plotQC(ppe@assays@data$Quantification, cols=colorCodes, labels = colnames(ppe), panel="pca", ylim=c(-20, 20), xlim=c(-30, 30))
+# plot after batch correction
+p1 = plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "dendrogram" )
+p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="dendrogram")
+ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 ```{r}
 # plot after batch correction
-par(mfrow=c(1,2))
-plotQC(ppe@assays@data$normalised, panel = "dendrogram", cols=colorCodes, labels = colnames(ppe))
-plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe_RUV), panel="pca", ylim=c(-20, 20), xlim=c(-30, 30))
+p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", cols=grps, labels = colnames(ppe)) +
+  ggplot2::ggtitle("Before Batch correction")
+p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="pca") +
+  ggplot2::ggtitle("After Batch correction")
+ggpubr::ggarrange(p1, p2, nrow = 2)
 ```
 
 ### Generating SPSs
