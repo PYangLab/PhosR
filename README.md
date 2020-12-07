@@ -31,12 +31,13 @@ Please find the links to our vignette below. Note that the vignette utilises sub
 * Introduction
      * [Full vignette](https://pyanglab.github.io/PhosR/articles/PhosR.html)
 * Processing of phosphoproteomic data 
-     * [Imputation](https://pyanglab.github.io/PhosR/articles/imputation.html)
-     * [Batch correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html)
+     * [Imputation](https://PYangLab.github.io/PhosR/articles/web/imputation.html)
+     * [Batch correction](https://PYangLab.github.io/PhosR/articles/web/batch_correction.html)
 * Downstream analysis of phosphoproteomic data
-     * [Pathway analysis](https://pyanglab.github.io/PhosR/articles/pathway_analysis.html)
-     * [Site- and gene-centric analysis](https://pyanglab.github.io/PhosR/articles/site_gene_analysis.html)
-     * [Kinase-substrate relationship scoring and signalome construction](https://pyanglab.github.io/PhosR/articles/signalomes.html)
+     * [Pathway analysis](https://PYangLab.github.io/PhosR/articles/web/pathway_analysis.html)
+     * [Site- and gene-centric analysis](https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html)
+     * [Kinase-substrate relationship scoring and signalome construction](https://PYangLab.github.io/PhosR/articles/web/signalomes.html)
+
 
 ## Contact us
 

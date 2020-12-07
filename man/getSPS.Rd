@@ -23,6 +23,8 @@ Generate set of stable phosphoporylated sites
 }
 \examples{
 
+library(stringr)
+
 data("phospho_L6_ratio_pe")
 data("phospho_liverInsTC_RUV_pe")
 data("phospho.cells.Ins.pe")
@@ -33,7 +35,7 @@ ppe3 <- phospho.cells.Ins.pe
 grp3 = gsub('_[0-9]{1}', '', colnames(ppe3))
 
 cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-                  grp2 = str_sub(colnames(ppe2), end=-5),
+                  grp2 = stringr::str_sub(colnames(ppe2), end=-5),
                   grp3 = grp3)
 
 ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
@@ -46,6 +48,6 @@ ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
 
 ppe.list <- list(ppe1, ppe2, ppe3)
 
-inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
+inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
 
 }

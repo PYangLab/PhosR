@@ -17,10 +17,10 @@ Create frequency matrix
 }
 \examples{
 
-data("phospho_L6_ratio.pe")
+data("phospho_L6_ratio_pe")
 
 # We will create a frequency matrix of Tfg S198 phosphosite.
-idx = which(rownames(phospho.L6.ratio.pe) == "TFG;S198;")
+idx = which(grepl("TFG\\\\;S198\\\\;", rownames(phospho.L6.ratio.pe)))
 substrate.seq = phospho.L6.ratio.pe@Sequence[idx]
 freq.mat = createFrequencyMat(substrate.seq)
 

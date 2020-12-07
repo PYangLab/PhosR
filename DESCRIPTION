@@ -35,7 +35,13 @@ Imports:
     SummarizedExperiment,
     methods,
     S4Vectors,
-    BiocGenerics
+    BiocGenerics,
+    ggplot2,
+    GGally,
+    ggdendro,
+    ggpubr,
+    network,
+    reshape2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
@@ -44,15 +50,10 @@ biocViews: Software, ResearchField, Proteomics
 Suggests:
     testthat,
     knitr,
-    GGally,
     rgl,
     sna,
-    network,
-    reshape2,
     ClueR,
     directPA,
-    ggplot2,
-    ggpubr,
     rmarkdown,
     org.Rn.eg.db,
     org.Mm.eg.db,

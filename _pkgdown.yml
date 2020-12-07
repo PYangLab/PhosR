@@ -11,17 +11,17 @@ navbar:
     - text: Preprocessing
       menu:
         - text: Imputation
-          href: articles/imputation.html
+          href: articles/web/imputation.html
         - text: Batch correction
-          href: articles/batch_correction.html
+          href: articles/web/batch_correction.html
     - text: Downstream analysis
       menu:
         - text: Pathway analysis
-          href: articles/pathway_analysis.html
+          href: articles/web/pathway_analysis.html
         - text: Site- and gene-centric analysis
-          href: articles/site_gene_analysis.html
+          href: articles/web/site_gene_analysis.html
         - text: Signalomes
-          href: articles/signalomes.html
+          href: articles/web/signalomes.html
     - text: Functions
       href: reference/index.html
   right:

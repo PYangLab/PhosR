@@ -20,7 +20,7 @@ A vector of multiple testing adjusted p-values
 Performs an ANOVA test and returns its adjusted p-value
 }
 \examples{
-data('phospho.L6.ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
 

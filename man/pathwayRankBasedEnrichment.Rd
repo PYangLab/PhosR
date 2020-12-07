@@ -31,27 +31,25 @@ library(org.Rn.eg.db)
 library(reactome.db)
 library(annotate)
 
-data('phospho_L6_ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 
-grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
-
-                 ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
-                 ";", sep = "")
-
-# Construct a design matrix by condition
+ppe <- phospho.L6.ratio.pe
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+    sapply(ppe@Residue, function(x)x),
+    sapply(ppe@Site, function(x)x),
+    ";", sep = "")
+grps = gsub("_.+", "", colnames(ppe))
 design = model.matrix(~ grps - 1)
+ctl = which(sites \%in\% SPSs)
+ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
-ctl = which(L6.sites \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
-                                  M = design, k = 3, ctl = ctl)
+phosphoL6 = ppe@assays@data$normalised
 
 # fit linear model for each phosphosite
 f <- grps
 X <- model.matrix(~ f - 1)
-fit <- lmFit(phospho.L6.ratio.RUV, X)
+fit <- lmFit(phosphoL6, X)
 
 # extract top-ranked phosphosites for each condition compared to basal
 table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)

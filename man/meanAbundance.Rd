@@ -19,7 +19,7 @@ a matrix with mean expression from replicates
 Obtain average expression from replicates
 }
 \examples{
-data('phospho.L6.ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
 
