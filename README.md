@@ -27,12 +27,12 @@ Our vignette prepared for BioC (`PhosR.Rmd`) utilisesthe subset of these dataset
 
 
 * Processing of phosphoproteomic data 
-     * Filtering and imputation (https://PYangLab.github.io/PhosR/articles/webOnly/imputation.html)
-     * Batch correction (https://PYangLab.github.io/PhosR/articles/webOnly/batch_correction.html)
+     * Filtering and imputation (https://PYangLab.github.io/PhosR/articles/imputation.html)
+     * Batch correction (https://PYangLab.github.io/PhosR/articles/batch_correction.html)
 * Downstream analysis of phosphoproteomic data
-     * Pathway analysis (https://PYangLab.github.io/PhosR/articles/webOnly/pathway_analysis.html)
-     * Site- and gene-centric analysis (https://PYangLab.github.io/PhosR/articles/webOnly/site_gene_analysis.html)
-     * Kinase-substrate relationship scoring and signalome construction (https://PYangLab.github.io/PhosR/articles/webOnly/signalomes.html)
+     * Pathway analysis (https://PYangLab.github.io/PhosR/articles/pathway_analysis.html)
+     * Site- and gene-centric analysis (https://PYangLab.github.io/PhosR/articles/site_gene_analysis.html)
+     * Kinase-substrate relationship scoring and signalome construction (https://PYangLab.github.io/PhosR/webOnly/signalomes.html)
 
 ## Code relating to our preprint
 
