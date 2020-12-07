@@ -18,7 +18,7 @@ Standardisation by z-score transformation.
 }
 \examples{
 
-data('phospho_L6_ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 
 grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))

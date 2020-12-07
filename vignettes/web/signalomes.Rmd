@@ -45,7 +45,7 @@ data("KinaseFamily")
 As before, we will set up the data by cleaning up the phoshophosite labels and performing RUV normalisation. We will generate the `ppe_RUV` matrix as in [batch_correction](../docs/webOnly/batch_correction.html).
 
 ```{r}
-data("phospho_L6_ratio")
+data("phospho_L6_ratio_pe")
 data("SPSs")
 
 ##### Run batch correction

@@ -47,37 +47,33 @@ filtering based on both motifs and dynamic profiles
 }
 \examples{
 
-data('phospho.L6.ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
 
-grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
-
-# Construct a design matrix by condition
+ppe <- phospho.L6.ratio.pe
+sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
+    sapply(ppe@Residue, function(x)x),
+    sapply(ppe@Site, function(x)x),
+    ";", sep = "")
+grps = gsub("_.+", "", colnames(ppe))
 design = model.matrix(~ grps - 1)
+ctl = which(sites \%in\% SPSs)
+ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
-# phosphoproteomics data normalisation using RUV
-L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
-                 ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
-                 ";", sep = "")
-ctl = which(L6.sites \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
-                                  M = design, k = 3,ctl = ctl)
-
-phosphoL6 = phospho.L6.ratio.RUV
-rownames(phosphoL6) <- rownames(phospho.L6.ratio.pe)
+phosphoL6 = ppe@assays@data$normalised
 
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 aov <- matANOVA(mat=phosphoL6, grps = grps)
-phosphoL6.reg <- phosphoL6[(aov < 0.05) &
-                        (rowSums(phosphoL6.mean > 0.5) > 0), drop = FALSE]
+idx <- (aov < 0.05) & (rowSums(phosphoL6.mean > 0.5) > 0)
+phosphoL6.reg <- phosphoL6[idx, ,drop = FALSE]
+
 L6.phos.std <- standardise(phosphoL6.reg)
 
-idx <- match(rownames(L6.phos.std), L6.sites)
-L6.phos.seq <- phospho.L6.ratio.pe@Sequence[idx]
+rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
+
+L6.phos.seq <- ppe@Sequence[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)

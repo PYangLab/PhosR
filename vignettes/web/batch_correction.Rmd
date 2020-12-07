@@ -83,13 +83,13 @@ cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 par(mfrow=c(1,1))
-plotQC(ppe, panel = 2, cols=colorCodes, main = "Before batch correction")
+plotQC(ppe, panel = "dendrogram", cols=colorCodes, main = "Before batch correction")
 ```
 
 We can also visualise the samples in PCA space by setting *panel = 4*. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the *AICAR* treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
 ```{r}
 par(mfrow=c(1,1))
-plotQC(ppe, cols=colorCodes, labels = colnames(ppe), panel = 4, ylim=c(-20, 20), xlim=c(-30, 30), main = "Before batch correction")
+plotQC(ppe@assays@data$Quantification, cols=colorCodes, labels = colnames(ppe), panel = "pca", ylim=c(-20, 20), xlim=c(-30, 30), main = "Before batch correction")
 ```
 
 # Correcting batch effect
@@ -118,14 +118,14 @@ As quality control, we will demonstrate and evaluate our normalisation method wi
 ```{r}
 # plot after batch correction
 par(mfrow=c(1,2))
-plotQC(ppe@assays@data$Quantification, panel = 2, cols=colorCodes)
-plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel=2, ylim=c(-20, 20), xlim=c(-30, 30))
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=colorCodes)
+plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel="dendrogram")
 ```
 
 ```{r}
 par(mfrow=c(1,2))
-plotQC(ppe@assays@data$Quantification, panel = 4, cols=colorCodes, labels = colnames(ppe), main="Before Batch correction")
-plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe_RUV), panel=4, ylim=c(-20, 20), xlim=c(-30, 30), main="After Batch correction")
+plotQC(ppe@assays@data$Quantification, panel = "pca", cols=colorCodes, labels = colnames(ppe), main="Before Batch correction")
+plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel="pca", ylim=c(-20, 20), xlim=c(-30, 30), main="After Batch correction")
 ```
 
 # Generating SPSs

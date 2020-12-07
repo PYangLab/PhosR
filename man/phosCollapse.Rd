@@ -28,11 +28,12 @@ downstream gene-centric analyses.
 \examples{
 library(limma)
 
-data('phospho_L6_ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 
 grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
+L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
                  ";",
                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),

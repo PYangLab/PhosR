@@ -38,7 +38,7 @@ data('phospho.cells.Ins.sample')
 grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins))
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins, grps, 0.5, n=1)
 
-For PhosphoExperiment object
+# For PhosphoExperiment object
 data('phospho.cells.Ins.pe')
 grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins.pe))
 phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 0.5, n=1)

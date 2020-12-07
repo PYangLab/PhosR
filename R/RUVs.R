@@ -25,7 +25,7 @@
 #'
 #' @examples
 #'
-#' data('phospho_L6_ratio.pe')
+#' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #'
 #' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
@@ -40,16 +40,9 @@
 #' design = model.matrix(~ grps - 1)
 #'
 #' # phosphoproteomics data normalisation using RUV
-#' ctl = which(L6.site %in% SPSs)
+#' ctl = which(L6.sites %in% SPSs)
 #' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
 #'                                   M = design, k = 3, ctl = ctl)
-#' 
-#' # For PhosphoExperiment objects
-#' # mat = PhosphoExperiment(
-#' #     assay = phospho.L6.ratio
-#' # )
-#' # phospho.L6.ratio.RUV = RUVphospho(mat, M = design, k = 3,
-#' #                                 ctl = ctl)
 #' 
 #' @importFrom ruv RUVIII
 #' @importFrom methods is

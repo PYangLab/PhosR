@@ -23,16 +23,18 @@ Generate set of stable phosphoporylated sites
 }
 \examples{
 
+library(stringr)
+
 data("phospho_L6_ratio_pe")
-data("phospho.liver.Ins.TC.ratio.RUV.pe")
+data("phospho_liverInsTC_RUV_pe")
 
 ppe1 <- phospho.L6.ratio.pe
 ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
 
 ppe.list <- list(ppe1, ppe2)
 cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-                  grp2 = str_sub(colnames(ppe2), end=-5))
+                  grp2 = stringr::str_sub(colnames(ppe2), end=-5))
 
-inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
+inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
 
 }

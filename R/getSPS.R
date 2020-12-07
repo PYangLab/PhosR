@@ -11,6 +11,8 @@
 #'
 #' @examples
 #'
+#' library(stringr)
+#' 
 #' data("phospho_L6_ratio_pe")
 #' data("phospho_liverInsTC_RUV_pe")
 #' 
@@ -19,9 +21,9 @@
 #' 
 #' ppe.list <- list(ppe1, ppe2)
 #' cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
-#'                   grp2 = str_sub(colnames(ppe2), end=-5))
+#'                   grp2 = stringr::str_sub(colnames(ppe2), end=-5))
 #' 
-#' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
+#' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
 #' 
 #' @export
 #' 

@@ -27,18 +27,13 @@ Our vignette prepared for BioC (`PhosR.Rmd`) utilisesthe subset of these dataset
 
 
 * Processing of phosphoproteomic data 
-     * Filtering and imputation (https://PYangLab.github.io/PhosR/articles/imputation.html)
-     * Batch correction (https://PYangLab.github.io/PhosR/articles/batch_correction.html)
+     * [Imputation](https://PYangLab.github.io/PhosR/articles/web/imputation.html)
+     * [Batch correction](https://PYangLab.github.io/PhosR/articles/web/batch_correction.html)
 * Downstream analysis of phosphoproteomic data
-     * Pathway analysis (https://PYangLab.github.io/PhosR/articles/pathway_analysis.html)
-     * Site- and gene-centric analysis (https://PYangLab.github.io/PhosR/articles/site_gene_analysis.html)
-     * Kinase-substrate relationship scoring and signalome construction (https://PYangLab.github.io/PhosR/articles/signalomes.html)
+     * [Pathway analysis](https://PYangLab.github.io/PhosR/articles/web/pathway_analysis.html)
+     * [Site- and gene-centric analysis](https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html)
+     * [Kinase-substrate relationship scoring and signalome construction](https://PYangLab.github.io/PhosR/articles/web/signalomes.html)
 
-## Code relating to our preprint
-
-* Data imputation: [https://pyanglab.github.io/PhosR/Analysis-of-FL83B-and-Hepa-1-6.html]
-* Identification of stably phosphorylated sites: [https://pyanglab.github.io/PhosR/IdentifySPS_dataIntegration.html]
-* 1-3 dimensional enrichmet analysis: [https://pyanglab.github.io/PhosR/1,-2,-3D-Enrichment-Analysis.html]
 
 ## Contact us
 

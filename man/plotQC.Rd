@@ -18,8 +18,6 @@ equal to the columns of the mat.}
 
 \item{panel}{A numeric value (0-4) to choose the plot type. See description
 for details.}
-
-\item{...}{Plotting parameters for base plots}
 }
 \value{
 A graphical plot
@@ -59,13 +57,13 @@ phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute,
                                     scale = FALSE)
 
 cols <- rep(c('#ED4024', '#7FBF42', '#3F61AD', '#9B822F'), each=6)
-par(mfrow=c(1,2))
-plotQC(phospho.cells.Ins.filtered,
+p1 = plotQC(phospho.cells.Ins.filtered,
         labels=colnames(phospho.cells.Ins.filtered),
         panel = "quantify", cols = cols)
-plotQC(phospho.cells.Ins.ms,
+p2 = plotQC(phospho.cells.Ins.ms,
         labels=colnames(phospho.cells.Ins.ms),
         panel = "quantify", cols = cols)
+ggpubr::ggarrange(p1, p2, nrow = 1)
 
 # Batch correction
 data('phospho.L6.ratio.pe')
@@ -96,19 +94,20 @@ cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 # plot after batch correction
-par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes)
-plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+p1 = plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes,
+         labels = colnames(phospho.L6.ratio))
+p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
         labels = colnames(phospho.L6.ratio),
-        panel="dendrogram", ylim=c(-20, 20), xlim=c(-30, 30))
+        panel="dendrogram")
+ggpubr::ggarrange(p1, p2, nrow = 1)
 
-par(mfrow=c(1,2))
-plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,
+p1 = plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,
+        labels = colnames(phospho.L6.ratio)) +
+        ggplot2::ggtitle('Before Batch correction')
+p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
         labels = colnames(phospho.L6.ratio),
-        main='Before Batch correction')
-plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
-        labels = colnames(phospho.L6.ratio),
-        panel="pca", ylim=c(-20, 20), xlim=c(-30, 30),
-        main='After Batch correction')
+        panel="pca") +
+        ggplot2::ggtitle('After Batch correction')
+ggpubr::ggarrange(p1, p2, nrow = 1)
 
 }

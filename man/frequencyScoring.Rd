@@ -19,7 +19,7 @@ Frequency scoring
 }
 \examples{
 
-data('phospho_L6_ratio.pe')
+data('phospho_L6_ratio_pe')
 data('KinaseMotifs')
 
 # Extracting first 10 sequences for demonstration purpose
