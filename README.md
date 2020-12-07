@@ -26,8 +26,7 @@ devtools::install_github("PYangLab/PhosR")
 ## Vignette 
 
 <!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/PhosR.html-->
-Please note that the vignette generated in the link below is using the full dataset. 
-Our vignette prepared for BioC (`PhosR.Rmd`) utilises the subset of these datasets and the results may not be identical.
+Please find the links to our vignette below. Note that the vignette utilises subset of the full phosphoproteomics datasets that were used in [our pre-print](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full), meaning that the results will not be identical and are for demonstration purposes.
 
 * Introduction
      * [Full vignette](https://pyanglab.github.io/PhosR/articles/PhosR.html)
