@@ -210,7 +210,7 @@ cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 par(mfrow=c(1,2))
 plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
         panel = "quantify", cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$scaled, 
+plotQC(ppe_imputed_scaled@assays@data$imputed, 
        labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
 ```
 
@@ -294,20 +294,26 @@ grps
 
 There are a number of ways to diagnose batch effect. In `PhosR`, we make use of two visualisation methods to detect batch effect: dendrogram of hierarchical clustering and a principal component analysis (PCA) plot. We use the `plotQC` function we introduced in the *imputation* section of the vignette. 
 
-By setting *panel = 2*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
+By setting *panel = dendrogram*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
 cs = rainbow(length(unique(grps)))
 colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
 
 par(mfrow=c(1,1))
-plotQC(ppe, panel = 2, cols=colorCodes, main = "Before batch correction")
+plotQC(ppe@assays@data$Quantification, 
+       panel = "dendrogram", 
+       cols = colorCodes)
 ```
 
 We can also visualise the samples in PCA space by setting *panel = 4*. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the *AICAR* treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
 ```{r}
 par(mfrow=c(1,1))
-plotQC(ppe, cols=colorCodes, labels = colnames(ppe), panel = 4, ylim=c(-20, 20), xlim=c(-30, 30), main = "Before batch correction")
+plotQC(ppe@assays@data$Quantification, 
+       panel = "pca", 
+       labels = colnames(ppe), 
+       ylim = c(-20, 20), xlim = c(-30, 30), 
+       cols = colorCodes)
 ```
 
 ### Correcting batch effect
@@ -334,16 +340,17 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again `plotQC`. Both the hierarchical clustering and PCA results demonstrate the normalisation procedure in `PhosR` facilitates effective batch correction.
 
 ```{r}
-# plot after batch correction
+# plot before batch correction
 par(mfrow=c(1,2))
-plotQC(ppe@assays@data$Quantification, panel = 2, cols=colorCodes)
-plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe), panel=2, ylim=c(-20, 20), xlim=c(-30, 30))
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=colorCodes, labels = colnames(ppe))
+plotQC(ppe@assays@data$Quantification, cols=colorCodes, labels = colnames(ppe), panel="pca", ylim=c(-20, 20), xlim=c(-30, 30))
 ```
 
 ```{r}
+# plot after batch correction
 par(mfrow=c(1,2))
-plotQC(ppe@assays@data$Quantification, panel = 4, cols=colorCodes, labels = colnames(ppe), main="Before Batch correction")
-plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe_RUV), panel=4, ylim=c(-20, 20), xlim=c(-30, 30), main="After Batch correction")
+plotQC(ppe@assays@data$normalised, panel = "dendrogram", cols=colorCodes, labels = colnames(ppe))
+plotQC(ppe@assays@data$normalised, cols=colorCodes, labels = colnames(ppe_RUV), panel="pca", ylim=c(-20, 20), xlim=c(-30, 30))
 ```
 
 ### Generating SPSs
