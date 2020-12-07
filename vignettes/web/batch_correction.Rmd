@@ -80,7 +80,7 @@ There are a number of ways to diagnose batch effect. In `PhosR`, we make use of 
 By setting *panel = 2*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
-plotQC(ppe, panel = "dendrogram", cols=grps, labels = colnames(ppe)) +
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=grps, labels = colnames(ppe)) +
   ggplot2::ggtitle("Before batch correction")
 ```
 
