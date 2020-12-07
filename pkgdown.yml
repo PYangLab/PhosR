@@ -3,10 +3,10 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   PhosR: PhosR.html
-  batch_correction: batch_correction.html
-  imputation: imputation.html
-  pathway_analysis: pathway_analysis.html
-  signalomes: signalomes.html
-  site_gene_analysis: site_gene_analysis.html
-last_built: 2020-12-07T14:17Z
+  web/batch_correction: batch_correction.html
+  web/imputation: imputation.html
+  web/pathway_analysis: pathway_analysis.html
+  web/signalomes: signalomes.html
+  web/site_gene_analysis: site_gene_analysis.html
+last_built: 2020-12-07T18:10Z
 

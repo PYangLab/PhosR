@@ -107,10 +107,10 @@ matrix.
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/imputation.html">Imputation</a>
+      <a href="../articles/web/imputation.html">Imputation</a>
     </li>
     <li>
-      <a href="../articles/batch_correction.html">Batch correction</a>
+      <a href="../articles/web/batch_correction.html">Batch correction</a>
     </li>
   </ul>
 </li>
@@ -122,13 +122,13 @@ matrix.
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/pathway_analysis.html">Pathway analysis</a>
+      <a href="../articles/web/pathway_analysis.html">Pathway analysis</a>
     </li>
     <li>
-      <a href="../articles/site_gene_analysis.html">Site- and gene-centric analysis</a>
+      <a href="../articles/web/site_gene_analysis.html">Site- and gene-centric analysis</a>
     </li>
     <li>
-      <a href="../articles/signalomes.html">Signalomes</a>
+      <a href="../articles/web/signalomes.html">Signalomes</a>
     </li>
   </ul>
 </li>
@@ -199,10 +199,6 @@ equal to the columns of the mat.</p></td>
       <td><p>A numeric value (0-4) to choose the plot type. See description
 for details.</p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Plotting parameters for base plots</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -232,13 +228,13 @@ for details.</p></td>
                                     scale <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'#ED4024'</span>, <span class='st'>'#7FBF42'</span>, <span class='st'>'#3F61AD'</span>, <span class='st'>'#9B822F'</span><span class='op'>)</span>, each<span class='op'>=</span><span class='fl'>6</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span>,
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span>,
         labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span><span class='op'>)</span>,
         panel <span class='op'>=</span> <span class='st'>"quantify"</span>, cols <span class='op'>=</span> <span class='va'>cols</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.ms</span>,
+<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.ms</span>,
         labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.ms</span><span class='op'>)</span>,
         panel <span class='op'>=</span> <span class='st'>"quantify"</span>, cols <span class='op'>=</span> <span class='va'>cols</span><span class='op'>)</span>
+<span class='fu'>ggpubr</span><span class='fu'>::</span><span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html'>ggarrange</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='plotQC-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Batch correction</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'phospho.L6.ratio.pe'</span><span class='op'>)</span>
@@ -269,20 +265,23 @@ for details.</p></td>
 <span class='va'>colorCodes</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>grps</span>, <span class='va'>switch</span>, AICAR<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, Ins<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, AICARIns<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
 
 <span class='co'># plot after batch correction</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"dendrogram"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"dendrogram"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
+#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='input'><span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>,
-        panel<span class='op'>=</span><span class='st'>"dendrogram"</span>, ylim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>20</span><span class='op'>)</span>, xlim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+        panel<span class='op'>=</span><span class='st'>"dendrogram"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
+#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='input'><span class='fu'>ggpubr</span><span class='fu'>::</span><span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html'>ggarrange</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='plotQC-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"pca"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"pca"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+        labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>'Before Batch correction'</span><span class='op'>)</span>
+<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>,
-        main<span class='op'>=</span><span class='st'>'Before Batch correction'</span><span class='op'>)</span>
-<span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
-        labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>,
-        panel<span class='op'>=</span><span class='st'>"pca"</span>, ylim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>20</span><span class='op'>)</span>, xlim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span>,
-        main<span class='op'>=</span><span class='st'>'After Batch correction'</span><span class='op'>)</span>
+        panel<span class='op'>=</span><span class='st'>"pca"</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>'After Batch correction'</span><span class='op'>)</span>
+<span class='fu'>ggpubr</span><span class='fu'>::</span><span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html'>ggarrange</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='plotQC-3.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
