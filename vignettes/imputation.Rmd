@@ -128,7 +128,7 @@ cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 par(mfrow=c(1,2))
 plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
         panel = "quantify", cols = cols)
-plotQC(ppe_imputed_scaled@assays@data$scaled, 
+plotQC(ppe_imputed_scaled@assays@data$imputed, 
        labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
 ```
 
