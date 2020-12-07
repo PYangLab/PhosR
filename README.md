@@ -1,4 +1,4 @@
-<img src="man/figures/PhosR_logo.png" align="right" width="200" height="200" />
+<img src="man/figures/PhosR_logo.png" align="right" width="200" height="300" />
 
 <!-- badges: start -->
 [![R build status](https://github.com/PYangLab/PhosR/workflows/R-CMD-check/badge.svg)](https://github.com/PYangLab/PhosR/actions)
