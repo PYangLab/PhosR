@@ -109,7 +109,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Signalome construction with PhosR</h1>
             
-            <h4 class="date">7 December 2020</h4>
+            <h4 class="date">8 December 2020</h4>
       
       
       <div class="hidden name"><code>signalomes.Rmd</code></div>
@@ -185,7 +185,7 @@
 <code class="sourceCode R"><span class="va">L6.matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/kinaseSubstrateScore.html">kinaseSubstrateScore</a></span><span class="op">(</span>substrate.list <span class="op">=</span> <span class="va">PhosphoSite.mouse</span>, 
                                     mat <span class="op">=</span> <span class="va">L6.phos.std</span>, seqs <span class="op">=</span> <span class="va">L6.phos.seq</span>, 
                                     numMotif <span class="op">=</span> <span class="fl">5</span>, numSub <span class="op">=</span> <span class="fl">1</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p><img src="signalomes_files/figure-html/unnamed-chunk-7-1.png" width="480"></p>
+<p><img src="signalomes_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">L6.predMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/kinaseSubstratePred.html">kinaseSubstratePred</a></span><span class="op">(</span><span class="va">L6.matrices</span>, top<span class="op">=</span><span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </code></pre></div>
@@ -223,7 +223,7 @@
 <p>Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../../reference/plotKinaseNetwork.html">plotKinaseNetwork</a></span><span class="op">(</span>KSR <span class="op">=</span> <span class="va">L6.matrices</span>, predMatrix <span class="op">=</span> <span class="va">L6.predMat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="va">kinase_all_color</span><span class="op">)</span></code></pre></div>
-<p><img src="signalomes_files/figure-html/unnamed-chunk-10-1.png" width="480"></p>
+<p><img src="signalomes_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
