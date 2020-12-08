@@ -109,6 +109,7 @@ ppe@Residue <- gsub("[0-9]","", sapply(strsplit(rownames(ppe), ";"), "[[", 3))
 ppe@Site <- as.numeric(gsub("[A-Z]","", sapply(strsplit(rownames(ppe), ";"), "[[", 3)))
 ppe@Sequence <- sapply(strsplit(rownames(ppe), ";"), "[[", 4)
 ```
+
 Collectively, we can set up our data as following.
 ```{r}
 ppe <- PhosphoExperiment(assays = list(Quantification = as.matrix(phospho.L6.ratio)), 
