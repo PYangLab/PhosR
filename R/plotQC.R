@@ -8,8 +8,7 @@
 #' equal to the columns of the mat.
 #' @param labels A vector of sample names. Used the label points in PCA plot
 #' (panel=4)
-#' @param panel A numeric value (0-4) to choose the plot type. See description
-#' for details.
+#' @param panel A type of plot to output. See description for details.
 #'
 #' @description
 #' The `panel` parameter allows different type of visualisation for output

@@ -16,8 +16,7 @@ equal to the columns of the mat.}
 \item{labels}{A vector of sample names. Used the label points in PCA plot
 (panel=4)}
 
-\item{panel}{A numeric value (0-4) to choose the plot type. See description
-for details.}
+\item{panel}{A type of plot to output. See description for details.}
 }
 \value{
 A graphical plot
