@@ -89,7 +89,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/PYangLab/PhosR">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -103,8 +103,7 @@
 
       
 
-      </header><script src="PhosR_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="PhosR_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="PhosR_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="PhosR_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>An introduction to PhosR package</h1>
@@ -368,7 +367,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to <a href="https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full">our preprint</a> for the full list of the datasets used). The <code>SPSs</code> will be used as our <code>negative control</code> in RUV normalisation.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
@@ -730,7 +729,7 @@
 <div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ClueR</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">reactome.db</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span>
@@ -866,8 +865,8 @@
 
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally">GGally</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">calibrate</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://statnet.org/">network</a></span><span class="op">)</span>
@@ -951,13 +950,21 @@
                                 KOI<span class="op">=</span><span class="va">kinaseOI</span><span class="op">)</span></code></pre></div>
 <pre><code>## calculating optimal number of clusters...</code></pre>
 <pre><code>## optimal number of clusters = 3</code></pre>
+<pre><code>## Note: The second link end is drawn out of sector '1'.</code></pre>
+<pre><code>## Note: The second link end is drawn out of sector '2'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'MAP2K1'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'MAPK3'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'PRKAA1'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'PRKAA2'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'RPS6KA5'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'TBK1'.</code></pre>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-61-1.png" width="960"></p>
 </div>
 <div id="generate-signalome-map" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-signalome-map" class="anchor"></a>Generate signalome map</h3>
 <p>We can also visualise the relative contribution of each kinase towards the regulation of protein modules by plotting a balloon plot. In the balloon plot, the size of the balloons denote the percentage magnitude of kinase regulation in each module.</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">### generate palette</span>
 <span class="va">my_color_palette</span> <span class="op">&lt;-</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">8</span>, <span class="st">"Accent"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">kinase_all_color</span> <span class="op">&lt;-</span> <span class="fu">my_color_palette</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">L6.matrices</span><span class="op">$</span><span class="va">combinedScoreMatrix</span><span class="op">)</span><span class="op">)</span>
@@ -971,7 +978,7 @@
 <h3 class="hasAnchor">
 <a href="#generate-signalome-network" class="anchor"></a>Generate signalome network</h3>
 <p>Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks.</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotKinaseNetwork.html">plotKinaseNetwork</a></span><span class="op">(</span>KSR <span class="op">=</span> <span class="va">L6.matrices</span>, predMatrix <span class="op">=</span> <span class="va">L6.predMat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="va">kinase_all_color</span><span class="op">)</span></code></pre></div>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-63-1.png" width="480"></p>
 </div>
@@ -980,7 +987,7 @@
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## R version 4.0.3 (2020-10-10)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
@@ -1003,71 +1010,72 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] network_1.16.1       ggpubr_0.4.0         GGally_2.0.0        
-##  [4] dplyr_1.0.2          org.Mm.eg.db_3.12.0  ClueR_1.4           
+##  [1] network_1.16.1       ggpubr_0.4.0         GGally_2.1.0        
+##  [4] dplyr_1.0.4          org.Mm.eg.db_3.12.0  ClueR_1.4           
 ##  [7] e1071_1.7-4          annotate_1.68.0      XML_3.99-0.5        
 ## [10] reactome.db_1.74.0   org.Rn.eg.db_3.12.0  AnnotationDbi_1.52.0
-## [13] IRanges_2.24.0       S4Vectors_0.28.0     Biobase_2.50.0      
+## [13] IRanges_2.24.1       S4Vectors_0.28.1     Biobase_2.50.0      
 ## [16] BiocGenerics_0.36.0  directPA_1.5         limma_3.46.0        
-## [19] calibrate_1.7.7      MASS_7.3-53          ggplot2_3.3.2       
+## [19] calibrate_1.7.7      MASS_7.3-53          ggplot2_3.3.3       
 ## [22] stringr_1.4.0        PhosR_1.1.2          BiocStyle_2.18.1    
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_2.0-0            ggsignif_0.6.0             
 ##   [3] ellipsis_0.3.1              class_7.3-17               
 ##   [5] rio_0.5.16                  rprojroot_2.0.2            
-##   [7] circlize_0.4.11             XVector_0.30.0             
+##   [7] circlize_0.4.12             XVector_0.30.0             
 ##   [9] GenomicRanges_1.42.0        GlobalOptions_0.1.2        
 ##  [11] ggdendro_0.1.22             fs_1.5.0                   
 ##  [13] farver_2.0.3                bit64_4.0.5                
-##  [15] splines_4.0.3               knitr_1.30                 
-##  [17] broom_0.7.2                 pheatmap_1.0.12            
-##  [19] httr_1.4.2                  BiocManager_1.30.10        
-##  [21] compiler_4.0.3              backports_1.2.0            
-##  [23] assertthat_0.2.1            Matrix_1.2-18              
-##  [25] htmltools_0.5.0             tools_4.0.3                
-##  [27] igraph_1.2.6                coda_0.19-4                
-##  [29] gtable_0.3.0                glue_1.4.2                 
-##  [31] GenomeInfoDbData_1.2.4      reshape2_1.4.4             
-##  [33] Rcpp_1.0.5                  rle_0.9.2                  
-##  [35] carData_3.0-4               statnet.common_4.4.1       
-##  [37] cellranger_1.1.0            pkgdown_1.6.1              
-##  [39] vctrs_0.3.5                 nlme_3.1-149               
-##  [41] preprocessCore_1.52.0       xfun_0.19                  
-##  [43] openxlsx_4.2.3              lifecycle_0.2.0            
-##  [45] rstatix_0.6.0               dendextend_1.14.0          
-##  [47] zlibbioc_1.36.0             scales_1.1.1               
-##  [49] ragg_0.4.0                  pcaMethods_1.82.0          
-##  [51] hms_0.5.3                   MatrixGenerics_1.2.0       
-##  [53] SummarizedExperiment_1.20.0 RColorBrewer_1.1-2         
-##  [55] yaml_2.2.1                  curl_4.3                   
-##  [57] memoise_1.1.0               gridExtra_2.3              
-##  [59] reshape_0.8.8               stringi_1.5.3              
-##  [61] RSQLite_2.2.1               desc_1.2.0                 
-##  [63] zip_2.1.1                   shape_1.4.5                
-##  [65] GenomeInfoDb_1.26.1         rlang_0.4.9                
-##  [67] pkgconfig_2.0.3             systemfonts_0.3.2          
-##  [69] matrixStats_0.57.0          bitops_1.0-6               
-##  [71] evaluate_0.14               lattice_0.20-41            
-##  [73] purrr_0.3.4                 ruv_0.9.7.1                
-##  [75] labeling_0.4.2              bit_4.0.4                  
-##  [77] cowplot_1.1.0               tidyselect_1.1.0           
-##  [79] plyr_1.8.6                  magrittr_2.0.1             
-##  [81] bookdown_0.21               R6_2.5.0                   
-##  [83] generics_0.1.0              sna_2.6                    
-##  [85] DelayedArray_0.16.0         DBI_1.1.0                  
-##  [87] mgcv_1.8-33                 pillar_1.4.7               
-##  [89] haven_2.3.1                 foreign_0.8-80             
-##  [91] withr_2.3.0                 abind_1.4-5                
-##  [93] RCurl_1.98-1.2              tibble_3.0.4               
-##  [95] crayon_1.3.4                car_3.0-10                 
-##  [97] rmarkdown_2.5               viridis_0.5.1              
-##  [99] grid_4.0.3                  readxl_1.3.1               
-## [101] data.table_1.13.2           blob_1.2.1                 
-## [103] forcats_0.5.0               digest_0.6.27              
-## [105] xtable_1.8-4                tidyr_1.1.2                
-## [107] textshaping_0.2.1           munsell_0.5.0              
-## [109] viridisLite_0.3.0</code></pre>
+##  [15] splines_4.0.3               cachem_1.0.2               
+##  [17] knitr_1.31                  broom_0.7.4                
+##  [19] pheatmap_1.0.12             httr_1.4.2                 
+##  [21] BiocManager_1.30.10         compiler_4.0.3             
+##  [23] backports_1.2.1             assertthat_0.2.1           
+##  [25] Matrix_1.2-18               fastmap_1.1.0              
+##  [27] htmltools_0.5.1.1           tools_4.0.3                
+##  [29] igraph_1.2.6                coda_0.19-4                
+##  [31] gtable_0.3.0                glue_1.4.2                 
+##  [33] GenomeInfoDbData_1.2.4      reshape2_1.4.4             
+##  [35] Rcpp_1.0.6                  rle_0.9.2                  
+##  [37] carData_3.0-4               statnet.common_4.4.1       
+##  [39] cellranger_1.1.0            pkgdown_1.6.1              
+##  [41] vctrs_0.3.6                 nlme_3.1-149               
+##  [43] preprocessCore_1.52.1       xfun_0.20                  
+##  [45] openxlsx_4.2.3              lifecycle_0.2.0            
+##  [47] rstatix_0.6.0               dendextend_1.14.0          
+##  [49] zlibbioc_1.36.0             scales_1.1.1               
+##  [51] ragg_0.4.1                  pcaMethods_1.82.0          
+##  [53] hms_1.0.0                   MatrixGenerics_1.2.1       
+##  [55] SummarizedExperiment_1.20.0 RColorBrewer_1.1-2         
+##  [57] yaml_2.2.1                  curl_4.3                   
+##  [59] memoise_2.0.0               gridExtra_2.3              
+##  [61] RSQLite_2.2.3               reshape_0.8.8              
+##  [63] stringi_1.5.3               highr_0.8                  
+##  [65] desc_1.2.0                  zip_2.1.1                  
+##  [67] shape_1.4.5                 GenomeInfoDb_1.26.2        
+##  [69] rlang_0.4.10                pkgconfig_2.0.3            
+##  [71] systemfonts_1.0.0           matrixStats_0.58.0         
+##  [73] bitops_1.0-6                evaluate_0.14              
+##  [75] lattice_0.20-41             purrr_0.3.4                
+##  [77] ruv_0.9.7.1                 labeling_0.4.2             
+##  [79] bit_4.0.4                   cowplot_1.1.1              
+##  [81] tidyselect_1.1.0            plyr_1.8.6                 
+##  [83] magrittr_2.0.1              bookdown_0.21              
+##  [85] R6_2.5.0                    generics_0.1.0             
+##  [87] sna_2.6                     DBI_1.1.1                  
+##  [89] DelayedArray_0.16.1         mgcv_1.8-33                
+##  [91] pillar_1.4.7                haven_2.3.1                
+##  [93] foreign_0.8-80              withr_2.4.1                
+##  [95] abind_1.4-5                 RCurl_1.98-1.2             
+##  [97] tibble_3.0.6                crayon_1.4.0               
+##  [99] car_3.0-10                  rmarkdown_2.6              
+## [101] viridis_0.5.1               grid_4.0.3                 
+## [103] readxl_1.3.1                data.table_1.13.6          
+## [105] blob_1.2.1                  forcats_0.5.1              
+## [107] digest_0.6.27               xtable_1.8-4               
+## [109] tidyr_1.1.2                 textshaping_0.2.1          
+## [111] munsell_0.5.0               viridisLite_0.3.0</code></pre>
 </div>
   </div>
 
