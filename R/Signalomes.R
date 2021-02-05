@@ -3,7 +3,7 @@
 #' @description A function to generate signalomes
 #'
 #' @usage Signalomes(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork=0.9,
-#' signalomeCutoff=0.5, verbose = TRUE)
+#' signalomeCutoff=0.5, module_res = 10, verbose = TRUE)
 #'
 #' @param KSR kinase-substrate relationship scoring results
 #' @param predMatrix output of kinaseSubstratePred function
@@ -11,6 +11,7 @@
 #' corresponding to samples
 #' @param KOI a character vector that contains kinases of interest for which
 #' expanded signalomes will be generated
+#' @param module_res parameter to select number of final modules
 #' @param threskinaseNetwork threshold used to select interconnected kinases for
 #'  the expanded signalomes
 #' @param signalomeCutoff threshold used to filter kinase-substrate
@@ -23,6 +24,14 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr count
+#' @importFrom dplyr n
+#' @importFrom graphics title
+#' @importFrom graphics par
+#' @importFrom graphics barplot
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 scale_size_continuous
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 element_blank
 #' @importFrom stats hclust
 #' @importFrom rlang .data
 #'
