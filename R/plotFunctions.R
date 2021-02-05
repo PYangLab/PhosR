@@ -66,6 +66,7 @@ plotSignalomeMap <- function(signalomes, color) {
 #' @return a graphical plot
 #' 
 #' @importFrom network network
+#' @importFrom RColorBrewer brewer.pal
 #' @importFrom reshape2 melt
 #' @importFrom stats cor
 #' @importFrom GGally ggnet2
@@ -76,26 +77,22 @@ plotSignalomeMap <- function(signalomes, color) {
 plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
     
     cor_mat <- stats::cor(KSR$combinedScoreMatrix)
-    
     diag(cor_mat) <- 0
-    kinase_network <- lapply(1:ncol(cor_mat), function(x) names(which(cor_mat[,x] > threshold))) 
-    names(kinase_network) <- colnames(cor_mat)
-    
+
+    cor_mat_values = cor_mat
+
     cor_mat <- apply(cor_mat, 2, function(x) x  > threshold)
     cor_mat[cor_mat == F] <- 0
     cor_mat[cor_mat == T] <- 1
     
-    links <- reshape2::melt(cor_mat)
-    links <- links[links$value == 1,]
-    res <- sapply(1:length(links$Var1), function(x) { cor_mat[rownames(cor_mat) == links$Var1[x], colnames(cor_mat) == links$Var2[x]]
-    })
-    links$cor <- res
-    colnames(links) <- c("source", "target", "binary", "cor")
+    n = network::network(cor_mat, directed=F)
+    network::set.edge.value(n, "cor", cor_mat_values^2)
+    my_col = RColorBrewer::brewer.pal(11, "Spectral")
     
-    g <- GGally::ggnet2(network::network(cor_mat, directed=F), 
+    g <- GGally::ggnet2(n, 
                    node.size=10, 
                    node.color=color, 
-                   edge.size = 0.5, 
+                   edge.size = "cor", 
                    size = "degree",
                    size.cut=3,
                    label=colnames(cor_mat),
