@@ -77,7 +77,7 @@
 #' @export
 
 Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
-    signalomeCutoff = 0.5, verbose = TRUE) {
+    signalomeCutoff = 0.5, module_res = 10, verbose = TRUE) {
     ############## generate objects required for signalome function
     protein_assignment = mapply("[[",
                                 strsplit(rownames(KSR$combinedScoreMatrix),";"),
@@ -112,8 +112,14 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
         method = "ward.D")
     tree_height <- as.numeric(names(table(hclust_res$height)))
     branching <- as.numeric(table(hclust_res$height))
-    hcutree <- min(tree_height[tree_height > 0])
-    modules <- stats::cutree(hclust_res, h = hcutree)
+    #hcutree <- min(tree_height[tree_height > 0])
+    tree_height_calc = unlist(lapply(2:length(tree_height), function(x) {
+        h <- tree_height[[x]]
+        m <- stats::cutree(hclust_res, h = h)
+        return(length(table(m)))
+    }))
+    hcutree = which(tree_height_calc <= module_res) + 1
+    modules <- stats::cutree(hclust_res, h = tree_height[[hcutree[[1]]]])
     ############## generate signalomes
     signalomeSubstrates <- .phosRsignalome(predMatrix, signalomeCutoff,
         kinase_signalome_color, modules)
@@ -227,7 +233,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     ############## generate circlize plot
     dftoPlot_signalome <- stack(signalomeSubstrates)
     dftoPlot_signalome$modules <- modules[dftoPlot_signalome$values]
-    # adjacencyData <- with(dftoPlot_signalome, table(ind, modules))
+    #adjacencyData <- with(dftoPlot_signalome, table(ind, modules))
     adjacencyData <- table(dftoPlot_signalome$ind, dftoPlot_signalome$modules)
 
     grid.col <- c(kinase_signalome_color, rep("grey", length(unique(modules))))
@@ -239,7 +245,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     chordDiagram(adjacencyData, transparency = 0.2,
                 order = c(rownames(adjacencyData),
                             rev(as.character(unique(modules)))),
-                grid.col = grid.col, big.gap = 15,
+                grid.col = grid.col, #big.gap = 15,
                 annotationTrack = c("name", "grid"), scale = TRUE)
     title("Signalomes")
     circos.clear()
