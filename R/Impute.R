@@ -278,14 +278,17 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
             mat2 = SummarizedExperiment::assay(mat2, assay)
         }
     }
-    
+    # matrix before imputation
+    mat1.raw = mat1
+    mat2.raw = mat2
     
     # impute for mat2
-    idx1 <- which((rowSums(!is.na(mat1))/nrow(mat1)) >= percent1 &
-        (rowSums(!is.na(mat2))/nrow(mat2)) <= percent2)
+    idx1 <- which((rowSums(!is.na(mat1))/ncol(mat1)) >= percent1 &
+        (rowSums(!is.na(mat2))/ncol(mat2)) <= percent2)
+    
     if (verbose)
         message(paste("idx1:", length(idx1)))
-
+    
     ms <- colMeans(mat2, na.rm = TRUE)
     sds <- apply(mat2, 2, stats::sd, na.rm = TRUE)
     if (length(idx1) > 0) {
@@ -297,8 +300,9 @@ ptImpute <- function(mat1, mat2, percent1, percent2, m = 1.6,
 
     if (paired == TRUE) {
         # impute for mat1
-        idx2 <- which((rowSums(!is.na(mat2))/nrow(mat2)) >= percent1 &
-            (rowSums(!is.na(mat1))/nrow(mat1)) <= percent2)
+        # If paired = TRUE, estimate idx2 before imputing mat2
+        idx2 <- which((rowSums(!is.na(mat2.raw))/ncol(mat2.raw)) >= percent1 &
+                (rowSums(!is.na(mat1.raw))/ncol(mat1.raw)) <= percent2)
         if (verbose)
             message(paste("idx2:", length(idx2)))
 
