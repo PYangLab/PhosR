@@ -81,7 +81,7 @@ matrix.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -185,7 +185,7 @@ matrix.
 the number of samples.</p></td>
     </tr>
     <tr>
-      <th>cols</th>
+      <th>grps</th>
       <td><p>A vector of colours to be used in the plot. The length should be
 equal to the columns of the mat.</p></td>
     </tr>
@@ -222,17 +222,16 @@ equal to the columns of the mat.</p></td>
     <span class='va'>phospho.cells.Ins.impute</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>6</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span>,
     <span class='va'>phospho.cells.Ins.impute</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span>, 
     percent1 <span class='op'>=</span> <span class='fl'>0.6</span>, percent2 <span class='op'>=</span> <span class='fl'>0</span>, paired <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>idx1: 0</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>idx1: 34</span></div><div class='input'>
 <span class='va'>phospho.cells.Ins.ms</span> <span class='op'>&lt;-</span> <span class='fu'><a href='medianScaling.html'>medianScaling</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.impute</span>,
                                     scale <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='va'>cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'#ED4024'</span>, <span class='st'>'#7FBF42'</span>, <span class='st'>'#3F61AD'</span>, <span class='st'>'#9B822F'</span><span class='op'>)</span>, each<span class='op'>=</span><span class='fl'>6</span><span class='op'>)</span>
 <span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span>,
         labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span><span class='op'>)</span>,
-        panel <span class='op'>=</span> <span class='st'>"quantify"</span>, cols <span class='op'>=</span> <span class='va'>cols</span><span class='op'>)</span>
+        panel <span class='op'>=</span> <span class='st'>"quantify"</span>, grps <span class='op'>=</span> <span class='va'>grps</span><span class='op'>)</span>
 <span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.ms</span>,
         labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.ms</span><span class='op'>)</span>,
-        panel <span class='op'>=</span> <span class='st'>"quantify"</span>, cols <span class='op'>=</span> <span class='va'>cols</span><span class='op'>)</span>
+        panel <span class='op'>=</span> <span class='st'>"quantify"</span>, grps <span class='op'>=</span> <span class='va'>grps</span><span class='op'>)</span>
 <span class='fu'>ggpubr</span><span class='fu'>::</span><span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html'>ggarrange</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='plotQC-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Batch correction</span>
@@ -260,23 +259,20 @@ equal to the columns of the mat.</p></td>
 <span class='va'>phospho.L6.ratio.RUV</span> <span class='op'>=</span> <span class='fu'><a href='RUVphospho.html'>RUVphospho</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, M <span class='op'>=</span> <span class='va'>design</span>, k <span class='op'>=</span> <span class='fl'>3</span>,
                                   ctl <span class='op'>=</span> <span class='va'>ctl</span><span class='op'>)</span>
                                   
-<span class='va'>cs</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>rainbow</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>grps</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>colorCodes</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>grps</span>, <span class='va'>switch</span>, AICAR<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, Ins<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, AICARIns<span class='op'>=</span><span class='va'>cs</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
-
 <span class='co'># plot after batch correction</span>
-<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"dendrogram"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"dendrogram"</span>, grps<span class='op'>=</span><span class='va'>grps</span>,
          labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='input'><span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='input'><span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, grps<span class='op'>=</span><span class='va'>grps</span>,
         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>,
         panel<span class='op'>=</span><span class='st'>"dendrogram"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
 #&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='input'><span class='fu'>ggpubr</span><span class='fu'>::</span><span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html'>ggarrange</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='img'><img src='plotQC-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"pca"</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span>, panel <span class='op'>=</span> <span class='st'>"pca"</span>, grps<span class='op'>=</span><span class='va'>grps</span>,
         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
         <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>'Before Batch correction'</span><span class='op'>)</span>
-<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, cols<span class='op'>=</span><span class='va'>colorCodes</span>,
+<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'>plotQC</span><span class='op'>(</span><span class='va'>phospho.L6.ratio.RUV</span>, grps<span class='op'>=</span><span class='va'>grps</span>,
         labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio</span><span class='op'>)</span>,
         panel<span class='op'>=</span><span class='st'>"pca"</span><span class='op'>)</span> <span class='op'>+</span>
         <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='st'>'After Batch correction'</span><span class='op'>)</span>

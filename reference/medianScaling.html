@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -156,14 +156,7 @@
     <p>Median centering and scaling of an input numeric matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>medianScaling</span><span class='op'>(</span>
-  <span class='va'>mat</span>,
-  imputed <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  scale <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  grps <span class='op'>=</span> <span class='cn'>NULL</span>,
-  reorder <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  assay <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>medianScaling</span><span class='op'>(</span><span class='va'>mat</span>, scale <span class='op'>=</span> <span class='cn'>TRUE</span>, grps <span class='op'>=</span> <span class='cn'>NULL</span>, reorder <span class='op'>=</span> <span class='cn'>FALSE</span>, assay <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,7 +176,8 @@ correspond to samples.</p></td>
     </tr>
     <tr>
       <th>reorder</th>
-      <td><p>whehther to reorder by factor.</p></td>
+      <td><p>To reorder the columns by group (<code>grps</code>).
+By default (<code>reorder=FALSE</code>), original column order is maintained.</p></td>
     </tr>
     <tr>
       <th>assay</th>
@@ -213,7 +207,7 @@ object.</p></td>
     <span class='va'>phospho.cells.Ins.impute</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>6</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span>,
     <span class='va'>phospho.cells.Ins.impute</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span>, percent1 <span class='op'>=</span> <span class='fl'>0.6</span>,
     percent2 <span class='op'>=</span> <span class='fl'>0</span>, paired <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>idx1: 0</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>idx1: 34</span></div><div class='input'>
 <span class='va'>phospho.cells.Ins.ms</span> <span class='op'>&lt;-</span>
     <span class='fu'>medianScaling</span><span class='op'>(</span><span class='va'>phospho.cells.Ins.impute</span>, scale <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 

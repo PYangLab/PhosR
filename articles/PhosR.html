@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -307,16 +307,16 @@
 <span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ptImpute.html">ptImpute</a></span><span class="op">(</span><span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">12</span><span class="op">)</span><span class="op">]</span>, 
                                  <span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span>, 
                                  percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code>## idx1: 0</code></pre>
+<pre><code>## idx1: 12</code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">13</span>,<span class="fl">18</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ptImpute.html">ptImpute</a></span><span class="op">(</span><span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">19</span>,<span class="fl">24</span><span class="op">)</span><span class="op">]</span>, 
                                      <span class="va">ppe_imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">13</span>,<span class="fl">18</span><span class="op">)</span><span class="op">]</span>, 
                                      percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, 
                                      paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code>## idx1: 0</code></pre>
+<pre><code>## idx1: 29</code></pre>
 <p>Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ppe_imputed_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">ppe_imputed</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, imputed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">ppe_imputed_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">ppe_imputed</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, assay <span class="op">=</span> <span class="st">"imputed"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="quantification-plots" class="section level3">
@@ -324,24 +324,23 @@
 <a href="#quantification-plots" class="anchor"></a>Quantification plots</h3>
 <p>A useful function in <code>PhosR</code> is to visualize the percentage of quantified sites before and after filtering and imputation. The main inputs of <code>plotQC</code> are the quantification matrix, sample labels (equating the column names of the matrix), an integer indicating the panel to plot, and lastly, a color vector. To visualize the percentage of quantified sites, use the <code>plotQC</code> function and set <em>panel = “quantify”</em> to visualise bar plots of samples.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#ED4024"</span>, <span class="st">"#7FBF42"</span>, <span class="st">"#3F61AD"</span>, <span class="st">"#9B822F"</span><span class="op">)</span>, each<span class="op">=</span><span class="fl">6</span><span class="op">)</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>, 
-        panel <span class="op">=</span> <span class="st">"quantify"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>, 
+        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">scaled</span>, 
-       labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"quantify"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+       labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <p>By setting <em>panel = “dendrogram”</em>, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, 
        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, 
-       cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></code></pre></div>
+       grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
 ## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">scaled</span>, 
        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, 
-       panel <span class="op">=</span> <span class="st">"dendrogram"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></code></pre></div>
+       panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
 ## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
@@ -429,14 +428,14 @@
 <p>There are a number of ways to diagnose batch effect. In <code>PhosR</code>, we make use of two visualisation methods to detect batch effect: dendrogram of hierarchical clustering and a principal component analysis (PCA) plot. We use the <code>plotQC</code> function we introduced in the <em>imputation</em> section of the vignette.</p>
 <p>By setting <em>panel = “dendrogram”</em>, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as <em>expX</em>, where X refers to the batch number). This is particularly evident for samples from <em>Ins</em> and <em>AICARIns</em> treated conditions.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
 ## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 <p>We can also visualise the samples in PCA space by setting <em>panel = “pca”</em>. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the <em>AICAR</em> treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4.</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></code></pre></div>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 </div>
@@ -478,11 +477,11 @@
 <p>As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again <code>plotQC</code>. Both the hierarchical clustering and PCA results demonstrate the normalisation procedure in <code>PhosR</code> facilitates effective batch correction.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot after batch correction</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span> <span class="op">)</span></code></pre></div>
+<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span> <span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
 ## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
 ## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
@@ -490,9 +489,9 @@
 <p><img src="PhosR_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot after batch correction</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Before Batch correction"</span><span class="op">)</span>
-<span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, cols<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"After Batch correction"</span><span class="op">)</span>
 <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
@@ -1017,7 +1016,7 @@
 ## [13] IRanges_2.24.1       S4Vectors_0.28.1     Biobase_2.50.0      
 ## [16] BiocGenerics_0.36.0  directPA_1.5         limma_3.46.0        
 ## [19] calibrate_1.7.7      MASS_7.3-53          ggplot2_3.3.3       
-## [22] stringr_1.4.0        PhosR_1.1.2          BiocStyle_2.18.1    
+## [22] stringr_1.4.0        PhosR_1.1.4          BiocStyle_2.18.1    
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_2.0-0            ggsignif_0.6.0             
@@ -1041,7 +1040,7 @@
 ##  [37] carData_3.0-4               statnet.common_4.4.1       
 ##  [39] cellranger_1.1.0            pkgdown_1.6.1              
 ##  [41] vctrs_0.3.6                 nlme_3.1-149               
-##  [43] preprocessCore_1.52.1       xfun_0.20                  
+##  [43] preprocessCore_1.52.1       xfun_0.21                  
 ##  [45] openxlsx_4.2.3              lifecycle_0.2.0            
 ##  [47] rstatix_0.6.0               dendextend_1.14.0          
 ##  [49] zlibbioc_1.36.0             scales_1.1.1               
@@ -1068,7 +1067,7 @@
 ##  [91] pillar_1.4.7                haven_2.3.1                
 ##  [93] foreign_0.8-80              withr_2.4.1                
 ##  [95] abind_1.4-5                 RCurl_1.98-1.2             
-##  [97] tibble_3.0.6                crayon_1.4.0               
+##  [97] tibble_3.0.6                crayon_1.4.1               
 ##  [99] car_3.0-10                  rmarkdown_2.6              
 ## [101] viridis_0.5.1               grid_4.0.3                 
 ## [103] readxl_1.3.1                data.table_1.13.6          

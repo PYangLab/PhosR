@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -108,7 +108,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Imputation of phosphoproteomics data with PhosR</h1>
             
-            <h4 class="date">5 February 2021</h4>
+            <h4 class="date">12 February 2021</h4>
       
       
       <div class="hidden name"><code>imputation.Rmd</code></div>
@@ -223,7 +223,7 @@
                                      percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ppe_imputed_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">ppe_imputed</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, imputed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">ppe_imputed_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">ppe_imputed</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, assay <span class="op">=</span> <span class="st">"imputed"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="quantification-plots" class="section level1">
@@ -231,21 +231,20 @@
 <a href="#quantification-plots" class="anchor"></a>Quantification plots</h1>
 <p>A useful function in <code>PhosR</code> is to visualize the percentage of quantified sites before and after filtering and imputation. The main inputs of <code>plotQC</code> are the quantification matrix, sample labels (equating the column names of the matrix), an integer indicating the panel to plot, and lastly, a color vector. To visualize the percentage of quantified sites, use the <code>plotQC</code> function and set <em>panel = quantify</em> to visualise bar plots of samples.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#ED4024"</span>, <span class="st">"#7FBF42"</span>, <span class="st">"#3F61AD"</span>, <span class="st">"#9B822F"</span><span class="op">)</span>, each<span class="op">=</span><span class="fl">6</span><span class="op">)</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>,
-        panel <span class="op">=</span> <span class="st">"quantify"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>,
+        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">scaled</span>, 
-       labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"quantify"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+       labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="imputation_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <p>By setting <em>panel = dendrogram</em>, we can visualise the results of unsupervised hierarchical clustering of samples as a dendrogram. The dendrogram demonstrates that imputation has improved the clustering of the samples so that replicates from the same conditions cluster together.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, 
        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, 
-       cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+       grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">scaled</span>, 
        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe_imputed_scaled</span><span class="op">)</span>, 
-       panel <span class="op">=</span> <span class="st">"dendrogram"</span>, cols <span class="op">=</span> <span class="va">cols</span><span class="op">)</span>
+       panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span>
 <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="imputation_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>We can now move onto the next step in the <code>PhosR</code> workflow: integration of datasets and batch correction.</p>
@@ -270,7 +269,7 @@
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] PhosR_1.1.2      BiocStyle_2.18.1</span>
+<span class="co">#&gt; [1] PhosR_1.1.4      BiocStyle_2.18.1</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;   [1] bitops_1.0-6                matrixStats_0.58.0         </span>
@@ -308,7 +307,7 @@
 <span class="co">#&gt;  [65] MASS_7.3-53                 SummarizedExperiment_1.20.0</span>
 <span class="co">#&gt;  [67] zlibbioc_1.36.0             plyr_1.8.6                 </span>
 <span class="co">#&gt;  [69] grid_4.0.3                  parallel_4.0.3             </span>
-<span class="co">#&gt;  [71] forcats_0.5.1               crayon_1.4.0               </span>
+<span class="co">#&gt;  [71] forcats_0.5.1               crayon_1.4.1               </span>
 <span class="co">#&gt;  [73] lattice_0.20-41             cowplot_1.1.1              </span>
 <span class="co">#&gt;  [75] haven_2.3.1                 hms_1.0.0                  </span>
 <span class="co">#&gt;  [77] circlize_0.4.12             knitr_1.31                 </span>
@@ -323,7 +322,7 @@
 <span class="co">#&gt;  [95] tidyr_1.1.2                 reshape_0.8.8              </span>
 <span class="co">#&gt;  [97] assertthat_0.2.1            cachem_1.0.3               </span>
 <span class="co">#&gt;  [99] ggplot2_3.3.3               openxlsx_4.2.3             </span>
-<span class="co">#&gt; [101] xfun_0.20                   broom_0.7.4                </span>
+<span class="co">#&gt; [101] xfun_0.21                   broom_0.7.4                </span>
 <span class="co">#&gt; [103] e1071_1.7-4                 rstatix_0.6.0              </span>
 <span class="co">#&gt; [105] ragg_0.4.1                  class_7.3-17               </span>
 <span class="co">#&gt; [107] viridisLite_0.3.0           tibble_3.0.6               </span>
