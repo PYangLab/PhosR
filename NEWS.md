@@ -1,3 +1,8 @@
+## PhosR 1.1.4
+
+* Fixed the parameter of `plotQC` from `cols` to `grps`
+
+
 ## PhosR 1.1.3
 
 * Fixed a bug in ptImpute function

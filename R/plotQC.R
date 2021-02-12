@@ -4,7 +4,7 @@
 #'
 #' @param mat A p by n matrix, where p is the number of phosphosites and n is
 #' the number of samples.
-#' @param cols A vector of colours to be used in the plot. The length should be
+#' @param grps A vector of colours to be used in the plot. The length should be
 #' equal to the columns of the mat.
 #' @param labels A vector of sample names. Used the label points in PCA plot
 #' (panel=4)
@@ -52,13 +52,12 @@
 #' phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute,
 #'                                     scale = FALSE)
 #'
-#' cols <- rep(c('#ED4024', '#7FBF42', '#3F61AD', '#9B822F'), each=6)
 #' p1 = plotQC(phospho.cells.Ins.filtered,
 #'         labels=colnames(phospho.cells.Ins.filtered),
-#'         panel = "quantify", cols = cols)
+#'         panel = "quantify", grps = grps)
 #' p2 = plotQC(phospho.cells.Ins.ms,
 #'         labels=colnames(phospho.cells.Ins.ms),
-#'         panel = "quantify", cols = cols)
+#'         panel = "quantify", grps = grps)
 #' ggpubr::ggarrange(p1, p2, nrow = 1)
 #' 
 #' # Batch correction
@@ -86,21 +85,18 @@
 #' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
 #'                                   ctl = ctl)
 #'                                   
-#' cs = rainbow(length(unique(grps)))
-#' colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
-#'
 #' # plot after batch correction
-#' p1 = plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes,
+#' p1 = plotQC(phospho.L6.ratio, panel = "dendrogram", grps=grps,
 #'          labels = colnames(phospho.L6.ratio))
-#' p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+#' p2 = plotQC(phospho.L6.ratio.RUV, grps=grps,
 #'         labels = colnames(phospho.L6.ratio),
 #'         panel="dendrogram")
 #' ggpubr::ggarrange(p1, p2, nrow = 1)
 #'
-#' p1 = plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,
+#' p1 = plotQC(phospho.L6.ratio, panel = "pca", grps=grps,
 #'         labels = colnames(phospho.L6.ratio)) +
 #'         ggplot2::ggtitle('Before Batch correction')
-#' p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+#' p2 = plotQC(phospho.L6.ratio.RUV, grps=grps,
 #'         labels = colnames(phospho.L6.ratio),
 #'         panel="pca") +
 #'         ggplot2::ggtitle('After Batch correction')
@@ -108,25 +104,25 @@
 #'
 #' @export
 #'
-plotQC <- function(mat, cols, labels, panel = 
+plotQC <- function(mat, grps, labels, panel = 
         c("quantify", "dendrogram", "abundance", "pca", "all")) {
     if (missing(mat))
         stop("Paramter mat is missing!")
     p = NULL
     if (panel == "quantify") {
-        p = quantPlot(mat, cols, labels)
+        p = quantPlot(mat, grps, labels)
     } else if (panel == "dendrogram") {
-        p = dendPlot(mat, cols, labels)
+        p = dendPlot(mat, grps, labels)
     } else if (panel == "abundance") {
-        p = abundPlot(mat, cols, labels)
+        p = abundPlot(mat, grps, labels)
     } else if (panel == "pca") {
-        p = pcaPlot(mat, cols, labels)
+        p = pcaPlot(mat, grps, labels)
     }
     if (panel == "all") {
-        p1 = quantPlot(mat, cols, labels)
-        p2 = dendPlot(mat, cols, labels)
-        p3 = abundPlot(mat, cols, labels)
-        p4 = pcaPlot(mat, cols, labels) 
+        p1 = quantPlot(mat, grps, labels)
+        p2 = dendPlot(mat, grps, labels)
+        p3 = abundPlot(mat, grps, labels)
+        p4 = pcaPlot(mat, grps, labels) 
         p = ggpubr::ggarrange(
             p1,
             p2,
@@ -140,12 +136,12 @@ plotQC <- function(mat, cols, labels, panel =
 
 #' @importFrom ggplot2 ggplot geom_bar coord_cartesian ggtitle labs theme aes 
 #' element_text
-quantPlot = function(mat, cols, labels) {
+quantPlot = function(mat, grps, labels) {
     quant = (1-colSums(is.na(mat))/nrow(mat))*100
     dat = data.frame(
         Quantification = quant,
         Sample = labels,
-        Groups = cols
+        Groups = grps
     )
     ggplot2::ggplot(dat, ggplot2::aes(x = Sample, y = Quantification, 
         fill = Groups)) +
@@ -159,9 +155,9 @@ quantPlot = function(mat, cols, labels) {
 
 #' @importFrom ggdendro ggdendrogram
 #' @importFrom ggplot2 ggtitle
-dendPlot = function(mat, cols, labels) {
+dendPlot = function(mat, grps, labels) {
     dend <- stats::hclust(stats::dist(t(mat)))
-    label_colors <- cols[stats::order.dendrogram(as.dendrogram(dend))]
+    label_colors <- grps[stats::order.dendrogram(as.dendrogram(dend))]
     
     dendr = ggdendro::dendro_data(dend, type = "rectangle")
         
@@ -176,7 +172,7 @@ dendPlot = function(mat, cols, labels) {
 
 #' @importFrom dplyr %>% mutate
 #' @importFrom ggplot2 ggplot geom_boxplot labs aes
-abundPlot = function(mat, cols, labels) {
+abundPlot = function(mat, grps, labels) {
     rep_num = nrow(mat)
     dat = mat %>%
         as.data.frame() %>%
@@ -184,7 +180,7 @@ abundPlot = function(mat, cols, labels) {
         tidyr::pivot_longer(-sites, names_to = "Samples", 
             values_to = "abundance") %>%
         dplyr::mutate(
-            Groups = rep(cols, rep_num)
+            Groups = rep(grps, rep_num)
         )
     
     ggplot2::ggplot(dat, ggplot2::aes(x = Samples, y = abundance, 
@@ -194,17 +190,17 @@ abundPlot = function(mat, cols, labels) {
 }
 
 #' @importFrom ggplot2 ggplot geom_point geom_text labs aes
-pcaPlot = function(mat, cols, labels) {
+pcaPlot = function(mat, grps, labels) {
     result <- pcaMethods::pca(t(mat), method = "ppca", nPcs = 2,
         seed = 123, main = "PCA")
     
     dat = data.frame(
         PC1 = result@scores[, 1],
         PC2 = result@scores[, 2],
-        col = cols,
+        grps = grps,
         Samples = labels
     )
-    ggplot2::ggplot(dat, ggplot2::aes(x = PC1, y = PC2, color = col, 
+    ggplot2::ggplot(dat, ggplot2::aes(x = PC1, y = PC2, color = grps, 
         label = Samples)) +
         ggplot2::geom_point(size = 2) +
         ggplot2::geom_text(hjust = 0, vjust = 0) +

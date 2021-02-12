@@ -17,6 +17,3 @@ a ggplot object
 \description{
 Plot signalome map
 }
-\examples{
-
-}

@@ -250,7 +250,7 @@ ppe_imputed[,seq(13,18)] <- ptImpute(ppe_imputed[,seq(19,24)],
 
 Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data. 
 ```{r}
-ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, imputed = TRUE)
+ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, assay = "imputed")
 ```
 
 ### Quantification plots
@@ -259,11 +259,10 @@ ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, imputed = TRUE)
 A useful function in `PhosR` is to visualize the percentage of quantified sites before and after filtering and imputation. The main inputs of `plotQC` are the quantification matrix, sample labels (equating the column names of the matrix), an integer indicating the panel to plot, and lastly, a color vector. To visualize the percentage of quantified sites, use the `plotQC` function and set *panel = "quantify"* to visualise bar plots of samples. 
 
 ```{r}
-cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 p1 = plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered), 
-        panel = "quantify", cols = cols)
+        panel = "quantify", grps = grps)
 p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
-       labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
+       labels=colnames(ppe_imputed_scaled), panel = "quantify", grps = grps)
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
@@ -271,10 +270,10 @@ By setting *panel = "dendrogram"*, we can visualise the results of unsupervised 
 ```{r}
 p1 = plotQC(ppe_filtered@assays@data$Quantification, 
        labels=colnames(ppe_filtered), panel = "dendrogram", 
-       cols = cols)
+       grps = grps)
 p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), 
-       panel = "dendrogram", cols = cols)
+       panel = "dendrogram", grps = grps)
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
@@ -353,13 +352,13 @@ There are a number of ways to diagnose batch effect. In `PhosR`, we make use of 
 By setting *panel = "dendrogram"*, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as *expX*, where X refers to the batch number). This is particularly evident for samples from *Ins* and *AICARIns* treated conditions.
 
 ```{r}
-plotQC(ppe@assays@data$Quantification, panel = "dendrogram", cols=grps, labels = colnames(ppe)) +
+plotQC(ppe@assays@data$Quantification, panel = "dendrogram", grps=grps, labels = colnames(ppe)) +
   ggplot2::ggtitle("Before batch correction")
 ```
 
 We can also visualise the samples in PCA space by setting *panel = "pca"*. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the *AICAR* treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4. 
 ```{r}
-plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "pca") +
+plotQC(ppe@assays@data$Quantification, grps=grps, labels = colnames(ppe), panel = "pca") +
   ggplot2::ggtitle("Before batch correction")
 ```
 
@@ -391,16 +390,16 @@ As quality control, we will demonstrate and evaluate our normalisation method wi
 
 ```{r}
 # plot after batch correction
-p1 = plotQC(ppe@assays@data$Quantification, cols=grps, labels = colnames(ppe), panel = "dendrogram" )
-p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="dendrogram")
+p1 = plotQC(ppe@assays@data$Quantification, grps=grps, labels = colnames(ppe), panel = "dendrogram" )
+p2 = plotQC(ppe@assays@data$normalised, grps=grps, labels = colnames(ppe), panel="dendrogram")
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
 ```{r}
 # plot after batch correction
-p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", cols=grps, labels = colnames(ppe)) +
+p1 = plotQC(ppe@assays@data$Quantification, panel = "pca", grps=grps, labels = colnames(ppe)) +
   ggplot2::ggtitle("Before Batch correction")
-p2 = plotQC(ppe@assays@data$normalised, cols=grps, labels = colnames(ppe), panel="pca") +
+p2 = plotQC(ppe@assays@data$normalised, grps=grps, labels = colnames(ppe), panel="pca") +
   ggplot2::ggtitle("After Batch correction")
 ggpubr::ggarrange(p1, p2, nrow = 2)
 ```
