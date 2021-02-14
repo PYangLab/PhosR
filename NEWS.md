@@ -1,3 +1,9 @@
+## PhosR 1.1.5
+
+* Fixed the warning message generated in plotQC for dendrograms. (`Warning message:
+Vectorized input to `element_text()` is not officially supported.`).
+
+
 ## PhosR 1.1.4
 
 * Fixed the parameter of `plotQC` from `cols` to `grps`

@@ -61,7 +61,7 @@
 #' ggpubr::ggarrange(p1, p2, nrow = 1)
 #' 
 #' # Batch correction
-#' data('phospho.L6.ratio.pe')
+#' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' 
 #' grps = gsub('_.+', '', phospho.L6.ratio.pe@colData@rownames)
@@ -164,7 +164,7 @@ dendPlot = function(mat, grps, labels) {
     ggdendro::ggdendrogram(dend) +
         ggplot2::ggtitle("Sample hierarchical clustering") +
         ggplot2::theme(
-            axis.text.x = ggplot2::element_text(color = factor(label_colors))
+            axis.text.x = ggtext::element_markdown(color = factor(label_colors))
         )
     
 }

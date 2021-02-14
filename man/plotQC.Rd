@@ -64,7 +64,7 @@ p2 = plotQC(phospho.cells.Ins.ms,
 ggpubr::ggarrange(p1, p2, nrow = 1)
 
 # Batch correction
-data('phospho.L6.ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 
 grps = gsub('_.+', '', phospho.L6.ratio.pe@colData@rownames)
