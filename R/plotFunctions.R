@@ -70,12 +70,18 @@ plotSignalomeMap <- function(signalomes, color) {
 #' @importFrom reshape2 melt
 #' @importFrom stats cor
 #' @importFrom GGally ggnet2
+#' @import circlize
 #' 
 #' @examples
 #' 
 #' @export
-plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
+plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color, type = NULL, verbose = FALSE) {
     
+    if (is.null(type)) { type = "chord" } else {
+        type <- match.arg(type, c("graph", "chord"),
+                          several.ok = FALSE)
+    }
+
     cor_mat <- stats::cor(KSR$combinedScoreMatrix)
     diag(cor_mat) <- 0
 
@@ -85,6 +91,12 @@ plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
     cor_mat[cor_mat == F] <- 0
     cor_mat[cor_mat == T] <- 1
     
+    if (type == "graph") {
+        
+        if (verbose) {
+            print("Generating network graph...")
+        }
+        
     n = network::network(cor_mat, directed=F)
     network::set.edge.value(n, "cor", cor_mat_values^2)
     my_col = RColorBrewer::brewer.pal(11, "Spectral")
@@ -99,5 +111,29 @@ plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color) {
                    label.size=2,
                    mode="circle",
                    label.color="black")
-    g
+    print(g)
+    
+    }
+    
+    if (type == "chord") {
+        
+        if (verbose) {
+            print("Generating circular graph...")
+        }
+        
+        grid.col <- kinase_all_color
+        names(grid.col) <- rownames(cor_mat)
+        
+        n = length(grid.col)
+        
+        circos.clear()
+        circos.par(start.degree = 180)
+        circos.initialize(factors = "a", xlim = c(0, n))
+        chordDiagram(cor_mat, transparency = 0.2,
+                     order = rownames(cor_mat),
+                     grid.col = grid.col,
+                     annotationTrack = c("name", "grid"), scale = TRUE)
+        title("Kinase network")
+
+    }
 }
