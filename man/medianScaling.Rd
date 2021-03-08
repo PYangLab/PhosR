@@ -4,14 +4,7 @@
 \alias{medianScaling}
 \title{Median centering and scaling}
 \usage{
-medianScaling(
-  mat,
-  imputed = FALSE,
-  scale = TRUE,
-  grps = NULL,
-  reorder = FALSE,
-  assay = NULL
-)
+medianScaling(mat, scale = TRUE, grps = NULL, reorder = FALSE, assay = NULL)
 }
 \arguments{
 \item{mat}{a matrix with rows correspond to phosphosites and columns
@@ -21,7 +14,8 @@ correspond to samples.}
 
 \item{grps}{a string or factor specifying the grouping (replciates).}
 
-\item{reorder}{whehther to reorder by factor.}
+\item{reorder}{To reorder the columns by group (\code{grps}).
+By default (\code{reorder=FALSE}), original column order is maintained.}
 
 \item{assay}{an assay to be selected if \code{mat} is a PhosphoExperiment 
 object.}

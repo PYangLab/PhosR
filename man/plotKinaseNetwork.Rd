@@ -20,6 +20,3 @@ a graphical plot
 \description{
 Plot kinase network
 }
-\examples{
-
-}

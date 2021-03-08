@@ -7,7 +7,6 @@
 #'
 #' @return a ggplot object
 #'
-#' @examples
 #'
 #' @importFrom ggplot2 ggplot
 #' @importFrom tidyr spread
@@ -72,7 +71,6 @@ plotSignalomeMap <- function(signalomes, color) {
 #' @importFrom GGally ggnet2
 #' @import circlize
 #' 
-#' @examples
 #' 
 #' @export
 plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color, type = NULL, verbose = FALSE) {

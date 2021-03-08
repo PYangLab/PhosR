@@ -7,7 +7,8 @@
 #' correspond to samples.
 #' @param scale a boolean flag indicating whether to scale the samples.
 #' @param grps a string or factor specifying the grouping (replciates).
-#' @param reorder whehther to reorder by factor.
+#' @param reorder To reorder the columns by group (\code{grps}).
+#' By default (\code{reorder=FALSE}), original column order is maintained.
 #' @param assay an assay to be selected if \code{mat} is a PhosphoExperiment 
 #' object.
 #'
@@ -38,24 +39,16 @@
 #'
 #' @export
 #'
-medianScaling <- function(mat, imputed = FALSE, scale = TRUE, grps = NULL, reorder = FALSE, 
+medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE, 
                           assay = NULL) {
     pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
         pe = TRUE
         mat.orig = mat
         if (is.null(assay)) {
-            if (imputed == FALSE) {
-                mat = SummarizedExperiment::assay(mat)
-            } else {
-                mat = mat@assays@data$imputed
-            }
+            mat = SummarizedExperiment::assay(mat)
         } else {
-            if (imputed == FALSE) {
             mat = SummarizedExperiment::assay(mat, assay)
-            } else {
-                mat = mat@assays@data$imputed
-            }
         }
     }
     mat.medianScaled <- NULL

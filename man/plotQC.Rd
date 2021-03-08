@@ -10,7 +10,7 @@ plotQC(mat, cols, labels, panel, ...)
 \item{mat}{A p by n matrix, where p is the number of phosphosites and n is
 the number of samples.}
 
-\item{cols}{A vector of colours to be used in the plot. The length should be
+\item{grps}{A vector of colours to be used in the plot. The length should be
 equal to the columns of the mat.}
 
 \item{labels}{A vector of sample names. Used the label points in PCA plot
@@ -55,17 +55,16 @@ phospho.cells.Ins.impute[,seq_len(5)] <- ptImpute(
 phospho.cells.Ins.ms <- medianScaling(phospho.cells.Ins.impute,
                                     scale = FALSE)
 
-cols <- rep(c('#ED4024', '#7FBF42', '#3F61AD', '#9B822F'), each=6)
 p1 = plotQC(phospho.cells.Ins.filtered,
         labels=colnames(phospho.cells.Ins.filtered),
-        panel = "quantify", cols = cols)
+        panel = "quantify", grps = grps)
 p2 = plotQC(phospho.cells.Ins.ms,
         labels=colnames(phospho.cells.Ins.ms),
-        panel = "quantify", cols = cols)
+        panel = "quantify", grps = grps)
 ggpubr::ggarrange(p1, p2, nrow = 1)
 
 # Batch correction
-data('phospho.L6.ratio.pe')
+data('phospho_L6_ratio_pe')
 data('SPSs')
 
 grps = gsub('_.+', '', phospho.L6.ratio.pe@colData@rownames)
@@ -89,21 +88,18 @@ ctl = which(rownames(phospho.L6.ratio) \%in\% SPSs)
 phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio, M = design, k = 3,
                                   ctl = ctl)
                                   
-cs = rainbow(length(unique(grps)))
-colorCodes = sapply(grps, switch, AICAR=cs[1], Ins=cs[2], AICARIns=cs[3])
-
 # plot after batch correction
-p1 = plotQC(phospho.L6.ratio, panel = "dendrogram", cols=colorCodes,
+p1 = plotQC(phospho.L6.ratio, panel = "dendrogram", grps=grps,
          labels = colnames(phospho.L6.ratio))
-p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+p2 = plotQC(phospho.L6.ratio.RUV, grps=grps,
         labels = colnames(phospho.L6.ratio),
         panel="dendrogram")
 ggpubr::ggarrange(p1, p2, nrow = 1)
 
-p1 = plotQC(phospho.L6.ratio, panel = "pca", cols=colorCodes,
+p1 = plotQC(phospho.L6.ratio, panel = "pca", grps=grps,
         labels = colnames(phospho.L6.ratio)) +
         ggplot2::ggtitle('Before Batch correction')
-p2 = plotQC(phospho.L6.ratio.RUV, cols=colorCodes,
+p2 = plotQC(phospho.L6.ratio.RUV, grps=grps,
         labels = colnames(phospho.L6.ratio),
         panel="pca") +
         ggplot2::ggtitle('After Batch correction')

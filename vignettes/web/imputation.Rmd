@@ -116,7 +116,7 @@ ppe_imputed[,seq(13,18)] <- ptImpute(ppe_imputed[,seq(19,24)],
 
 Lastly, we perform normalisation of the filtered and imputed phosphoproteomic data. 
 ```{r}
-ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, imputed = TRUE)
+ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, assay = "imputed")
 ```
 
 # Quantification plots
@@ -124,11 +124,10 @@ ppe_imputed_scaled <- medianScaling(ppe_imputed, scale = FALSE, imputed = TRUE)
 A useful function in `PhosR` is to visualize the percentage of quantified sites before and after filtering and imputation. The main inputs of `plotQC` are the quantification matrix, sample labels (equating the column names of the matrix), an integer indicating the panel to plot, and lastly, a color vector. To visualize the percentage of quantified sites, use the `plotQC` function and set *panel = quantify* to visualise bar plots of samples. 
 
 ```{r}
-cols <- rep(c("#ED4024", "#7FBF42", "#3F61AD", "#9B822F"), each=6)
 p1 = plotQC(ppe_filtered@assays@data$Quantification, labels=colnames(ppe_filtered),
-        panel = "quantify", cols = cols)
+        panel = "quantify", grps = grps)
 p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
-       labels=colnames(ppe_imputed_scaled), panel = "quantify", cols = cols)
+       labels=colnames(ppe_imputed_scaled), panel = "quantify", grps = grps)
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
@@ -136,10 +135,10 @@ By setting *panel = dendrogram*, we can visualise the results of unsupervised hi
 ```{r}
 p1 = plotQC(ppe_filtered@assays@data$Quantification, 
        labels=colnames(ppe_filtered), panel = "dendrogram", 
-       cols = cols)
+       grps = grps)
 p2 = plotQC(ppe_imputed_scaled@assays@data$scaled, 
        labels=colnames(ppe_imputed_scaled), 
-       panel = "dendrogram", cols = cols)
+       panel = "dendrogram", grps = grps)
 ggpubr::ggarrange(p1, p2, nrow = 1)
 ```
 
