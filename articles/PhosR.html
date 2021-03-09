@@ -937,19 +937,14 @@
 <pre><code>## optimal number of clusters = 3</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector '1'.</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector '2'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'MAP2K1'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'MAPK3'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'PRKAA1'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'PRKAA2'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'RPS6KA5'.</code></pre>
-<pre><code>## Note: The first link end is drawn out of sector 'TBK1'.</code></pre>
+<pre><code>## Note: The first link end is drawn out of sector 'CAMK2A'.</code></pre>
 <p><img src="PhosR_files/figure-html/unnamed-chunk-61-1.png" width="960"></p>
 </div>
 <div id="generate-signalome-map" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-signalome-map" class="anchor"></a>Generate signalome map</h3>
 <p>We can also visualise the relative contribution of each kinase towards the regulation of protein modules by plotting a balloon plot. In the balloon plot, the size of the balloons denote the percentage magnitude of kinase regulation in each module.</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">### generate palette</span>
 <span class="va">my_color_palette</span> <span class="op">&lt;-</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">8</span>, <span class="st">"Accent"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">kinase_all_color</span> <span class="op">&lt;-</span> <span class="fu">my_color_palette</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">L6.matrices</span><span class="op">$</span><span class="va">combinedScoreMatrix</span><span class="op">)</span><span class="op">)</span>
@@ -963,7 +958,7 @@
 <h3 class="hasAnchor">
 <a href="#generate-signalome-network" class="anchor"></a>Generate signalome network</h3>
 <p>Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks.</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotKinaseNetwork.html">plotKinaseNetwork</a></span><span class="op">(</span>KSR <span class="op">=</span> <span class="va">L6.matrices</span>, predMatrix <span class="op">=</span> <span class="va">L6.predMat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="va">kinase_all_color</span><span class="op">)</span></code></pre></div>
 <pre><code>## Note: The second link end is drawn out of sector 'CAMK2A'.</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector 'IRAK1'.</code></pre>
@@ -978,7 +973,7 @@
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## R version 4.0.4 (2021-02-15)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
