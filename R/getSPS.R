@@ -40,69 +40,67 @@
 #' 
 #' @export
 #' 
-getSPS <- function(phosData = ..., conds = ..., num = 100, residueInfo = FALSE) {
-    sites <- sites.unique <- mat.max <- list()
-    n <- length(phosData)
-    m <- length(conds)
-    if (n < 2) {
-        stop("Please use more than one dataset")
-    }
-    if (n != m) {
-        stop("Please use the same number of datasets and conditions")
-    }
-    for (i in 1:n) {
-        if (!"PhosphoExperiment" %in% is(phosData[[i]])) {
-            stop("Wrong phosData, need to be a PhosphoExperiment object") }
+getSPS <-function (phosData = ..., assays = ..., conds = ..., num = 100, residueInfo = FALSE) {
+        sites <- sites.unique <- mat.max <- list()
+        n <- length(phosData)
+        m <- length(conds)
+        if (n < 2) {
+            stop("Please use more than one dataset")
         }
-    for (i in 1:n) {
-        if (residueInfo) {
-            sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), paste(phosData[[i]]@Residue, phosData[[i]]@Site, sep = ""), sep = ";")
-            
-        } else {
-            sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), phosData[[i]]@Site, sep = ";")
+        if (n != m) {
+            stop("Please use the same number of datasets and conditions")
         }
-        sites.unique[[i]] <- unique(sites[[i]])
-        nrep <- ncol(phosData[[i]]@assays@data$Quantification)/length(unique(conds[[i]]))
-        if (nrep == 1) {
-            mat.mean <- phosData[[i]]@assays@data$Quantification # if no replicates
-        } else {
-            grps <- conds[[i]]
-            mat.mean <- PhosR::meanAbundance(phosData[[i]]@assays@data$Quantification, grps)
+        for (i in 1:n) {
+            if (!"PhosphoExperiment" %in% is(phosData[[i]])) {
+                stop("Wrong phosData, need to be a PhosphoExperiment object")
+            }
         }
-        
-        sites.mean <- t(sapply(split(as.data.frame(mat.mean), sites[[i]]), colMeans))
-        # maximum fold change for each phosphosite
-        sites.max <- apply(sites.mean, 1, function(x){x[which.max(abs(x))]})
-        mat.max[[i]] <- sort(abs(sites.max), decreasing = TRUE)
-    }
-    
-    # identify the overlapped sites in all datasets, if it is more than 1000, find top 1000 overlapped phosphosites
-    o <- as.data.frame(table(unlist(sites.unique)))
-    
-    if (length(which(o$Freq > 1)) < 200) {
-        stop("Less than 200 overlapped sites")
-    } 
-    
-    if (length(which(o$Freq == m)) > 1000) {
-        top <- as.character(o[which(o$Freq == m), 1])
-    } else {
-        message("Warning: there aren't enough overlappling sites")
-        top <- as.character(o[which(o$Freq > 1), 1])
-    }
-    
-    Ts <- data.frame(mat.max[[1]][top])
-    for (i in 2:n) {
-        Ts <- cbind(Ts, mat.max[[i]][top])
-    }
-    
-    # rank phosphosites by absolute fold change
-    Tc <- (apply(-abs(Ts),2,rank)-0.5)/nrow(Ts)
-    
-    # overlapping
-    Tt4 <- pchisq(-2*rowSums(log(Tc)), (n-1)*2, lower.tail = FALSE)
-    names(Tt4) <- top
-    
-    sites.sorted <- names(sort(Tt4, decreasing=TRUE))
-    return(sites.sorted[1:num])
+        for (i in 1:n) {
+            if (residueInfo) {
+                sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
+                                    paste(phosData[[i]]@Residue, phosData[[i]]@Site, 
+                                          sep = ""), sep = ";")
+            }
+            else {
+                sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
+                                    phosData[[i]]@Site, sep = ";")
+            }
+            sites.unique[[i]] <- unique(sites[[i]])
+            nrep <- ncol(phosData[[i]])/length(unique(conds[[i]]))
+            if (nrep == 1) {
+                mat.mean <- phosData[[i]]@assays@data[[assays[1]]]
+            }
+            else {
+                grps <- conds[[i]]
+                mat.mean <- PhosR::meanAbundance(phosData[[i]]@assays@data[[assays[i]]], 
+                                                 grps)
+            }
+            sites.mean <- t(sapply(split(as.data.frame(mat.mean), 
+                                         sites[[i]]), colMeans))
+            sites.max <- apply(sites.mean, 1, function(x) {
+                x[which.max(abs(x))]
+            })
+            mat.max[[i]] <- sort(abs(sites.max), decreasing = TRUE)
+        }
+        o <- as.data.frame(table(unlist(sites.unique)))
+        if (length(which(o$Freq > 1)) < 200) {
+            stop("Fewer than 200 overlapped sites")
+        }
+        if (length(which(o$Freq == m)) > 1000) {
+            top <- as.character(o[which(o$Freq == m), 1])
+        }
+        else {
+            message("Warning: there aren't enough overlappling sites")
+            top <- as.character(o[which(o$Freq > 1), 1])
+        }
+        Ts <- data.frame(mat.max[[1]][top])
+        for (i in 2:n) {
+            Ts <- cbind(Ts, mat.max[[i]][top])
+        }
+        Tc <- (apply(-abs(Ts), 2, rank) - 0.5)/nrow(Ts)
+        Tt4 <- pchisq(-2 * rowSums(log(Tc)), (n - 1) * 2, lower.tail = FALSE)
+        names(Tt4) <- top
+        sites.sorted <- names(sort(Tt4, decreasing = TRUE))
+        return(sites.sorted[1:num])
 }
 
