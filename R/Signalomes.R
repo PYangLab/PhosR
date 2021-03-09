@@ -129,6 +129,9 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     }))
     hcutree = which(tree_height_calc <= module_res) + 1
     modules <- stats::cutree(hclust_res, h = tree_height[[hcutree[[1]]]])
+    filter_modules = modules %in% which(table(modules) < 10)
+    modules[filter_modules] = "noModule"
+    
     ############## generate signalomes
     signalomeSubstrates <- .phosRsignalome(predMatrix, signalomeCutoff,
         kinase_signalome_color, modules)
@@ -144,7 +147,6 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 
 .kinaseNetwork <- function(predMatrix, KSR, threskinaseNetwork,
     kinase_signalome_color) {
-
 
     signalomeKinase <- colnames(predMatrix)
     kinase_cor <- stats::cor(KSR$combinedScoreMatrix)
@@ -162,7 +164,6 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 
     network <- igraph::graph_from_adjacency_matrix(cor_kinase_mat,
         mode = "undirected", diag = FALSE)
-
 
     kinaseNetwork.res <- list(kinaseNetwork = kinase_network,
         kinaseCor = cor_kinase_mat)
@@ -243,21 +244,27 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     dftoPlot_signalome <- stack(signalomeSubstrates)
     dftoPlot_signalome$modules <- modules[dftoPlot_signalome$values]
     #adjacencyData <- with(dftoPlot_signalome, table(ind, modules))
-    adjacencyData <- table(dftoPlot_signalome$ind, dftoPlot_signalome$modules)
+    d = table(dftoPlot_signalome$ind, dftoPlot_signalome$modules)
+    adjacencyData <- matrix(table(dftoPlot_signalome$ind, dftoPlot_signalome$modules), 
+                            nrow = nrow(d), ncol = ncol(d))
+    rownames(adjacencyData) = rownames(d)
+    colnames(adjacencyData) = colnames(d)
 
-    grid.col <- c(kinase_signalome_color, rep("grey", length(unique(modules))))
-    names(grid.col) <- c(rownames(adjacencyData), as.character(unique(modules)))
-
+    m = modules[!grepl("noModule", modules)]
+    grid.col <- c(kinase_signalome_color, rep("grey", length(unique(m))))
+    names(grid.col) <- c(rownames(adjacencyData), as.character(unique(m)))
+    adjacencyData = adjacencyData[,!grepl("noModule",colnames(adjacencyData))]
+    
     n = length(grid.col)
+    circos.clear()
     circos.par(start.degree = 180)
     circos.initialize(factors = "a", xlim = c(0, n))
     chordDiagram(adjacencyData, transparency = 0.2,
                 order = c(rownames(adjacencyData),
-                            rev(as.character(unique(modules)))),
+                            rev(as.character(unique(m)))),
                 grid.col = grid.col, #big.gap = 15,
                 annotationTrack = c("name", "grid"), scale = TRUE)
     title("Signalomes")
-    circos.clear()
 
     return(signalomeSubstrates)
 }
@@ -267,6 +274,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 #' @importFrom rlang .data
 .getSignalomes <- function(predMatrix, exprsMat, KOI, resKinaseNetwork,
     signalomeSubstrates, modules, kinaseGroup, verbose = TRUE) {
+    
     protein = mapply("[[", strsplit(rownames(exprsMat), ";"),
         MoreArgs = list(1))
     KinaseSubstrateList <- resKinaseNetwork$kinaseNetwork
@@ -283,18 +291,22 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
         dplyr::count(.data$cluster, .data$ind)
     balloon_bycluster$ind <- as.factor(balloon_bycluster$ind)
     balloon_bycluster$cluster <- as.factor(balloon_bycluster$cluster)
-    balloon_bycluster <- tidyr::pivot_wider(balloon_bycluster, names_from = .data$ind,
-        values_from = .data$n)[, -1]
-    
+    balloon_bycluster <- as.data.frame(tidyr::pivot_wider(balloon_bycluster, 
+                                                          names_from = .data$ind, values_from = .data$n))
+    rownames(balloon_bycluster) = balloon_bycluster$cluster
+    balloon_bycluster = balloon_bycluster[,-1]
+
     balloon_bycluster[is.na(balloon_bycluster)] <- 0
-    balloon_bycluster <- do.call(rbind, lapply(seq_len(nrow(balloon_bycluster)),
+    balloon <- do.call(rbind, lapply(seq_len(nrow(balloon_bycluster)),
         function(x) {
             res = mapply(function(y, balloon_bycluster, x) {
                 y/sum(balloon_bycluster[x, ]) * 100
             }, balloon_bycluster[x, ],
             MoreArgs = list(balloon_bycluster = balloon_bycluster, x = x))
         }))
-    kinaseProportions <- round(balloon_bycluster, 3)
+    rownames(balloon) = rownames(balloon_bycluster)
+    colnames(balloon) = colnames(balloon_bycluster)
+    kinaseProportions <- round(balloon, 3)
 
     ############## generate kinase specific signalomes
     res = generateSignalome(kinaseAnnot, kinaseGroup, predMatrix, KOI,
@@ -329,15 +341,19 @@ generateSignalome = function(kinaseAnnot, kinaseGroup, predMatrix, KOI,
         kinaseFamily = as.factor(kinaseGroup[kinaseAnnot$kinase]),
         score = as.numeric(kinaseAnnot$score))
     rownames(annotation) <- rownames(predMatrix)
+    
+    kinaseProp = kinaseProportions[!grepl("noModule",rownames(kinaseProportions)),]
+    m = modules[!grepl("noModule", modules)]
+    
     res <- lapply(KOI, function(x) {
         if (x %in% names(KinaseSubstrateList)) {
-            regModule <- which(kinaseProportions[, x] > 1)
+            regModule <- which(kinaseProp[, x] > 1)
             kinases <- unique(c(x, KinaseSubstrateList[[x]]))
             substrates <- unique(unlist(
                 lapply(kinases, function(x) signalomeSubstrates[[x]])))
             exprs_dat <- lapply(regModule, function(y) {
                 exprsMat[protein %in%
-                        names(modules[modules == y]) &
+                        names(m[m == y]) &
                         protein %in% substrates, ]
             })
             exprs_dat <- do.call(rbind, exprs_dat)
@@ -354,3 +370,4 @@ generateSignalome = function(kinaseAnnot, kinaseGroup, predMatrix, KOI,
     names(res) <- KOI
     res
 }
+
