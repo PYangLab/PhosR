@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.6</span>
       </span>
     </div>
 
@@ -163,11 +163,17 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>phosData</th>
-      <td><p>a list of users' PhosphoExperiment objects from which generate SPSs</p></td>
+      <td><p>a list of users' PhosphoExperiment objects from which 
+generate SPSs</p></td>
+    </tr>
+    <tr>
+      <th>assays</th>
+      <td><p>an assay to use for each dataset in phosData</p></td>
     </tr>
     <tr>
       <th>conds</th>
-      <td><p>a list of vector contains the conditions labels for each sample in the phosphoExperiment objects</p></td>
+      <td><p>a list of vector contains the conditions labels for each sample 
+in the phosphoExperiment objects</p></td>
     </tr>
     <tr>
       <th>num</th>
@@ -175,7 +181,8 @@
     </tr>
     <tr>
       <th>residueInfo</th>
-      <td><p>whether the phosphosite contains amino acid information or not, by default is FALSE</p></td>
+      <td><p>whether the phosphosite contains amino acid information or
+not, by default is FALSE</p></td>
     </tr>
     </table>
 
@@ -204,8 +211,12 @@
 <span class='va'>ppe3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tImpute.html'>tImpute</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>)</span>
 
 <span class='co'># convert matrix to ratio</span>
-<span class='va'>FL83B.ratio</span> <span class='op'>&lt;-</span> <span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>]</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>"FL83B_Control"</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
-<span class='va'>Hepa.ratio</span> <span class='op'>&lt;-</span> <span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>, <span class='fl'>13</span><span class='op'>:</span><span class='fl'>24</span><span class='op'>]</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>"Hepa1.6_Control"</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>FL83B.ratio</span> <span class='op'>&lt;-</span> <span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>]</span> <span class='op'>-</span> 
+    <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>"FL83B_Control"</span>, 
+    <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>Hepa.ratio</span> <span class='op'>&lt;-</span> <span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>, <span class='fl'>13</span><span class='op'>:</span><span class='fl'>24</span><span class='op'>]</span> <span class='op'>-</span> 
+    <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>imputed</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grep</a></span><span class='op'>(</span><span class='st'>"Hepa1.6_Control"</span>, 
+    <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ppe3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
 <span class='va'>ppe3</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Quantification</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>FL83B.ratio</span>, <span class='va'>Hepa.ratio</span><span class='op'>)</span>
 
 <span class='va'>ppe.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>ppe1</span>, <span class='va'>ppe2</span>, <span class='va'>ppe3</span><span class='op'>)</span>

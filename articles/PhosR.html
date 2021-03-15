@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.6</span>
       </span>
     </div>
 
@@ -935,6 +935,8 @@
                                 KOI<span class="op">=</span><span class="va">kinaseOI</span><span class="op">)</span></code></pre></div>
 <pre><code>## calculating optimal number of clusters...</code></pre>
 <pre><code>## optimal number of clusters = 3</code></pre>
+<pre><code>## Warning in sort(as.integer(unique(dftoPlot_signalome$modules))): NAs introduced
+## by coercion</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector '1'.</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector '2'.</code></pre>
 <pre><code>## Note: The first link end is drawn out of sector 'CAMK2A'.</code></pre>
@@ -944,7 +946,7 @@
 <h3 class="hasAnchor">
 <a href="#generate-signalome-map" class="anchor"></a>Generate signalome map</h3>
 <p>We can also visualise the relative contribution of each kinase towards the regulation of protein modules by plotting a balloon plot. In the balloon plot, the size of the balloons denote the percentage magnitude of kinase regulation in each module.</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">### generate palette</span>
 <span class="va">my_color_palette</span> <span class="op">&lt;-</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">8</span>, <span class="st">"Accent"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">kinase_all_color</span> <span class="op">&lt;-</span> <span class="fu">my_color_palette</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">L6.matrices</span><span class="op">$</span><span class="va">combinedScoreMatrix</span><span class="op">)</span><span class="op">)</span>
@@ -958,7 +960,7 @@
 <h3 class="hasAnchor">
 <a href="#generate-signalome-network" class="anchor"></a>Generate signalome network</h3>
 <p>Finally, we can also plot the signalome network that illustrates the connectivity between kinase signalome networks.</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotKinaseNetwork.html">plotKinaseNetwork</a></span><span class="op">(</span>KSR <span class="op">=</span> <span class="va">L6.matrices</span>, predMatrix <span class="op">=</span> <span class="va">L6.predMat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, color <span class="op">=</span> <span class="va">kinase_all_color</span><span class="op">)</span></code></pre></div>
 <pre><code>## Note: The second link end is drawn out of sector 'CAMK2A'.</code></pre>
 <pre><code>## Note: The second link end is drawn out of sector 'IRAK1'.</code></pre>
@@ -973,7 +975,7 @@
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## R version 4.0.4 (2021-02-15)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
@@ -998,25 +1000,25 @@
 ## other attached packages:
 ##  [1] network_1.16.1       ggpubr_0.4.0         GGally_2.1.1        
 ##  [4] dplyr_1.0.5          org.Mm.eg.db_3.12.0  ClueR_1.4           
-##  [7] e1071_1.7-4          annotate_1.68.0      XML_3.99-0.5        
+##  [7] e1071_1.7-5          annotate_1.68.0      XML_3.99-0.5        
 ## [10] reactome.db_1.74.0   org.Rn.eg.db_3.12.0  AnnotationDbi_1.52.0
 ## [13] IRanges_2.24.1       S4Vectors_0.28.1     Biobase_2.50.0      
 ## [16] BiocGenerics_0.36.0  directPA_1.5         limma_3.46.0        
 ## [19] calibrate_1.7.7      MASS_7.3-53          ggplot2_3.3.3       
-## [22] stringr_1.4.0        PhosR_1.1.5          BiocStyle_2.18.1    
+## [22] stringr_1.4.0        PhosR_1.1.6          BiocStyle_2.18.1    
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] readxl_1.3.1                backports_1.2.1            
 ##   [3] circlize_0.4.12             systemfonts_1.0.1          
 ##   [5] plyr_1.8.6                  igraph_1.2.6               
-##   [7] splines_4.0.4               GenomeInfoDb_1.26.2        
+##   [7] splines_4.0.4               GenomeInfoDb_1.26.4        
 ##   [9] digest_0.6.27               htmltools_0.5.1.1          
 ##  [11] viridis_0.5.1               fansi_0.4.2                
 ##  [13] magrittr_2.0.1              memoise_2.0.0              
 ##  [15] openxlsx_4.2.3              matrixStats_0.58.0         
 ##  [17] pkgdown_1.6.1               colorspace_2.0-0           
 ##  [19] blob_1.2.1                  textshaping_0.3.1          
-##  [21] haven_2.3.1                 xfun_0.21                  
+##  [21] haven_2.3.1                 xfun_0.22                  
 ##  [23] crayon_1.4.1                RCurl_1.98-1.2             
 ##  [25] jsonlite_1.7.2              glue_1.4.2                 
 ##  [27] ruv_0.9.7.1                 gtable_0.3.0               
@@ -1028,43 +1030,43 @@
 ##  [39] Rcpp_1.0.6                  viridisLite_0.3.0          
 ##  [41] xtable_1.8-4                gridtext_0.1.4             
 ##  [43] foreign_0.8-81              bit_4.0.4                  
-##  [45] preprocessCore_1.52.1       httr_1.4.2                 
-##  [47] RColorBrewer_1.1-2          ellipsis_0.3.1             
-##  [49] pkgconfig_2.0.3             reshape_0.8.8              
-##  [51] farver_2.1.0                sass_0.3.1                 
-##  [53] utf8_1.1.4                  tidyselect_1.1.0           
-##  [55] labeling_0.4.2              rlang_0.4.10               
-##  [57] reshape2_1.4.4              munsell_0.5.0              
-##  [59] cellranger_1.1.0            tools_4.0.4                
-##  [61] cachem_1.0.4                generics_0.1.0             
-##  [63] RSQLite_2.2.3               broom_0.7.5                
-##  [65] evaluate_0.14               fastmap_1.1.0              
-##  [67] ggdendro_0.1.22             yaml_2.2.1                 
-##  [69] ragg_1.1.1                  knitr_1.31                 
-##  [71] bit64_4.0.5                 fs_1.5.0                   
-##  [73] zip_2.1.1                   purrr_0.3.4                
-##  [75] dendextend_1.14.0           nlme_3.1-152               
-##  [77] xml2_1.3.2                  compiler_4.0.4             
-##  [79] curl_4.3                    ggsignif_0.6.1             
-##  [81] tibble_3.1.0                bslib_0.2.4                
-##  [83] stringi_1.5.3               highr_0.8                  
-##  [85] desc_1.3.0                  forcats_0.5.1              
-##  [87] lattice_0.20-41             Matrix_1.3-2               
-##  [89] markdown_1.1                vctrs_0.3.6                
-##  [91] pillar_1.5.1                lifecycle_1.0.0            
-##  [93] BiocManager_1.30.10         jquerylib_0.1.3            
-##  [95] GlobalOptions_0.1.2         data.table_1.14.0          
-##  [97] cowplot_1.1.1               bitops_1.0-6               
-##  [99] GenomicRanges_1.42.0        R6_2.5.0                   
-## [101] pcaMethods_1.82.0           bookdown_0.21              
-## [103] gridExtra_2.3               rio_0.5.26                 
-## [105] SummarizedExperiment_1.20.0 rprojroot_2.0.2            
-## [107] withr_2.4.1                 GenomeInfoDbData_1.2.4     
-## [109] mgcv_1.8-33                 hms_1.0.0                  
-## [111] ggtext_0.1.1                grid_4.0.4                 
-## [113] tidyr_1.1.3                 class_7.3-18               
-## [115] rmarkdown_2.7               MatrixGenerics_1.2.1       
-## [117] carData_3.0-4</code></pre>
+##  [45] proxy_0.4-25                preprocessCore_1.52.1      
+##  [47] httr_1.4.2                  RColorBrewer_1.1-2         
+##  [49] ellipsis_0.3.1              pkgconfig_2.0.3            
+##  [51] reshape_0.8.8               farver_2.1.0               
+##  [53] sass_0.3.1                  utf8_1.2.1                 
+##  [55] tidyselect_1.1.0            labeling_0.4.2             
+##  [57] rlang_0.4.10                reshape2_1.4.4             
+##  [59] munsell_0.5.0               cellranger_1.1.0           
+##  [61] tools_4.0.4                 cachem_1.0.4               
+##  [63] generics_0.1.0              RSQLite_2.2.4              
+##  [65] broom_0.7.5                 evaluate_0.14              
+##  [67] fastmap_1.1.0               ggdendro_0.1.22            
+##  [69] yaml_2.2.1                  ragg_1.1.1                 
+##  [71] knitr_1.31                  bit64_4.0.5                
+##  [73] fs_1.5.0                    zip_2.1.1                  
+##  [75] purrr_0.3.4                 dendextend_1.14.0          
+##  [77] nlme_3.1-152                xml2_1.3.2                 
+##  [79] compiler_4.0.4              curl_4.3                   
+##  [81] ggsignif_0.6.1              tibble_3.1.0               
+##  [83] bslib_0.2.4                 stringi_1.5.3              
+##  [85] highr_0.8                   desc_1.3.0                 
+##  [87] forcats_0.5.1               lattice_0.20-41            
+##  [89] Matrix_1.3-2                markdown_1.1               
+##  [91] vctrs_0.3.6                 pillar_1.5.1               
+##  [93] lifecycle_1.0.0             BiocManager_1.30.10        
+##  [95] jquerylib_0.1.3             GlobalOptions_0.1.2        
+##  [97] data.table_1.14.0           cowplot_1.1.1              
+##  [99] bitops_1.0-6                GenomicRanges_1.42.0       
+## [101] R6_2.5.0                    pcaMethods_1.82.0          
+## [103] bookdown_0.21               gridExtra_2.3              
+## [105] rio_0.5.26                  SummarizedExperiment_1.20.0
+## [107] rprojroot_2.0.2             withr_2.4.1                
+## [109] GenomeInfoDbData_1.2.4      mgcv_1.8-33                
+## [111] hms_1.0.0                   ggtext_0.1.1               
+## [113] grid_4.0.4                  tidyr_1.1.3                
+## [115] class_7.3-18                rmarkdown_2.7              
+## [117] MatrixGenerics_1.2.1        carData_3.0-4</code></pre>
 </div>
   </div>
 
