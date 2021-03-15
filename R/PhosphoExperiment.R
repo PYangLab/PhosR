@@ -159,7 +159,6 @@ setReplaceMethod("Localisation", signature="PhosphoExperiment", function(x, valu
 ################################################################################
 ## Getting subset
 #' @importFrom methods callNextMethod
-#' @importFrom BiocGenerics replaceSlots
 setMethod("[", "PhosphoExperiment", function(x, i, j, drop=TRUE) {
     uID=UniprotID(x, withDimnames = FALSE)
     gs=GeneSymbol(x, withDimnames = FALSE)
