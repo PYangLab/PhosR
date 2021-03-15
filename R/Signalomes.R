@@ -148,7 +148,6 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
 .kinaseNetwork <- function(predMatrix, KSR, threskinaseNetwork,
     kinase_signalome_color) {
 
-    signalomeKinase <- colnames(predMatrix)
     kinase_cor <- stats::cor(KSR$combinedScoreMatrix)
 
     cor_kinase_mat <- kinase_cor
@@ -250,7 +249,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     rownames(adjacencyData) = rownames(d)
     colnames(adjacencyData) = colnames(d)
 
-    m = modules[!grepl("noModule", modules)]
+    m = sort(as.integer(unique(dftoPlot_signalome$modules)))
     grid.col <- c(kinase_signalome_color, rep("grey", length(unique(m))))
     names(grid.col) <- c(rownames(adjacencyData), as.character(unique(m)))
     adjacencyData = adjacencyData[,!grepl("noModule",colnames(adjacencyData))]
@@ -261,7 +260,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     circos.initialize(factors = "a", xlim = c(0, n))
     chordDiagram(adjacencyData, transparency = 0.2,
                 order = c(rownames(adjacencyData),
-                            rev(as.character(unique(m)))),
+                            rev(unique(m))),
                 grid.col = grid.col, #big.gap = 15,
                 annotationTrack = c("name", "grid"), scale = TRUE)
     title("Signalomes")
