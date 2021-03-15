@@ -158,6 +158,8 @@ setReplaceMethod("Localisation", signature="PhosphoExperiment", function(x, valu
 # Subsetting
 ################################################################################
 ## Getting subset
+#' @importFrom methods callNextMethod
+#' @importFrom BiocGenerics replaceSlots
 setMethod("[", "PhosphoExperiment", function(x, i, j, drop=TRUE) {
     uID=UniprotID(x, withDimnames = FALSE)
     gs=GeneSymbol(x, withDimnames = FALSE)
@@ -193,7 +195,7 @@ setMethod("[", "PhosphoExperiment", function(x, i, j, drop=TRUE) {
         j <- as.vector(j)
     }
     
-    out <- callNextMethod()
+    out <- methods::callNextMethod()
     BiocGenerics:::replaceSlots(out, UniprotID=uID, GeneSymbol=gs,
         Site=site, Residue=residue, 
         Sequence=seq, Localisation=loc, check=FALSE)
@@ -352,10 +354,12 @@ setMethod("cbind", "PhosphoExperiment", function(..., deparse.level=1) {
 #' site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
 #' res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
 #' seq <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[4]]))
-#' phosData <- PhosphoExperiment(assays = list(Quantification = quant), UniprotID = uniprot, Site = site, 
-#' GeneSymbol = symbol, Residue = res, Sequence = seq)
+#' phosData <- PhosphoExperiment(assays = list(Quantification = quant), 
+#'     UniprotID = uniprot, Site = site, GeneSymbol = symbol, Residue = res, 
+#'     Sequence = seq)
 #'
-PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(), Residue=c(), Sequence=c(), Localisation=c()) {
+PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(), 
+    Residue=c(), Sequence=c(), Localisation=c()) {
     se <- SummarizedExperiment(...)
     .se_to_pe(
         se,

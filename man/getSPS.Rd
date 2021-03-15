@@ -7,13 +7,18 @@
 getSPS(phosData, conds)
 }
 \arguments{
-\item{phosData}{a list of users' PhosphoExperiment objects from which generate SPSs}
+\item{phosData}{a list of users' PhosphoExperiment objects from which 
+generate SPSs}
 
-\item{conds}{a list of vector contains the conditions labels for each sample in the phosphoExperiment objects}
+\item{assays}{an assay to use for each dataset in phosData}
+
+\item{conds}{a list of vector contains the conditions labels for each sample 
+in the phosphoExperiment objects}
 
 \item{num}{the number of identified SPSs, by default is 100}
 
-\item{residueInfo}{whether the phosphosite contains amino acid information or not, by default is FALSE}
+\item{residueInfo}{whether the phosphosite contains amino acid information or
+not, by default is FALSE}
 }
 \value{
 A vectors of stably phosphorylated sites
@@ -42,8 +47,12 @@ ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
 ppe3 <- tImpute(ppe3)
 
 # convert matrix to ratio
-FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", colnames(ppe3))])
-Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", colnames(ppe3))])
+FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - 
+    rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", 
+    colnames(ppe3))])
+Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - 
+    rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", 
+    colnames(ppe3))])
 ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
 
 ppe.list <- list(ppe1, ppe2, ppe3)

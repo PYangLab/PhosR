@@ -30,7 +30,8 @@ symbol <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]])
 site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
 res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
 seq <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[4]]))
-phosData <- PhosphoExperiment(assays = list(Quantification = quant), UniprotID = uniprot, Site = site, 
-GeneSymbol = symbol, Residue = res, Sequence = seq)
+phosData <- PhosphoExperiment(assays = list(Quantification = quant), 
+    UniprotID = uniprot, Site = site, GeneSymbol = symbol, Residue = res, 
+    Sequence = seq)
 
 }

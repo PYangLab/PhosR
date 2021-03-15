@@ -2,10 +2,14 @@
 #'
 #' @usage getSPS(phosData, conds)
 #'
-#' @param phosData a list of users' PhosphoExperiment objects from which generate SPSs
-#' @param conds a list of vector contains the conditions labels for each sample in the phosphoExperiment objects
+#' @param phosData a list of users' PhosphoExperiment objects from which 
+#' generate SPSs
+#' @param assays an assay to use for each dataset in phosData
+#' @param conds a list of vector contains the conditions labels for each sample 
+#' in the phosphoExperiment objects
 #' @param num the number of identified SPSs, by default is 100
-#' @param residueInfo whether the phosphosite contains amino acid information or not, by default is FALSE
+#' @param residueInfo whether the phosphosite contains amino acid information or
+#'  not, by default is FALSE
 #'
 #' @return A vectors of stably phosphorylated sites
 #'
@@ -30,8 +34,12 @@
 #' ppe3 <- tImpute(ppe3)
 #' 
 #' # convert matrix to ratio
-#' FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", colnames(ppe3))])
-#' Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", colnames(ppe3))])
+#' FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - 
+#'     rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", 
+#'     colnames(ppe3))])
+#' Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - 
+#'     rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", 
+#'     colnames(ppe3))])
 #' ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
 #' 
 #' ppe.list <- list(ppe1, ppe2, ppe3)
@@ -40,7 +48,14 @@
 #' 
 #' @export
 #' 
-getSPS <-function (phosData = ..., assays = ..., conds = ..., num = 100, residueInfo = FALSE) {
+getSPS <-function (phosData, assays="Quantification", conds, num = 100, 
+        residueInfo = FALSE) {
+        if (missing(phosData)) 
+            stop("phosData is missing")
+        if (missing(conds)) 
+                stop("conds is missing")
+        
+        
         sites <- sites.unique <- mat.max <- list()
         n <- length(phosData)
         m <- length(conds)
@@ -50,16 +65,17 @@ getSPS <-function (phosData = ..., assays = ..., conds = ..., num = 100, residue
         if (n != m) {
             stop("Please use the same number of datasets and conditions")
         }
-        for (i in 1:n) {
+        for (i in seq(n)) {
             if (!"PhosphoExperiment" %in% is(phosData[[i]])) {
                 stop("Wrong phosData, need to be a PhosphoExperiment object")
             }
         }
-        for (i in 1:n) {
+        for (i in seq(n)) {
             if (residueInfo) {
                 sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
-                                    paste(phosData[[i]]@Residue, phosData[[i]]@Site, 
-                                          sep = ""), sep = ";")
+                                    paste(phosData[[i]]@Residue, 
+                                            phosData[[i]]@Site, sep = ""), 
+                                    sep = ";")
             }
             else {
                 sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
@@ -68,12 +84,12 @@ getSPS <-function (phosData = ..., assays = ..., conds = ..., num = 100, residue
             sites.unique[[i]] <- unique(sites[[i]])
             nrep <- ncol(phosData[[i]])/length(unique(conds[[i]]))
             if (nrep == 1) {
-                mat.mean <- phosData[[i]]@assays@data[[assays[1]]]
+                mat.mean <- phosData[[i]]@assays@data[[assays]]
             }
             else {
                 grps <- conds[[i]]
-                mat.mean <- PhosR::meanAbundance(phosData[[i]]@assays@data[[assays[i]]], 
-                                                 grps)
+                mat.mean <- PhosR::meanAbundance(
+                        phosData[[i]]@assays@data[[assays]], grps)
             }
             sites.mean <- t(sapply(split(as.data.frame(mat.mean), 
                                          sites[[i]]), colMeans))
@@ -101,6 +117,6 @@ getSPS <-function (phosData = ..., assays = ..., conds = ..., num = 100, residue
         Tt4 <- pchisq(-2 * rowSums(log(Tc)), (n - 1) * 2, lower.tail = FALSE)
         names(Tt4) <- top
         sites.sorted <- names(sort(Tt4, decreasing = TRUE))
-        return(sites.sorted[1:num])
+        return(sites.sorted[seq(num)])
 }
 
