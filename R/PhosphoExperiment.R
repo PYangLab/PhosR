@@ -382,6 +382,19 @@ PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(),
     Residue(out) <- Residue
     Sequence(out) <- Sequence
     Localisation(out) <- Localisation
+    
+    # Warning messages for missing inputs
+    if (!length(GeneSymbol))
+        warning("GeneSymbol is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Site))
+        warning("Site is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Residue))
+        warning("Residue is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Sequence))
+        warning("Sequence is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Localisation))
+        warning("Localisation is not specified. This may affect subsequent analysis steps.\n")
+    
     out
 }
 
