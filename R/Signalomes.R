@@ -12,6 +12,7 @@
 #' @param KOI a character vector that contains kinases of interest for which
 #' expanded signalomes will be generated
 #' @param module_res parameter to select number of final modules
+#' @param filter parameter to filter modules with only few proteins
 #' @param threskinaseNetwork threshold used to select interconnected kinases for
 #'  the expanded signalomes
 #' @param signalomeCutoff threshold used to filter kinase-substrate
@@ -85,8 +86,24 @@
 #'                                  KOI=kinaseOI)
 #' @export
 
-Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
-    signalomeCutoff = 0.5, module_res = 10, verbose = TRUE) {
+Signalomes <- function(KSR, 
+                       predMatrix, 
+                       exprsMat, 
+                       KOI, 
+                       threskinaseNetwork = 0.9,
+                       signalomeCutoff = 0.5, 
+                       module_res = NULL, 
+                       filter = FALSE, 
+                       verbose = TRUE) {
+    
+    if (!is.null(module_res)) {
+        if (module_res < 20) {
+            module_res = as.integer(module_res)
+        } else {
+            stop("module resolution should be an integer lower than 20")
+        }
+    } 
+    
     ############## generate objects required for signalome function
     protein_assignment = mapply("[[",
                                 strsplit(rownames(KSR$combinedScoreMatrix),";"),
@@ -94,6 +111,7 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     KinaseFamily = PhosR::KinaseFamily
     kinaseGroup <- KinaseFamily[, "kinase_group"]
     names(kinaseGroup) <- KinaseFamily[, "gene_symbol"]
+    
     ############## set color palette
     my_color_palette <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8,
         "Accent"))
@@ -105,11 +123,14 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
     kinaseGroup_color <-
         my_color_palette_kinaseGroup(length(unique(kinaseGroup)))
     names(kinaseGroup_color) <- unique(kinaseGroup)
+    
     ############## interconnected kinases
     resKinaseNetwork <- .kinaseNetwork(predMatrix, KSR, threskinaseNetwork,
         kinase_signalome_color)
+    
     ############## cluster phosphosites
     substrate_clusters <- .phosphositeClusters(KSR, verbose)
+    
     ############## generate coassignment
     cluster_assignment <- as.factor(substrate_clusters)
     dat.long <- data.frame(table(cluster_assignment, protein_assignment))
@@ -121,16 +142,24 @@ Signalomes <- function(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork = 0.9,
         method = "ward.D")
     tree_height <- as.numeric(names(table(hclust_res$height)))
     branching <- as.numeric(table(hclust_res$height))
-    #hcutree <- min(tree_height[tree_height > 0])
+
     tree_height_calc = unlist(lapply(2:length(tree_height), function(x) {
         h <- tree_height[[x]]
         m <- stats::cutree(hclust_res, h = h)
         return(length(table(m)))
     }))
-    hcutree = which(tree_height_calc <= module_res) + 1
+    
+    if (!is.null(module_res)) {
+        hcutree = which(tree_height_calc <= module_res) + 1
+    } else {
+        hcutree <- min(tree_height[tree_height > 0])
+    }
     modules <- stats::cutree(hclust_res, h = tree_height[[hcutree[[1]]]])
-    filter_modules = modules %in% which(table(modules) < 10)
-    modules[filter_modules] = "noModule"
+    
+    if (filter) {
+        filter_modules = modules %in% which(table(modules) < 10)
+        modules[filter_modules] = "noModule"
+    } 
     
     ############## generate signalomes
     signalomeSubstrates <- .phosRsignalome(predMatrix, signalomeCutoff,
