@@ -24,6 +24,8 @@ navbar:
           href: articles/web/signalomes.html
     - text: Functions
       href: reference/index.html
+    - text: STAR Protocols
+      href: articles/web/
   right:
     - icon: fa-github fa-lg
       href: https://github.com/PYangLab/PhosR
