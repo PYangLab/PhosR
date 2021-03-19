@@ -26,6 +26,8 @@ relationships}
 
 \item{module_res}{parameter to select number of final modules}
 
+\item{filter}{parameter to filter modules with only few proteins}
+
 \item{verbose}{Default to \code{TRUE} to show messages during the progress.
 All messages will be suppressed if set to \code{FALSE}}
 }
