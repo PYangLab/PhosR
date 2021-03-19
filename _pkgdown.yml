@@ -25,7 +25,7 @@ navbar:
     - text: Functions
       href: reference/index.html
     - text: STAR Protocols
-      href: articles/web/
+      href: articles/web/PhosR_STAR_protocols.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/PYangLab/PhosR
