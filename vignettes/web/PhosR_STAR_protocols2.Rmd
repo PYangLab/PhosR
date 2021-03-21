@@ -7,5 +7,5 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo = FALSE}
-htmltools::includeHTML("PhosR_STAR_protocols_static.html")
+htmltools::includeHTML("PhosR_STAR_protocols.html")
 ```
