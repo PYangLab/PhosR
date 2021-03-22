@@ -45,7 +45,7 @@
 #' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list)
 #' 
 #' @export
-#' 
+ 
 getSPS <-function (phosData, assays="Quantification", conds, num = 100) {
         if (missing(phosData)) 
             stop("phosData is missing")
@@ -109,6 +109,8 @@ getSPS <-function (phosData, assays="Quantification", conds, num = 100) {
         Tt4 <- pchisq(-2 * rowSums(log(Tc)), (n - 1) * 2, lower.tail = FALSE)
         names(Tt4) <- top
         sites.sorted <- names(sort(Tt4, decreasing = TRUE))
+        sites.sorted = paste0(sites.sorted, ";")
+        
         return(sites.sorted[seq(num)])
 }
 
