@@ -36,7 +36,7 @@ suppressPackageStartupMessages({
 
 We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.
 ```{r}
-data("phospho_liverInsTC_RUV_pe")
+data("phospho.liver.Ins.TC.ratio.RUV.pe")
 ppe <- phospho.liver.Ins.TC.ratio.RUV.pe
 ppe
 ```

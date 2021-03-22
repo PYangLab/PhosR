@@ -3,7 +3,7 @@
 \docType{data}
 \name{phospho.liver.Ins.TC.ratio.RUV.pe}
 \alias{phospho.liver.Ins.TC.ratio.RUV.pe}
-\title{phospho_liverInsTC_RUV_pe}
+\title{phospho.liver.Ins.TC.ratio.RUV.pe}
 \format{
 A Phosphoproteome Object
 }
@@ -11,7 +11,7 @@ A Phosphoproteome Object
 PRIDE accesion number: PXD001792
 }
 \usage{
-data(phospho_liverInsTC_RUV_pe)
+data(phospho.liver.Ins.TC.ratio.RUV.pe)
 }
 \description{
 A subset of phosphoproteomics dataset integrated from two

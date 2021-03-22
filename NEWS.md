@@ -1,3 +1,13 @@
+## PhosR 1.1.7
+
+* Fixed getSPS to expect residue information.
+
+
+## PhosR 1.1.6
+
+* Included warning signs to creating PhosphoExperiment object without attributes.
+
+
 ## PhosR 1.1.5
 
 * Fixed the warning message generated in plotQC for dendrograms. (`Warning message:

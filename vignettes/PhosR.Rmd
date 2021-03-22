@@ -411,11 +411,11 @@ We note that the current *SPS* are derived from phosphoproteomic datasets derive
 First, load datasets to use for SPS generation.
 ```{r}
 data("phospho_L6_ratio_pe")
-data("phospho_liverInsTC_RUV_pe")
+data("phospho.liver.Ins.TC.ratio.RUV.pe")
 data("phospho.cells.Ins.pe")
-
 ppe1 <- phospho.L6.ratio.pe
 ppe2 <- phospho.liver.Ins.TC.ratio.RUV.pe
+# ppe2 <- phospho.L1.Ins.ratio.subset.pe
 ppe3 <- phospho.cells.Ins.pe
 ```
 
@@ -432,6 +432,8 @@ ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
 Generate inputs of `getSPS`.
 ```{r}
 ppe.list <- list(ppe1, ppe2, ppe3)
+# ppe.list <- list(ppe1, ppe3)
+
 cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
                   grp2 = str_sub(colnames(ppe2), end=-5),
                   grp3 = str_sub(colnames(ppe3), end=-3))
@@ -439,7 +441,7 @@ cond.list <- list(grp1 = gsub("_.+", "", colnames(ppe1)),
 
 Finally run `getSPS` to generate list of SPSs.
 ```{r}
-inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = F)
+inhouse_SPSs <- getSPS(ppe.list, conds = cond.list)
 
 head(inhouse_SPSs)
 ```
@@ -447,7 +449,8 @@ head(inhouse_SPSs)
 Run `RUVphospho` using the newly generateed SPSs. (**NOTE** that we do not expect the results to be reproducible as the exempler SPSs have been generated from dummy datasets that have been heavily filtered.)
 ```{r}
 sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-                 sapply(ppe@Site, function(x)x), sep = "")
+              sapply(ppe@Residue, function(x)x),
+              sapply(ppe@Site, function(x)x), sep = "")
 
 ctl = which(sites %in% inhouse_SPSs)
 ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
@@ -665,8 +668,8 @@ suppressPackageStartupMessages({
 
 We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.
 ```{r}
-data("phospho_liverInsTC_RUV_pe")
-
+# data("phospho_liverInsTC_RUV_pe")
+data("phospho.liver.Ins.TC.ratio.RUV.pe")
 ppe <- phospho.liver.Ins.TC.ratio.RUV.pe
 ppe
 ```

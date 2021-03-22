@@ -16,9 +16,6 @@ generate SPSs}
 in the phosphoExperiment objects}
 
 \item{num}{the number of identified SPSs, by default is 100}
-
-\item{residueInfo}{whether the phosphosite contains amino acid information or
-not, by default is FALSE}
 }
 \value{
 A vectors of stably phosphorylated sites
@@ -57,6 +54,6 @@ ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
 
 ppe.list <- list(ppe1, ppe2, ppe3)
 
-inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
+inhouse_SPSs <- getSPS(ppe.list, conds = cond.list)
 
 }

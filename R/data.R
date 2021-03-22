@@ -120,14 +120,14 @@
 #' @docType data
 "phospho.liver.Ins.TC.ratio.RUV"
 
-#' @title phospho_liverInsTC_RUV_pe
+#' @title phospho.liver.Ins.TC.ratio.RUV.pe
 #'
 #' @description A subset of phosphoproteomics dataset integrated from two
 #' time-course datasets of early and intermediate insulin signalling in mouse
 #' liver upon insulin stimulation.
 #'
 #'
-#' @usage data(phospho_liverInsTC_RUV_pe)
+#' @usage data(phospho.liver.Ins.TC.ratio.RUV.pe)
 #'
 #' @source PRIDE accesion number: PXD001792
 #'

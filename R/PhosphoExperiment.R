@@ -371,11 +371,37 @@ PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(),
     )
 }
 
+
+getResidue = function(Seqs) {
+    splitSeqs = strsplit(Seqs, "")
+    pos = round(nchar(Seqs)/2)
+    res = unlist(lapply(seq_along(splitSeqs), function(x) splitSeqs[[x]][pos[[x]]]))
+    if (sum(!names(table(res)) %in% c("S", "T", "Y", "X"))) {
+        stop("One or more windows are not centered around the phosphosite")
+    }
+    return(res)
+}
+
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importClassesFrom S4Vectors DataFrame
 #' @importFrom methods new
 .se_to_pe = function(se, UniprotID=c(), GeneSymbol=c(), Site=c(), Residue=c(), Sequence=c(), Localisation = c()) {
     out <- new("PhosphoExperiment", se)
+    
+    # Warning messages for missing inputs
+    if (!length(GeneSymbol))
+        warning("GeneSymbol is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Site))
+        warning("Site is not specified. This may affect subsequent analysis steps.\n")
+    if (!length(Sequence)) {
+        warning("Sequence is not specified. This may affect subsequent analysis steps.\n")
+        if (!length(Residue))
+            warning("Residue is not specified. This may affect subsequent analysis steps.\n")
+    } else {
+        if (!length(Residue))
+            Residue = getResidue(Sequence)
+    } 
+    
     UniprotID(out) <- UniprotID
     GeneSymbol(out) <- GeneSymbol
     Site(out) <- Site
@@ -383,17 +409,6 @@ PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(),
     Sequence(out) <- Sequence
     Localisation(out) <- Localisation
     
-    # Warning messages for missing inputs
-    if (!length(GeneSymbol))
-        warning("GeneSymbol is not specified. This may affect subsequent analysis steps.\n")
-    if (!length(Site))
-        warning("Site is not specified. This may affect subsequent analysis steps.\n")
-    if (!length(Residue))
-        warning("Residue is not specified. This may affect subsequent analysis steps.\n")
-    if (!length(Sequence))
-        warning("Sequence is not specified. This may affect subsequent analysis steps.\n")
-    if (!length(Localisation))
-        warning("Localisation is not specified. This may affect subsequent analysis steps.\n")
     
     out
 }

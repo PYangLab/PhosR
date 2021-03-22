@@ -8,8 +8,6 @@
 #' @param conds a list of vector contains the conditions labels for each sample 
 #' in the phosphoExperiment objects
 #' @param num the number of identified SPSs, by default is 100
-#' @param residueInfo whether the phosphosite contains amino acid information or
-#'  not, by default is FALSE
 #'
 #' @return A vectors of stably phosphorylated sites
 #'
@@ -44,12 +42,11 @@
 #' 
 #' ppe.list <- list(ppe1, ppe2, ppe3)
 #' 
-#' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list, residueInfo = FALSE)
+#' inhouse_SPSs <- getSPS(ppe.list, conds = cond.list)
 #' 
 #' @export
 #' 
-getSPS <-function (phosData, assays="Quantification", conds, num = 100, 
-        residueInfo = FALSE) {
+getSPS <-function (phosData, assays="Quantification", conds, num = 100) {
         if (missing(phosData)) 
             stop("phosData is missing")
         if (missing(conds)) 
@@ -71,16 +68,11 @@ getSPS <-function (phosData, assays="Quantification", conds, num = 100,
             }
         }
         for (i in seq(n)) {
-            if (residueInfo) {
-                sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
-                                    paste(phosData[[i]]@Residue, 
-                                            phosData[[i]]@Site, sep = ""), 
-                                    sep = ";")
-            }
-            else {
-                sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
-                                    phosData[[i]]@Site, sep = ";")
-            }
+            sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
+                                paste(phosData[[i]]@Residue, 
+                                        phosData[[i]]@Site, sep = ""), 
+                                sep = ";")
+            
             sites.unique[[i]] <- unique(sites[[i]])
             nrep <- ncol(phosData[[i]])/length(unique(conds[[i]]))
             if (nrep == 1) {
