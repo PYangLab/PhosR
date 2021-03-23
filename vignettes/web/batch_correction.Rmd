@@ -172,7 +172,7 @@ Run `RUVphospho` using the newly generateed SPSs. (**NOTE** that we do not expec
 ```{r}
 sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
               sapply(ppe@Residue, function(x)x),
-              sapply(ppe@Site, function(x)x), sep = "")
+              sapply(ppe@Site, function(x)x), ";", sep = "")
 
 ctl = which(sites %in% inhouse_SPSs)
 ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
