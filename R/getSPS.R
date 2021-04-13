@@ -1,6 +1,6 @@
 #' Generate set of stable phosphoporylated sites
 #'
-#' @usage getSPS(phosData, conds)
+#' @usage getSPS(phosData, assays, conds, num)
 #'
 #' @param phosData a list of users' PhosphoExperiment objects from which 
 #' generate SPSs

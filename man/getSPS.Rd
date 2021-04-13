@@ -4,7 +4,7 @@
 \alias{getSPS}
 \title{Generate set of stable phosphoporylated sites}
 \usage{
-getSPS(phosData, conds)
+getSPS(phosData, assays, conds, num)
 }
 \arguments{
 \item{phosData}{a list of users' PhosphoExperiment objects from which 
