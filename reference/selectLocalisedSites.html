@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -159,7 +159,7 @@
     <p>Select phosphosites with a localisation score higher than the pre-defined probability score (default score = 0.75)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>selectLocalisedSites</span><span class='op'>(</span><span class='va'>mat</span>, localisation_scores<span class='op'>=</span><span class='cn'>NULL</span>, prob<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>selectLocalisedSites</span><span class='op'>(</span><span class='va'>mat</span>, loc<span class='op'>=</span><span class='cn'>NULL</span>, prob <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,6 +169,10 @@
       <td><p>a matrix (or PhosphoExperiment object) with rows corresponding to 
 phosphosites and columns corresponding to samples in replicates for different 
 treatments.</p></td>
+    </tr>
+    <tr>
+      <th>loc</th>
+      <td><p>a vector of localisation scores</p></td>
     </tr>
     <tr>
       <th>prob</th>

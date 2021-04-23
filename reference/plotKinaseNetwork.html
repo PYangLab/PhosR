@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -159,23 +159,38 @@
     <p>Plot kinase network</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotKinaseNetwork</span><span class='op'>(</span><span class='va'>KSR</span>, <span class='va'>predMatrix</span>, threshold<span class='op'>=</span><span class='fl'>0.9</span>, <span class='va'>color</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plotKinaseNetwork</span><span class='op'>(</span><span class='va'>KSR</span>, <span class='va'>predMatrix</span>, threshold <span class='op'>=</span> <span class='fl'>0.9</span>, <span class='va'>color</span>, 
+type <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>KSR</th>
-      <td><p>kinase-substrate relationship scoring results</p></td>
+      <td><p>Kinase-substrate relationship scoring results</p></td>
     </tr>
     <tr>
       <th>predMatrix</th>
-      <td><p>output of kinaseSubstratePred function</p></td>
+      <td><p>Output of kinaseSubstratePred function</p></td>
     </tr>
     <tr>
       <th>threshold</th>
-      <td><p>threshold used to select interconnected kinases for
+      <td><p>Threshold used to select interconnected kinases for
 the expanded signalomes</p></td>
+    </tr>
+    <tr>
+      <th>color</th>
+      <td><p>A string specifying the color vector for nodes</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>A type (<code>graph</code> or <code>chord</code>) of plot. If NULL, network 
+graph is plotted</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Default to <code>TRUE</code> to show messages during the progress.
+All messages will be suppressed if set to <code>FALSE</code></p></td>
     </tr>
     </table>
 

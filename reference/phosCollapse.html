@@ -73,7 +73,7 @@ downstream gene-centric analyses." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -238,7 +238,7 @@ phosphorylation levels.</p></td>
     <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>table.AICARInsVSAICAR</span><span class='op'>[</span>,<span class='st'>'adj.P.Val'</span><span class='op'>]</span> <span class='op'>&lt;</span> <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>o</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>table.AICARInsVSIns</span><span class='op'>)</span>
-<span class='va'>Tc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/limma/man/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>table.Ins</span><span class='op'>[</span><span class='va'>o</span>,<span class='st'>'logFC'</span><span class='op'>]</span>, <span class='va'>table.AICAR</span><span class='op'>[</span><span class='va'>o</span>,<span class='st'>'logFC'</span><span class='op'>]</span>,
+<span class='va'>Tc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='PPE-operate.html'>cbind</a></span><span class='op'>(</span><span class='va'>table.Ins</span><span class='op'>[</span><span class='va'>o</span>,<span class='st'>'logFC'</span><span class='op'>]</span>, <span class='va'>table.AICAR</span><span class='op'>[</span><span class='va'>o</span>,<span class='st'>'logFC'</span><span class='op'>]</span>,
             <span class='va'>table.AICARIns</span><span class='op'>[</span><span class='va'>o</span>,<span class='st'>'logFC'</span><span class='op'>]</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>Tc</span><span class='op'>)</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>'(.*)(;[A-Z])([0-9]+)(;)'</span>, <span class='st'>'\\1;\\3;'</span>, <span class='va'>o</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>Tc</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Ins'</span>, <span class='st'>'AICAR'</span>, <span class='st'>'AICAR+Ins'</span><span class='op'>)</span>
