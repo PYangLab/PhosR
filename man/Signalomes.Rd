@@ -5,7 +5,7 @@
 \title{PhosR Signalomes}
 \usage{
 Signalomes(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork=0.9,
-signalomeCutoff=0.5, module_res = 10, verbose = TRUE)
+signalomeCutoff=0.5, module_res = NULL, filter = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{KSR}{kinase-substrate relationship scoring results}

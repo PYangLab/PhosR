@@ -3,7 +3,7 @@
 #' @description A function to generate signalomes
 #'
 #' @usage Signalomes(KSR, predMatrix, exprsMat, KOI, threskinaseNetwork=0.9,
-#' signalomeCutoff=0.5, module_res = 10, verbose = TRUE)
+#' signalomeCutoff=0.5, module_res = NULL, filter = FALSE, verbose = TRUE)
 #'
 #' @param KSR kinase-substrate relationship scoring results
 #' @param predMatrix output of kinaseSubstratePred function
@@ -11,12 +11,12 @@
 #' corresponding to samples
 #' @param KOI a character vector that contains kinases of interest for which
 #' expanded signalomes will be generated
-#' @param module_res parameter to select number of final modules
-#' @param filter parameter to filter modules with only few proteins
 #' @param threskinaseNetwork threshold used to select interconnected kinases for
 #'  the expanded signalomes
 #' @param signalomeCutoff threshold used to filter kinase-substrate
 #' relationships
+#' @param module_res parameter to select number of final modules
+#' @param filter parameter to filter modules with only few proteins
 #' @param verbose Default to \code{TRUE} to show messages during the progress.
 #' All messages will be suppressed if set to \code{FALSE}
 #'
@@ -143,7 +143,7 @@ Signalomes <- function(KSR,
     tree_height <- as.numeric(names(table(hclust_res$height)))
     branching <- as.numeric(table(hclust_res$height))
 
-    tree_height_calc = unlist(lapply(2:length(tree_height), function(x) {
+    tree_height_calc = unlist(lapply(seq(2,length(tree_height), 1), function(x) {
         h <- tree_height[[x]]
         m <- stats::cutree(hclust_res, h = h)
         return(length(table(m)))

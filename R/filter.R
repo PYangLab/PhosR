@@ -267,11 +267,12 @@ given phosphosite to be retained.")
 #'
 #' @description Select phosphosites with a localisation score higher than the pre-defined probability score (default score = 0.75)
 #'
-#' @usage selectLocalisedSites(mat, localisation_scores=NULL, prob=0.75)
+#' @usage selectLocalisedSites(mat, loc=NULL, prob = 0.75)
 #'
 #' @param mat a matrix (or PhosphoExperiment object) with rows corresponding to 
 #' phosphosites and columns corresponding to samples in replicates for different 
 #' treatments.
+#' @param loc a vector of localisation scores
 #' @param prob a percent from 0 to 1, specifying the localisation probability of quantified
 #' values in across all samples for retaining a phosphosite for subsequent
 #' analysis.

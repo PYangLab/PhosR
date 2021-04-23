@@ -4,7 +4,8 @@
 \alias{plotQC}
 \title{A set of function for data QC plot}
 \usage{
-plotQC(mat, cols, labels, panel, ...)
+plotQC(mat, grps, labels, panel = 
+c("quantify", "dendrogram", "abundance", "pca", "all"))
 }
 \arguments{
 \item{mat}{A p by n matrix, where p is the number of phosphosites and n is

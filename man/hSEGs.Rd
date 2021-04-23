@@ -8,7 +8,7 @@
 An object of class \code{character} of length 1076.
 }
 \usage{
-data(mSEGs)
+data(SEGs)
 }
 \description{
 A list of stably expressed genes (SEGs) in mouse and human 

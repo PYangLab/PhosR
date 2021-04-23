@@ -21,47 +21,285 @@ setClass("PhosphoExperiment",
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Getters/setters for internal slots
 ###
-# setGeneric("Quantification", function(x, type, ...) standardGeneric("Quantification"))
-# 
-# setGeneric("Quantification<-", function(x, type, ..., value) standardGeneric("Quantification<-"))
+#' PhosphoExperiment object accessors
+#' 
+#' @description These are methods for getting for setting accessors of 
+#' \code{PhosphoExperiment} object.
+#' This provides some convenience for users.
+#' 
+#' @param value A vector of values to set to respective accessor. See section 
+#' \code{Available methods} for more details.
+#' @param withDimnames A \code{logical(1)}, indicating whether the names of the 
+#' vector should be applied. 
+#' @param x A \code{PhosphoExperiment} object to be assigned to.
+#' @param ... Ignored for accessors.
+#' 
+#' @section Available methods:
+#'  In the following code snippets, \code{ppe} is a 
+#'  \linkS4class{PhosphoExperiment} object.
+#' 
+#' \describe{
+#' \item{\code{UniprotID(ppe)}, \code{UniprotID(ppe) <- value}:}{Get or set a Uniprot ID, where \code{value} is a character 
+#' vector}
+#' \item{\code{GeneSymbol(ppe)}, \code{GeneSymbol(ppe) <- value}:}{Get or set a gene symbol , where \code{value} is a character 
+#' vector}
+#' \item{\code{Site(ppe)}, \code{Site(ppe) <- value}:}{Get or set a phosphorylation site, where \code{value} is a 
+#' numeric vector}
+#' \item{\code{Residue(ppe)}, \code{Residue(ppe) <- value}:}{Get or set a residue of phosphorylation site, where \code{value} is a 
+#' character}
+#' \item{\code{Sequence(ppe)}, \code{Sequence(ppe) <- value}:}{Get or set a sequence, where \code{value} is a character vector}
+#' \item{\code{Localisation(ppe)}, \code{Localisation(ppe) <- localisation}:}{Get or set a localisation score, where \code{localisation} is a numeric 
+#' vector}
+#' }
+#' 
+#' @author Taiyun Kim
+#' 
+#' @examples
+#' example(PhosphoExperiment, echo = FALSE)
+#' 
+#' UniprotID(phosData) <- uniprot
+#' head(UniprotID(phosData))
+#' 
+#' GeneSymbol(phosData) <- symbol
+#' head(GeneSymbol(phosData))
+#' 
+#' Site(phosData) <- site
+#' head(Site(phosData))
+#' 
+#' Residue(phosData) <- res
+#' head(Residue(phosData))
+#' 
+#' Sequence(phosData) <- seq
+#' head(Sequence(phosData))
+#' 
+#' Localisation(phosData) <- rnorm(nrow(phosData))
+#' head(Localisation(phosData))
+#' 
+#' @docType methods
+#' @name PPE-accessors
+#' @rdname PhosphoExperiment-methods
+NULL
 
+
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("UniprotID", function(x, ...) standardGeneric("UniprotID"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("UniprotID<-", function(x, value) standardGeneric("UniprotID<-"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("GeneSymbol", function(x, ...) standardGeneric("GeneSymbol"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("GeneSymbol<-", function(x, value) standardGeneric("GeneSymbol<-"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Site", function(x, ...) standardGeneric("Site"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Site<-", function(x, value) standardGeneric("Site<-"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Residue", function(x, ...) standardGeneric("Residue"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Residue<-", function(x, value) standardGeneric("Residue<-"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Sequence", function(x, ...) standardGeneric("Sequence"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Sequence<-", function(x, value) standardGeneric("Sequence<-"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Localisation", function(x, ...) standardGeneric("Localisation"))
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setGeneric("Localisation<-", function(x, value) standardGeneric("Localisation<-"))
 
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("UniprotID", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@UniprotID
@@ -71,6 +309,20 @@ setMethod("UniprotID", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("GeneSymbol", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@GeneSymbol
@@ -80,6 +332,20 @@ setMethod("GeneSymbol", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("Site", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@Site
@@ -89,6 +355,20 @@ setMethod("Site", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("Residue", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@Residue
@@ -98,6 +378,20 @@ setMethod("Residue", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("Sequence", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@Sequence
@@ -107,6 +401,20 @@ setMethod("Sequence", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setMethod("Localisation", "PhosphoExperiment", function(x, withDimnames=TRUE) {
     out <- x@Localisation
@@ -118,46 +426,202 @@ setMethod("Localisation", "PhosphoExperiment", function(x, withDimnames=TRUE) {
 
 
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setReplaceMethod("UniprotID", signature="PhosphoExperiment", function(x, value) {
     x@UniprotID <- as.character(value)
     return(x)
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setReplaceMethod("GeneSymbol", signature="PhosphoExperiment", function(x, value) {
     x@GeneSymbol<- as.character(value)
     return(x)
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setReplaceMethod("Site", signature="PhosphoExperiment", function(x, value) {
     x@Site <- as.numeric(value)
     return(x)
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setReplaceMethod("Residue", signature="PhosphoExperiment", function(x, value) {
     x@Residue <- as.character(value)
     return(x)
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
 setReplaceMethod("Sequence", signature="PhosphoExperiment", function(x, value) {
     x@Sequence<- as.character(value)
     return(x)
 })
 
+#' @rdname PhosphoExperiment-methods
+#' @aliases  
+#' UniprotID
+#' UniprotID<-
+#' GeneSymbol
+#' GeneSymbol<-
+#' Site
+#' Site<-
+#' Residue
+#' Residue<-
+#' Sequence
+#' Sequence<-
+#' Localisation
+#' Localisation<-
 #' @export
-setReplaceMethod("Localisation", signature="PhosphoExperiment", function(x, value) {
+setReplaceMethod("Localisation", signature="PhosphoExperiment", 
+    function(x, value) {
     x@Localisation<- as.numeric(value)
     return(x)
 })
+
+
+
+#' PhosphoExperiment object subset, combine methods
+#' 
+#' @description These are methods for combining or subsetting for  
+#' \code{PhosphoExperiment} object. This provides some convenience for users.
+#' 
+#' @section Available methods:
+#'  In the following code snippets, \code{ppe1} and \code{ppe2} is a 
+#'  \code{PhosphoExperiment} object with matching \code{colData}. 
+#'  \code{ppe3} and \code{ppe4} is a \code{PhosphoExperiment} object with 
+#'  matching \code{rowData}.
+#' 
+#' \describe{
+#' \item{\code{rbind(ppe1, ppe2)}:}{Combine row-wise}
+#' \item{\code{cbind(ppe3, ppe4)}:}{Combine column-wise}
+#' }
+#' 
+#' @param ... In \code{cbind} or \code{rbind}, a \code{PhosphoExperiment} 
+#' objects
+#' @param deparse.level {See \code{?base::\link[base]{cbind}} for a description 
+#' of this argument.}
+#' @param x A  \code{PhosphoExperiment} object
+#' @param i For \code{[,PhosphoExperiment}, \code{[,PhosphoExperiment<-, i, j} 
+#' are subscripts that can act to subset the rows of x
+#' @param j For \code{[,PhosphoExperiment}, \code{[,PhosphoExperiment<-, i, j} 
+#' are subscripts that can act to subset the columns of x
+#' @param drop A \code{logical(1)}, ignored by these methods
+#' @param value An object of a class specified in the S4 method signature.
+#' 
+#' @author Taiyun Kim
+#' 
+#' @seealso method \code{rbind}, \code{cbind} from 
+#' \linkS4class{SummarizedExperiment} object.
+#' 
+#' @examples
+#' example(PhosphoExperiment, echo = FALSE)
+#' 
+#' n = ncol(phosData)
+#' ppe1 = phosData[,seq(round(n/2))]
+#' ppe2 = phosData[,-seq(round(n/2))]
+#' 
+#' ppe = cbind(ppe1, ppe2)
+#' identical(ppe, phosData)
+#' 
+#' ppe[,seq(round(n/2))] = ppe1
+#' identical(ppe, phosData)
+#' 
+#' p = nrow(phosData)
+#' ppe1 = phosData[seq(round(p/2)),]
+#' ppe2 = phosData[-seq(round(p/2)),]
+#' 
+#' ppe = rbind(ppe1, ppe2)
+#' identical(ppe, phosData)
+#' 
+#' ppe[seq(round(p/2)),] = ppe1
+#' identical(ppe, phosData)
+#' 
+#' @docType methods
+#' @name PPE-operate
+#' @rdname PhosphoExperiment-operate
+NULL
+
 
 ################################################################################
 # Subsetting
 ################################################################################
 ## Getting subset
+#' @rdname PhosphoExperiment-operate
+#' @aliases  
+#' rbind
+#' cbind
+#' [
+#' [<-
+#' @export
 #' @importFrom methods callNextMethod
 setMethod("[", "PhosphoExperiment", function(x, i, j, drop=TRUE) {
     uID=UniprotID(x, withDimnames = FALSE)
@@ -202,6 +666,15 @@ setMethod("[", "PhosphoExperiment", function(x, i, j, drop=TRUE) {
 
 
 ## Assigning a subset
+#' @rdname PhosphoExperiment-operate
+#' @aliases  
+#' rbind
+#' cbind
+#' [
+#' [<-
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importClassesFrom SummarizedExperiment SummarizedExperiment
+#' @export
 setReplaceMethod("[", c("PhosphoExperiment"),
     function(x, i, j, ..., value) {
         uID=UniprotID(x, withDimnames = FALSE)
@@ -250,6 +723,12 @@ setReplaceMethod("[", c("PhosphoExperiment"),
 # Combining
 ################################################################################
 # By row
+#' @rdname PhosphoExperiment-operate
+#' @aliases  
+#' rbind
+#' cbind
+#' [
+#' [<-
 #' @export
 #' @importFrom BiocGenerics rbind cbind
 setMethod("rbind", "PhosphoExperiment", function(..., deparse.level=1) {
@@ -295,6 +774,13 @@ setMethod("rbind", "PhosphoExperiment", function(..., deparse.level=1) {
 })
 
 # By column
+# By row
+#' @rdname PhosphoExperiment-operate
+#' @aliases  
+#' rbind
+#' cbind
+#' [
+#' [<-
 #' @export
 #' @importFrom BiocGenerics rbind cbind
 setMethod("cbind", "PhosphoExperiment", function(..., deparse.level=1) {
@@ -334,19 +820,24 @@ setMethod("cbind", "PhosphoExperiment", function(..., deparse.level=1) {
 
 #'The PhosphoExperiment class
 #'
-#'
-#'
+#' @param ... Arguments parsed, identical to those used to create 
+#' \linkS4class{SummarizedExperiment}.
+#' @param UniprotID A character vector of Uniprot ID
+#' @param GeneSymbol A character vector of gene symbol
+#' @param Site A numeric vector of phosphorylation site
+#' @param Residue A character vector of site residue
+#' @param Sequence A character vector of sequences
+#' @param Localisation A localisation score.
+#' 
 #' @docType class
 #' @aliases 
 #' coerce, SummarizedExperiment, PhosphoExperiment-method
 #' @export
 #' @importFrom S4Vectors SimpleList
 #' @importFrom methods is as
-#' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importClassesFrom SummarizedExperiment SummarizedExperiment
+#' 
 #' 
 #' @examples 
-#' library(PhosR)
 #' quant <- as.matrix(PhosR::phospho.L6.ratio)
 #' uniprot <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
 #' symbol <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
@@ -382,8 +873,6 @@ getResidue = function(Seqs) {
     return(res)
 }
 
-#' @importFrom S4Vectors DataFrame SimpleList
-#' @importClassesFrom S4Vectors DataFrame
 #' @importFrom methods new
 .se_to_pe = function(se, UniprotID=c(), GeneSymbol=c(), Site=c(), Residue=c(), Sequence=c(), Localisation = c()) {
     out <- new("PhosphoExperiment", se)

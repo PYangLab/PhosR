@@ -243,7 +243,7 @@
 #' Evaluating stably expressed genes in single cells, GigaScience, 8(9):giz106, 
 #' https://doi.org/10.1093/gigascience/giz106 for more details
 #'
-#' @usage data(hSEGs)
+#' @usage data(SEGs)
 #'
 #' @name mSEGs
 #' @docType data
@@ -256,7 +256,7 @@
 #' Evaluating stably expressed genes in single cells, GigaScience, 8(9):giz106, 
 #' https://doi.org/10.1093/gigascience/giz106 for more details
 #'
-#' @usage data(mSEGs)
+#' @usage data(SEGs)
 #'
 #' @name hSEGs
 #' @docType data

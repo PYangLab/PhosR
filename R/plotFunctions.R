@@ -28,7 +28,7 @@ plotSignalomeMap <- function(signalomes, color) {
     df_balloon <- tidyr::spread(df_balloon, ind, n)[,-1]
     df_balloon[is.na(df_balloon)] <- 0
 
-    df_balloon <- do.call(rbind, lapply(1:nrow(df_balloon), function(x) {
+    df_balloon <- do.call(rbind, lapply(seq(nrow(df_balloon)), function(x) {
         
         res <- sapply(df_balloon[x,], function(y) y/sum(df_balloon[x,])*100)
         
@@ -55,12 +55,18 @@ plotSignalomeMap <- function(signalomes, color) {
 
 #' Plot kinase network
 #'
-#' @usage plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
+#' @usage plotKinaseNetwork(KSR, predMatrix, threshold = 0.9, color, 
+#' type = NULL, verbose = FALSE)
 #'
-#' @param KSR kinase-substrate relationship scoring results
-#' @param predMatrix output of kinaseSubstratePred function
-#' @param threshold threshold used to select interconnected kinases for
+#' @param KSR Kinase-substrate relationship scoring results
+#' @param predMatrix Output of kinaseSubstratePred function
+#' @param threshold Threshold used to select interconnected kinases for
 #'  the expanded signalomes
+#' @param color A string specifying the color vector for nodes
+#' @param type A type (\code{graph} or \code{chord}) of plot. If NULL, network 
+#' graph is plotted
+#' @param verbose Default to \code{TRUE} to show messages during the progress.
+#' All messages will be suppressed if set to \code{FALSE}
 #'  
 #' @return a graphical plot
 #' 
@@ -73,7 +79,8 @@ plotSignalomeMap <- function(signalomes, color) {
 #' 
 #' 
 #' @export
-plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color, type = NULL, verbose = FALSE) {
+plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color=NULL, 
+    type = NULL, verbose = FALSE) {
     
     if (is.null(type)) { type = "chord" } else {
         type <- match.arg(type, c("graph", "chord"),
@@ -86,30 +93,32 @@ plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color, type = NU
     cor_mat_values = cor_mat
 
     cor_mat <- apply(cor_mat, 2, function(x) x  > threshold)
-    cor_mat[cor_mat == F] <- 0
-    cor_mat[cor_mat == T] <- 1
+    cor_mat[cor_mat == FALSE] <- 0
+    cor_mat[cor_mat == TRUE] <- 1
     
     if (type == "graph") {
-        
+        if (is.null(color)) {
+            stop("Parameter color cannot be NULL.")
+        }
         if (verbose) {
             print("Generating network graph...")
         }
         
-    n = network::network(cor_mat, directed=F)
-    network::set.edge.value(n, "cor", cor_mat_values^2)
-    my_col = RColorBrewer::brewer.pal(11, "Spectral")
-    
-    g <- GGally::ggnet2(n, 
-                   node.size=10, 
-                   node.color=color, 
-                   edge.size = "cor", 
-                   size = "degree",
-                   size.cut=3,
-                   label=colnames(cor_mat),
-                   label.size=2,
-                   mode="circle",
-                   label.color="black")
-    print(g)
+        n = network::network(cor_mat, directed=FALSE)
+        network::set.edge.value(n, "cor", cor_mat_values^2)
+        my_col = RColorBrewer::brewer.pal(11, "Spectral")
+        
+        g <- GGally::ggnet2(n, 
+                       node.size=10, 
+                       node.color=color, 
+                       edge.size = "cor", 
+                       size = "degree",
+                       size.cut=3,
+                       label=colnames(cor_mat),
+                       label.size=2,
+                       mode="circle",
+                       label.color="black")
+        print(g)
     
     }
     

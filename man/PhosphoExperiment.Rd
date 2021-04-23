@@ -19,11 +19,26 @@ PhosphoExperiment(
   Localisation = c()
 )
 }
+\arguments{
+\item{...}{Arguments parsed, identical to those used to create 
+\linkS4class{SummarizedExperiment}.}
+
+\item{UniprotID}{A character vector of Uniprot ID}
+
+\item{GeneSymbol}{A character vector of gene symbol}
+
+\item{Site}{A numeric vector of phosphorylation site}
+
+\item{Residue}{A character vector of site residue}
+
+\item{Sequence}{A character vector of sequences}
+
+\item{Localisation}{A localisation score.}
+}
 \description{
 The PhosphoExperiment class
 }
 \examples{
-library(PhosR)
 quant <- as.matrix(PhosR::phospho.L6.ratio)
 uniprot <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
 symbol <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))

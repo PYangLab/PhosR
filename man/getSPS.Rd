@@ -44,10 +44,10 @@ ppe3 <- selectGrps(ppe3, grps = grp3, 0.5, n=1)
 ppe3 <- tImpute(ppe3)
 
 # convert matrix to ratio
-FL83B.ratio <- ppe3@assays@data$imputed[, 1:12] - 
+FL83B.ratio <- ppe3@assays@data$imputed[, seq(12)] - 
     rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", 
     colnames(ppe3))])
-Hepa.ratio <- ppe3@assays@data$imputed[, 13:24] - 
+Hepa.ratio <- ppe3@assays@data$imputed[, seq(13,24,1)] - 
     rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", 
     colnames(ppe3))])
 ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)

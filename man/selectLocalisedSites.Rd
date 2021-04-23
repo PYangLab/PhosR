@@ -4,12 +4,14 @@
 \alias{selectLocalisedSites}
 \title{Select phosphosites by localisation score}
 \usage{
-selectLocalisedSites(mat, localisation_scores=NULL, prob=0.75)
+selectLocalisedSites(mat, loc=NULL, prob = 0.75)
 }
 \arguments{
 \item{mat}{a matrix (or PhosphoExperiment object) with rows corresponding to 
 phosphosites and columns corresponding to samples in replicates for different 
 treatments.}
+
+\item{loc}{a vector of localisation scores}
 
 \item{prob}{a percent from 0 to 1, specifying the localisation probability of quantified
 values in across all samples for retaining a phosphosite for subsequent

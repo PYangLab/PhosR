@@ -4,15 +4,24 @@
 \alias{plotKinaseNetwork}
 \title{Plot kinase network}
 \usage{
-plotKinaseNetwork(KSR, predMatrix, threshold=0.9, color)
+plotKinaseNetwork(KSR, predMatrix, threshold = 0.9, color, 
+type = NULL, verbose = FALSE)
 }
 \arguments{
-\item{KSR}{kinase-substrate relationship scoring results}
+\item{KSR}{Kinase-substrate relationship scoring results}
 
-\item{predMatrix}{output of kinaseSubstratePred function}
+\item{predMatrix}{Output of kinaseSubstratePred function}
 
-\item{threshold}{threshold used to select interconnected kinases for
+\item{threshold}{Threshold used to select interconnected kinases for
 the expanded signalomes}
+
+\item{color}{A string specifying the color vector for nodes}
+
+\item{type}{A type (\code{graph} or \code{chord}) of plot. If NULL, network 
+graph is plotted}
+
+\item{verbose}{Default to \code{TRUE} to show messages during the progress.
+All messages will be suppressed if set to \code{FALSE}}
 }
 \value{
 a graphical plot
