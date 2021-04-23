@@ -203,7 +203,7 @@ analysis.</p></td>
 #&gt; FALSE  TRUE 
 #&gt;   709  4291 </div><div class='input'>
 <span class='co'># Filter</span>
-<span class='va'>ppe</span><span class='op'>@</span><span class='va'>Localisation</span> <span class='op'>&lt;-</span> <span class='va'>localisation_scores</span>
+<span class='fu'><a href='PPE-accessors.html'>Localisation</a></span><span class='op'>(</span><span class='va'>ppe</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>localisation_scores</span>
 <span class='va'>ppe_filtered</span> <span class='op'>&lt;-</span> <span class='fu'>selectLocalisedSites</span><span class='op'>(</span><span class='va'>ppe</span>, prob<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span>
 <span class='va'>ppe_mat_filtered</span> <span class='op'>&lt;-</span> <span class='fu'>selectLocalisedSites</span><span class='op'>(</span><span class='va'>ppe_mat</span>, loc<span class='op'>=</span><span class='va'>localisation_scores</span>, prob<span class='op'>=</span><span class='fl'>0.75</span><span class='op'>)</span>
 

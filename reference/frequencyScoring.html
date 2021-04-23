@@ -184,7 +184,7 @@
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'KinaseMotifs'</span><span class='op'>)</span>
 
 <span class='co'># Extracting first 10 sequences for demonstration purpose</span>
-<span class='va'>seqs</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio.pe</span><span class='op'>@</span><span class='va'>Sequence</span>
+<span class='va'>seqs</span> <span class='op'>=</span> <span class='fu'><a href='PPE-accessors.html'>Sequence</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span>
 <span class='va'>seqs</span> <span class='op'>=</span> <span class='va'>seqs</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>]</span>
 
 <span class='co'># extracting flanking sequences</span>
@@ -194,7 +194,8 @@
 <span class='op'>}</span>, <span class='va'>seqs</span><span class='op'>)</span>
 
 <span class='co'># The first 10 for demonstration purpose</span>
-<span class='va'>phospho.L6.ratio</span> <span class='op'>=</span> <span class='va'>phospho.L6.ratio.pe</span><span class='op'>@</span><span class='va'>assays</span><span class='op'>@</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Quantification</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,<span class='op'>]</span>
+<span class='va'>phospho.L6.ratio</span> <span class='op'>=</span> <span class='fu'>SummarizedExperiment</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html'>assay</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span>, 
+    <span class='st'>"Quantification"</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,<span class='op'>]</span>
 
 <span class='co'># minimum number of sequences used for compiling motif for each kinase.</span>
 <span class='va'>numMotif</span><span class='op'>=</span><span class='fl'>5</span>
