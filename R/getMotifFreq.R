@@ -12,7 +12,7 @@
 #' 
 #' # We will create a frequency matrix of Tfg S198 phosphosite.
 #' idx = which(grepl("TFG\\;S198\\;", rownames(phospho.L6.ratio.pe)))
-#' substrate.seq = phospho.L6.ratio.pe@Sequence[idx]
+#' substrate.seq = Sequence(phospho.L6.ratio.pe)[idx]
 #' freq.mat = createFrequencyMat(substrate.seq)
 #'
 #' @export
@@ -75,7 +75,7 @@ createFrequencyMat <- function(substrates.seq) {
 #' data('KinaseMotifs')
 #'
 #' # Extracting first 10 sequences for demonstration purpose
-#' seqs = phospho.L6.ratio.pe@Sequence
+#' seqs = Sequence(phospho.L6.ratio.pe)
 #' seqs = seqs[seq(10)]
 #'
 #' # extracting flanking sequences
@@ -85,7 +85,8 @@ createFrequencyMat <- function(substrates.seq) {
 #' }, seqs)
 #'
 #' # The first 10 for demonstration purpose
-#' phospho.L6.ratio = phospho.L6.ratio.pe@assays@data$Quantification[seq(10),]
+#' phospho.L6.ratio = SummarizedExperiment::assay(phospho.L6.ratio.pe, 
+#'     "Quantification")[seq(10),]
 #'
 #' # minimum number of sequences used for compiling motif for each kinase.
 #' numMotif=5

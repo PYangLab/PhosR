@@ -65,18 +65,23 @@
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' 
-#' grps = gsub('_.+', '', phospho.L6.ratio.pe@colData@rownames)
+#' grps = gsub('_.+', '', rownames(
+#'     SummarizedExperiment::colData(phospho.L6.ratio.pe))
+#' )
 #' 
 #' # Cleaning phosphosite label
-#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#' L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
 #'                  ";",
-#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
+#'                  sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
 #'                  ";", sep = "")
 #' phospho.L6.ratio = t(sapply(split(data.frame(
-#'     phospho.L6.ratio.pe@assays@data$Quantification), L6.sites),colMeans))
+#'     SummarizedExperiment::assay(phospho.L6.ratio.pe, "Quantification")), 
+#'     L6.sites),colMeans))
 #' phospho.site.names = split(
-#'     rownames(phospho.L6.ratio.pe@assays@data$Quantification), L6.sites)
+#'     rownames(
+#'         SummarizedExperiment::assay(phospho.L6.ratio.pe, "Quantification")
+#'     ), L6.sites)
 #' 
 #' # Construct a design matrix by condition
 #' design = model.matrix(~ grps - 1)

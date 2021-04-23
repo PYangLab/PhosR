@@ -38,7 +38,7 @@ localisation_scores <- round(rnorm(nrow(ppe), 0.8, 0.05), 2)
 table(localisation_scores >= 0.75)
 
 # Filter
-ppe@Localisation <- localisation_scores
+Localisation(ppe) <- localisation_scores
 ppe_filtered <- selectLocalisedSites(ppe, prob=0.75)
 ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, prob=0.75)
 

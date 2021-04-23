@@ -294,7 +294,7 @@ given phosphosite to be retained.")
 #' table(localisation_scores >= 0.75)
 #' 
 #' # Filter
-#' ppe@Localisation <- localisation_scores
+#' Localisation(ppe) <- localisation_scores
 #' ppe_filtered <- selectLocalisedSites(ppe, prob=0.75)
 #' ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, prob=0.75)
 #' 
@@ -315,14 +315,14 @@ given phosphosite to be retained.")
         stop("Parameter mat is missing!")
     if ((!is.null(prob)) && ((prob < 0) || (prob > 1)))
         stop("Parameter prob must be a numeric value between 0 and 1")
-    if ((is.null(loc)) && is.null(mat@Localisation) && is.null(mat@Localisation) && sum(is.na(mat@Localisation)) > 0)
+    if ((is.null(loc)) && is.null(Localisation(mat)) && is.null(Localisation(mat)) && sum(is.na(Localisation(mat))) > 0)
          stop("Some or all localisation scores are missing")
     if ((!is.null(loc)) && (length(loc) != nrow(mat)))
          stop("Length of loc should equal to the number of rows in mat")
      
     mat.orig = mat
     if (methods::is(mat, "PhosphoExperiment")) {
-            loc = mat@Localisation
+            loc = Localisation(mat)
     } else {
         if (is.null(loc))
             stop("Localisation probabilty scores missing")

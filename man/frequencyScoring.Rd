@@ -23,7 +23,7 @@ data('phospho_L6_ratio_pe')
 data('KinaseMotifs')
 
 # Extracting first 10 sequences for demonstration purpose
-seqs = phospho.L6.ratio.pe@Sequence
+seqs = Sequence(phospho.L6.ratio.pe)
 seqs = seqs[seq(10)]
 
 # extracting flanking sequences
@@ -33,7 +33,8 @@ seqWin = mapply(function(x) {
 }, seqs)
 
 # The first 10 for demonstration purpose
-phospho.L6.ratio = phospho.L6.ratio.pe@assays@data$Quantification[seq(10),]
+phospho.L6.ratio = SummarizedExperiment::assay(phospho.L6.ratio.pe, 
+    "Quantification")[seq(10),]
 
 # minimum number of sequences used for compiling motif for each kinase.
 numMotif=5

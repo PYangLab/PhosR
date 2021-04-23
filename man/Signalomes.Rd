@@ -50,14 +50,15 @@ design = model.matrix(~ grps - 1)
 
 # phosphoproteomics data normalisation using RUV
 
-L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
+                 sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";", sep = "")
 ctl = which(L6.sites \%in\% SPSs)
-phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
-                                  M = design, k = 3, ctl = ctl)
+phospho.L6.ratio.RUV = RUVphospho(
+    SummarizedExperiment::assay(phospho.L6.ratio.pe, "Quantification"), 
+    M = design, k = 3, ctl = ctl)
 
 phosphoL6 = phospho.L6.ratio.RUV
 
@@ -70,7 +71,7 @@ L6.phos.std <- standardise(phosphoL6.reg)
 idx <- match(rownames(L6.phos.std), rownames(phospho.L6.ratio.pe))
 rownames(L6.phos.std) <- L6.sites[idx]
 
-L6.phos.seq <- phospho.L6.ratio.pe@Sequence[idx]
+L6.phos.seq <- Sequence(phospho.L6.ratio.pe)[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
                                     L6.phos.seq, numMotif = 5, numSub = 1)

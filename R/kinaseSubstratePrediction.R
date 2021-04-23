@@ -45,16 +45,16 @@
 #' data('PhosphoSitePlus')
 #' 
 #' ppe <- phospho.L6.ratio.pe
-#' sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-#'     sapply(ppe@Residue, function(x)x),
-#'     sapply(ppe@Site, function(x)x),
+#' sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+#'     sapply(Residue(ppe), function(x)x),
+#'     sapply(Site(ppe), function(x)x),
 #'     ";", sep = "")
 #' grps = gsub("_.+", "", colnames(ppe))
 #' design = model.matrix(~ grps - 1)
 #' ctl = which(sites %in% SPSs)
 #' ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 #' 
-#' phosphoL6 = ppe@assays@data$normalised
+#' phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 #' 
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -64,9 +64,10 @@
 #' 
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #' 
-#' rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
+#' rownames(L6.phos.std) <- paste0(GeneSymbol(ppe), ";", Residue(ppe), 
+#'     Site(ppe), ";")[idx]
 #' 
-#' L6.phos.seq <- ppe@Sequence[idx]
+#' L6.phos.seq <- Sequence(ppe)[idx]
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
@@ -179,16 +180,16 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' data('PhosphoSitePlus')
 #' 
 #' ppe <- phospho.L6.ratio.pe
-#' sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-#'     sapply(ppe@Residue, function(x)x),
-#'     sapply(ppe@Site, function(x)x),
+#' sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+#'     sapply(Residue(ppe), function(x)x),
+#'     sapply(Site(ppe), function(x)x),
 #'     ";", sep = "")
 #' grps = gsub("_.+", "", colnames(ppe))
 #' design = model.matrix(~ grps - 1)
 #' ctl = which(sites %in% SPSs)
 #' ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 #' 
-#' phosphoL6 = ppe@assays@data$normalised
+#' phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 #' 
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -261,16 +262,16 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' data('PhosphoSitePlus')
 #' 
 #' ppe <- phospho.L6.ratio.pe
-#' sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-#'     sapply(ppe@Residue, function(x)x),
-#'     sapply(ppe@Site, function(x)x),
+#' sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+#'     sapply(Residue(ppe), function(x)x),
+#'     sapply(Site(ppe), function(x)x),
 #'     ";", sep = "")
 #' grps = gsub("_.+", "", colnames(ppe))
 #' design = model.matrix(~ grps - 1)
 #' ctl = which(sites %in% SPSs)
 #' ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 #' 
-#' phosphoL6 = ppe@assays@data$normalised
+#' phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 #' 
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -280,9 +281,10 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' 
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #' 
-#' rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
+#' rownames(L6.phos.std) <- paste0(GeneSymbol(ppe), ";", Residue(ppe), 
+#'     Site(ppe), ";")[idx]
 #' 
-#' L6.phos.seq <- ppe@Sequence[idx]
+#' L6.phos.seq <- Sequence(ppe)[idx]
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
@@ -333,16 +335,16 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' data('PhosphoSitePlus')
 #' 
 #' ppe <- phospho.L6.ratio.pe
-#' sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-#'     sapply(ppe@Residue, function(x)x),
-#'     sapply(ppe@Site, function(x)x),
+#' sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+#'     sapply(Residue(ppe), function(x)x),
+#'     sapply(Site(ppe), function(x)x),
 #'     ";", sep = "")
 #' grps = gsub("_.+", "", colnames(ppe))
 #' design = model.matrix(~ grps - 1)
 #' ctl = which(sites %in% SPSs)
 #' ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 #' 
-#' phosphoL6 = ppe@assays@data$normalised
+#' phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 #' 
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -352,9 +354,10 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' 
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #' 
-#' rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
+#' rownames(L6.phos.std) <- paste0(GeneSymbol(ppe), ";", Residue(ppe), 
+#'     Site(ppe), ";")[idx]
 #' 
-#' L6.phos.seq <- ppe@Sequence[idx]
+#' L6.phos.seq <- Sequence(ppe)[idx]
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
@@ -426,16 +429,16 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' data('PhosphoSitePlus')
 #' 
 #' ppe <- phospho.L6.ratio.pe
-#' sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-#'     sapply(ppe@Residue, function(x)x),
-#'     sapply(ppe@Site, function(x)x),
+#' sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+#'     sapply(Residue(ppe), function(x)x),
+#'     sapply(Site(ppe), function(x)x),
 #'     ";", sep = "")
 #' grps = gsub("_.+", "", colnames(ppe))
 #' design = model.matrix(~ grps - 1)
 #' ctl = which(sites %in% SPSs)
 #' ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 #' 
-#' phosphoL6 = ppe@assays@data$normalised
+#' phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 #' 
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -445,9 +448,10 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' 
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #' 
-#' rownames(L6.phos.std) <- paste0(ppe@GeneSymbol, ";", ppe@Residue, ppe@Site, ";")[idx]
+#' rownames(L6.phos.std) <- paste0(GeneSymbol(ppe), ";", Residue(ppe), 
+#'     Site(ppe), ";")[idx]
 #' 
-#' L6.phos.seq <- ppe@Sequence[idx]
+#' L6.phos.seq <- Sequence(ppe)[idx]
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)

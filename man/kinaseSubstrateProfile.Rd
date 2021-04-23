@@ -27,16 +27,16 @@ data('SPSs')
 data('PhosphoSitePlus')
 
 ppe <- phospho.L6.ratio.pe
-sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-    sapply(ppe@Residue, function(x)x),
-    sapply(ppe@Site, function(x)x),
+sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+    sapply(Residue(ppe), function(x)x),
+    sapply(Site(ppe), function(x)x),
     ";", sep = "")
 grps = gsub("_.+", "", colnames(ppe))
 design = model.matrix(~ grps - 1)
 ctl = which(sites \%in\% SPSs)
 ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
-phosphoL6 = ppe@assays@data$normalised
+phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)

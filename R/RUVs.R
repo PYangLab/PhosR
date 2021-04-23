@@ -30,10 +30,10 @@
 #'
 #' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 #'
-#' L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+#' L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
 #'                  ";",
-#'                  sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-#'                  sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+#'                  sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
+#'                  sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
 #'                  ";", sep = "")
 #'
 #' # Construct a design matrix by condition
@@ -41,8 +41,9 @@
 #'
 #' # phosphoproteomics data normalisation using RUV
 #' ctl = which(L6.sites %in% SPSs)
-#' phospho.L6.ratio.RUV = RUVphospho(phospho.L6.ratio.pe@assays@data$Quantification, 
-#'                                   M = design, k = 3, ctl = ctl)
+#' phospho.L6.ratio.RUV = RUVphospho(
+#'     SummarizedExperiment::assay(phospho.L6.ratio.pe, "Quantification"), 
+#'     M = design, k = 3, ctl = ctl)
 #' 
 #' @importFrom ruv RUVIII
 #' @importFrom methods is

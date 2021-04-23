@@ -32,13 +32,16 @@
 #' ppe3 <- tImpute(ppe3)
 #' 
 #' # convert matrix to ratio
-#' FL83B.ratio <- ppe3@assays@data$imputed[, seq(12)] - 
-#'     rowMeans(ppe3@assays@data$imputed[,grep("FL83B_Control", 
-#'     colnames(ppe3))])
-#' Hepa.ratio <- ppe3@assays@data$imputed[, seq(13,24,1)] - 
-#'     rowMeans(ppe3@assays@data$imputed[,grep("Hepa1.6_Control", 
-#'     colnames(ppe3))])
-#' ppe3@assays@data$Quantification <- cbind(FL83B.ratio, Hepa.ratio)
+#' FL83B.ratio <- SummarizedExperiment::assay(ppe3,"imputed")[, seq(12)] - 
+#'     rowMeans(
+#'         SummarizedExperiment::assay(ppe3,"imputed")[,grep("FL83B_Control", 
+#'         colnames(ppe3))])
+#' Hepa.ratio <- SummarizedExperiment::assay(ppe3,"imputed")[, seq(13,24,1)] - 
+#'     rowMeans(
+#'         SummarizedExperiment::assay(ppe3, "imputed")[,grep("Hepa1.6_Control", 
+#'         colnames(ppe3))])
+#' SummarizedExperiment::assay(ppe3, "Quantification") <- 
+#'     cbind(FL83B.ratio, Hepa.ratio)
 #' 
 #' ppe.list <- list(ppe1, ppe2, ppe3)
 #' 
@@ -68,20 +71,20 @@ getSPS <-function (phosData, assays="Quantification", conds, num = 100) {
             }
         }
         for (i in seq(n)) {
-            sites[[i]] <- paste(toupper(phosData[[i]]@GeneSymbol), 
-                                paste(phosData[[i]]@Residue, 
-                                        phosData[[i]]@Site, sep = ""), 
+            sites[[i]] <- paste(toupper(GeneSymbol(phosData[[i]])), 
+                                paste(Residue(phosData[[i]]), 
+                                        Site(phosData[[i]]), sep = ""), 
                                 sep = ";")
             
             sites.unique[[i]] <- unique(sites[[i]])
             nrep <- ncol(phosData[[i]])/length(unique(conds[[i]]))
             if (nrep == 1) {
-                mat.mean <- phosData[[i]]@assays@data[[assays]]
+                mat.mean <- SummarizedExperiment::assay(phosData[[i]], assays)
             }
             else {
                 grps <- conds[[i]]
                 mat.mean <- PhosR::meanAbundance(
-                        phosData[[i]]@assays@data[[assays]], grps)
+                        SummarizedExperiment::assay(phosData[[i]], assays),grps)
             }
             sites.mean <- t(sapply(split(as.data.frame(mat.mean), 
                                          sites[[i]]), colMeans))
