@@ -33,10 +33,10 @@ data('SPSs')
 
 grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
-L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
+                 sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";", sep = "")
 
 # Construct a design matrix by condition
@@ -49,7 +49,7 @@ phospho.L6.ratio.pe = RUVphospho(phospho.L6.ratio.pe,
 # fit linear model for each phosphosite
 f <- grps
 X <- model.matrix(~ f - 1)
-fit <- lmFit(phospho.L6.ratio.pe@assays@data$normalised, X)
+fit <- lmFit(SummarizedExperiment::assay(phospho.L6.ratio.pe, "normalised"), X)
 
 # extract top-ranked phosphosites for each condition compared to basal
 table.AICAR <- topTable(eBayes(fit), number=Inf, coef = 1)

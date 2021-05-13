@@ -13,19 +13,20 @@ treatments.}
 
 \item{loc}{a vector of localisation scores}
 
-\item{prob}{a percent from 0 to 1, specifying the localisation probability of quantified
-values in across all samples for retaining a phosphosite for subsequent
-analysis.}
+\item{prob}{a percent from 0 to 1, specifying the localisation probability 
+of quantified values in across all samples for retaining a phosphosite for 
+subsequent analysis.}
 }
 \value{
 a filtered matrix
 }
 \description{
-Select phosphosites with a localisation score higher than the pre-defined probability score (default score = 0.75)
+Select phosphosites with a localisation score higher than the 
+pre-defined probability score (default score = 0.75)
 }
 \examples{
 
-data('phospho.cells.Ins.sample')
+data('phospho.cells.Ins.pe')
 ppe <- phospho.cells.Ins.pe
 ppe_mat <- as.data.frame(SummarizedExperiment::assay(ppe))
 # Before filtering
@@ -40,7 +41,8 @@ table(localisation_scores >= 0.75)
 # Filter
 Localisation(ppe) <- localisation_scores
 ppe_filtered <- selectLocalisedSites(ppe, prob=0.75)
-ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, prob=0.75)
+ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, 
+     prob=0.75)
 
 # After filtering
 dim(ppe_filtered)

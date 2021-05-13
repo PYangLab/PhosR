@@ -40,9 +40,10 @@
 #'  \code{Signalomes}, \code{proteinModules} and \code{kinaseSubstrates}
 #'
 #' @examples
-#'
-#' data('phospho_L6_ratio.pe')
+#' \donttest{
+#' data('phospho_L6_ratio_pe')
 #' data('SPSs')
+#' data('PhosphoSitePlus')
 #' 
 #' grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 #' 
@@ -67,7 +68,7 @@
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 #' aov <- matANOVA(mat=phosphoL6, grps=grps)
 #' phosphoL6.reg <- phosphoL6[(aov < 0.05) &
-#'                                (rowSums(phosphoL6.mean > 0.5) > 0),, drop = FALSE]
+#'                          (rowSums(phosphoL6.mean > 0.5) > 0),, drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #' idx <- match(rownames(L6.phos.std), rownames(phospho.L6.ratio.pe))
 #' rownames(L6.phos.std) <- L6.sites[idx]
@@ -85,6 +86,8 @@
 #'                                  predMatrix=L6.predMat,
 #'                                  exprsMat=L6.phos.std,
 #'                                  KOI=kinaseOI)
+#' }
+#' 
 #' @export
 
 Signalomes <- function(KSR, 
@@ -109,7 +112,8 @@ Signalomes <- function(KSR,
     protein_assignment = mapply("[[",
                                 strsplit(rownames(KSR$combinedScoreMatrix),";"),
                                 MoreArgs = list(1))
-    KinaseFamily = PhosR::KinaseFamily
+    # KinaseFamily = PhosR::KinaseFamily
+    utils::data("KinaseFamily", envir = environment())
     kinaseGroup <- KinaseFamily[, "kinase_group"]
     names(kinaseGroup) <- KinaseFamily[, "gene_symbol"]
     
@@ -135,8 +139,8 @@ Signalomes <- function(KSR,
     ############## generate coassignment
     cluster_assignment <- as.factor(substrate_clusters)
     dat.long <- data.frame(table(cluster_assignment, protein_assignment))
-    dftoHeatmap <- tidyr::pivot_wider(dat.long, names_from = protein_assignment, 
-        values_from = Freq)[,-1]
+    dftoHeatmap <- tidyr::pivot_wider(dat.long, names_from = 
+        .data$protein_assignment, values_from = .data$Freq)[,-1]
     dftoHeatmap[is.na(dftoHeatmap)] <- 0
     dftoHeatmap[dftoHeatmap > 0] <- 1
     hclust_res <- stats::hclust(stats::dist(t(dftoHeatmap)),
@@ -144,7 +148,8 @@ Signalomes <- function(KSR,
     tree_height <- as.numeric(names(table(hclust_res$height)))
     branching <- as.numeric(table(hclust_res$height))
 
-    tree_height_calc = unlist(lapply(seq(2,length(tree_height), 1), function(x) {
+    tree_height_calc = unlist(lapply(seq(2,length(tree_height), 1), 
+        function(x) {
         h <- tree_height[[x]]
         m <- stats::cutree(hclust_res, h = h)
         return(length(table(m)))
@@ -274,8 +279,8 @@ Signalomes <- function(KSR,
     dftoPlot_signalome$modules <- modules[dftoPlot_signalome$values]
     #adjacencyData <- with(dftoPlot_signalome, table(ind, modules))
     d = table(dftoPlot_signalome$ind, dftoPlot_signalome$modules)
-    adjacencyData <- matrix(table(dftoPlot_signalome$ind, dftoPlot_signalome$modules), 
-                            nrow = nrow(d), ncol = ncol(d))
+    adjacencyData <- matrix(table(dftoPlot_signalome$ind, 
+        dftoPlot_signalome$modules), nrow = nrow(d), ncol = ncol(d))
     rownames(adjacencyData) = rownames(d)
     colnames(adjacencyData) = colnames(d)
 
@@ -320,8 +325,9 @@ Signalomes <- function(KSR,
         dplyr::count(.data$cluster, .data$ind)
     balloon_bycluster$ind <- as.factor(balloon_bycluster$ind)
     balloon_bycluster$cluster <- as.factor(balloon_bycluster$cluster)
-    balloon_bycluster <- as.data.frame(tidyr::pivot_wider(balloon_bycluster, 
-                                                          names_from = .data$ind, values_from = .data$n))
+    balloon_bycluster <- as.data.frame(
+        tidyr::pivot_wider(balloon_bycluster, 
+            names_from = .data$ind, values_from = .data$n))
     rownames(balloon_bycluster) = balloon_bycluster$cluster
     balloon_bycluster = balloon_bycluster[,-1]
 
@@ -371,7 +377,8 @@ generateSignalome = function(kinaseAnnot, kinaseGroup, predMatrix, KOI,
         score = as.numeric(kinaseAnnot$score))
     rownames(annotation) <- rownames(predMatrix)
     
-    kinaseProp = kinaseProportions[!grepl("noModule",rownames(kinaseProportions)),]
+    kinaseProp = kinaseProportions[!grepl("noModule",
+                                        rownames(kinaseProportions)),]
     m = modules[!grepl("noModule", modules)]
     
     res <- lapply(KOI, function(x) {

@@ -1,7 +1,7 @@
 Package: PhosR
 Type: Package
 Title: A set of methods and tools for comprehensive analysis of phosphoproteomics data
-Version: 1.1.8
+Version: 1.1.9
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut", "cre")),
@@ -12,11 +12,10 @@ Description: PhosR is a package for the comprenhensive analysis of phosphoproteo
     including filtering, imputation, normalisation, and functional analysis
     for inferring active kinases and signalling pathways.
 License: GPL-3 + file LICENSE
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Imports:
     ruv,
     e1071,
-    calibrate,
     dendextend,
     limma,
     pcaMethods,
@@ -44,7 +43,7 @@ Imports:
     reshape2,
     ggtext
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 biocViews: Software, ResearchField, Proteomics
@@ -61,4 +60,5 @@ Suggests:
     reactome.db,
     annotate,
     BiocStyle,
-    stringr
+    stringr,
+    calibrate

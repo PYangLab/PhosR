@@ -32,6 +32,7 @@
 #' All messages will be suppressed if set to \code{FALSE}
 #'
 #' @importFrom preprocessCore normalize.quantiles
+#' @importFrom utils data
 #'
 #' @return A list of 4 elements.
 #' \code{motifScoreMatrix}, \code{profileScoreMatrix},
@@ -39,7 +40,7 @@
 #' and their \code{weights}.
 #'
 #' @examples
-#'
+#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -71,12 +72,13 @@
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
-#'
+#' }
 #' @export
 kinaseSubstrateScore <- function(substrate.list, mat, seqs,
                                 numMotif = 5, numSub = 1, verbose = TRUE) {
     ks.profile.list <- kinaseSubstrateProfile(substrate.list, mat)
-    motif.mouse.list = PhosR::motif.mouse.list
+    # motif.mouse.list = PhosR::motif.mouse.list
+    utils::data("KinaseMotifs", envir = environment())
     if (verbose) {
         message(paste("Number of kinases passed motif size filtering:",
             sum(motif.mouse.list$NumInputSeq >= numMotif)))
@@ -130,7 +132,8 @@ by motifs and phospho profiles:")
     return(phosScoringMatrices)
 }
 
-scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs, verbose = TRUE) {
+scorePhosphositesMotifs = function(mat, motif.mouse.list.filtered, seqs, 
+                                verbose = TRUE) {
     motifScoreMatrix <- matrix(NA, nrow = nrow(mat),
                             ncol = length(motif.mouse.list.filtered))
     rownames(motifScoreMatrix) <- rownames(mat)
@@ -174,7 +177,7 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' @return Kinase profile list.
 #'
 #' @examples
-#' 
+#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -200,7 +203,7 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #'
 #' ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
-#'
+#' }
 #' @export
 kinaseSubstrateProfile <- function(substrate.list, mat) {
     # generate kinase substrate profile list
@@ -232,7 +235,8 @@ kinaseSubstrateProfile <- function(substrate.list, mat) {
 
 
 kinaseActivityHeatmap <- function(ksProfileMatrix) {
-    KinaseFamily = PhosR::KinaseFamily
+    # KinaseFamily = PhosR::KinaseFamily
+    utils::data("KinaseFamily", envir = environment())
     o <- intersect(rownames(ksProfileMatrix),
         rownames(KinaseFamily))
     annotation_row = data.frame(group = KinaseFamily[o,
@@ -255,8 +259,10 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @return a pheatmap object.
 #'
 #' @import pheatmap
+#' @importFrom utils data
 #'
 #' @examples
+#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -290,10 +296,11 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #'     
 #' kinaseSubstrateHeatmap(L6.matrices)
-#'
+#' }
 #' @export
 kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
-    KinaseFamily = PhosR::KinaseFamily
+    # KinaseFamily = PhosR::KinaseFamily
+    utils::data("KinaseFamily", envir = environment())
     ####### heatmap 1
     sites <- c()
     for (i in seq_len(ncol(phosScoringMatrices$combinedScoreMatrix))) {
@@ -329,7 +336,7 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' @return A graphical plot
 #'
 #' @examples
-#'
+#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -361,7 +368,7 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
-
+#'     
 #' set.seed(1)
 #' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
 #' dev.off()
@@ -369,7 +376,7 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 #' site = "AAK1;S677;"
 #' siteAnnotate(site, L6.matrices, L6.predMat)
-#'
+#' }
 #' @export
 siteAnnotate <- function(site, phosScoringMatrices,
     predMatrix) {
@@ -423,7 +430,7 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' @return Kinase prediction matrix
 #'
 #' @examples
-#'
+#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -457,7 +464,7 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #' set.seed(1)
 #' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
-#'
+#' }
 #' @export
 #'
 kinaseSubstratePred <- function(phosScoringMatrices,

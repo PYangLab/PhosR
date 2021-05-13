@@ -1,3 +1,11 @@
+## PhosR 1.1.9
+
+* Fixes in documentation, examples and styles to meet BioC requirements
+
+## PhosR 1.1.8
+
+* Fixes in documentation and examples to meet BioC requirements
+
 ## PhosR 1.1.7
 
 * Fixed getSPS to expect residue information.

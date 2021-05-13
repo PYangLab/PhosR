@@ -14,13 +14,14 @@
 #' @description
 #' The `panel` parameter allows different type of visualisation for output
 #' object from PhosR.
-#' `panel = "all"` is used to create a 2*2 panel of plots including the following.
+#' `panel = "all"` is used to create a 2*2 panel of plots including the 
+#' following.
 #' `panel = "quantify"` is used to visualise percentage of quantification after
 #' imputataion.
-#' `panel = "dendrogram"` is used to visualise dendrogram (hierarchical clustering) of the
-#' input matrix.
-#' `panel = "abundance"` is used to visualise abundance level of samples from the input
-#' matrix.
+#' `panel = "dendrogram"` is used to visualise dendrogram (hierarchical 
+#' clustering) of the input matrix.
+#' `panel = "abundance"` is used to visualise abundance level of samples from 
+#' the input matrix.
 #' `panel = "pca"` is used to show PCA plot
 #'
 #' @return A graphical plot
@@ -70,7 +71,7 @@
 #' )
 #' 
 #' # Cleaning phosphosite label
-#' L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
+#' L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe),function(x)paste(x)),
 #'                  ";",
 #'                  sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
 #'                  sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
@@ -149,14 +150,14 @@ quantPlot = function(mat, grps, labels) {
         Sample = labels,
         Groups = grps
     )
-    ggplot2::ggplot(dat, ggplot2::aes(x = Sample, y = Quantification, 
-        fill = Groups)) +
+    ggplot2::ggplot(dat, ggplot2::aes(x = .data$Sample, y = .data$Quantification, 
+        fill = .data$Groups)) +
         ggplot2::geom_bar(stat = "identity") +
         ggplot2::coord_cartesian(ylim = c(0,100)) + 
         ggplot2::ggtitle("Quantification per sample") +
         ggplot2::labs(y = "Quantification (%)") +
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 1, 
-            hjust = 1))    
+        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, 
+                                                        vjust = 1, hjust = 1))    
 }
 
 #' @importFrom ggdendro ggdendrogram
@@ -182,15 +183,15 @@ abundPlot = function(mat, grps, labels) {
     rep_num = nrow(mat)
     dat = mat %>%
         as.data.frame() %>%
-        dplyr::mutate(sites = rownames(.)) %>%
-        tidyr::pivot_longer(-sites, names_to = "Samples", 
+        dplyr::mutate(sites = rownames(.data)) %>%
+        tidyr::pivot_longer(-.data$sites, names_to = "Samples", 
             values_to = "abundance") %>%
         dplyr::mutate(
             Groups = rep(grps, rep_num)
         )
     
-    ggplot2::ggplot(dat, ggplot2::aes(x = Samples, y = abundance, 
-        fill = Groups)) +
+    ggplot2::ggplot(dat, ggplot2::aes(x = .data$Samples, y = .data$abundance, 
+        fill = .data$Groups)) +
         ggplot2::geom_boxplot() +
         ggplot2::labs(y = "Expression/Abundance level")
 }
@@ -201,17 +202,17 @@ pcaPlot = function(mat, grps, labels) {
         seed = 123, main = "PCA")
     
     dat = data.frame(
-        PC1 = result@scores[, 1],
-        PC2 = result@scores[, 2],
+        PC1 = pcaMethods::scores(result)[, 1],
+        PC2 = pcaMethods::scores(result)[, 2],
         grps = grps,
         Samples = labels
     )
-    ggplot2::ggplot(dat, ggplot2::aes(x = PC1, y = PC2, color = grps, 
-        label = Samples)) +
+    ggplot2::ggplot(dat, ggplot2::aes(x = .data$PC1, y = .data$PC2, 
+        color = .data$grps, label = .data$Samples)) +
         ggplot2::geom_point(size = 2) +
         ggplot2::geom_text(hjust = 0, vjust = 0) +
         ggplot2::labs(
-            x = paste("PC1", round(result@R2[1] * 100), "%"),
-            y = paste("PC2", round(result@R2[2] * 100), "%")
+            x = paste("PC1", round(pcaMethods::R2cum(result)[1] * 100), "%"),
+            y = paste("PC2", round(pcaMethods::R2cum(result)[2] * 100), "%")
         )
 }

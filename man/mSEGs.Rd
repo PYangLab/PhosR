@@ -12,8 +12,9 @@ data(SEGs)
 }
 \description{
 A list of stably expressed genes (SEGs) in mouse and human 
-identified from a collection of single-cell RNA-sequencing data. See Lin et al., 
-Evaluating stably expressed genes in single cells, GigaScience, 8(9):giz106, 
-https://doi.org/10.1093/gigascience/giz106 for more details
+identified from a collection of single-cell RNA-sequencing data. 
+See Lin et al., Evaluating stably expressed genes in single cells, 
+GigaScience, 8(9):giz106, https://doi.org/10.1093/gigascience/giz106 for 
+more details
 }
 \keyword{datasets}

@@ -28,7 +28,7 @@ Generate set of stable phosphoporylated sites
 library(stringr)
 
 data("phospho_L6_ratio_pe")
-data("phospho_liverInsTC_RUV_pe")
+data("phospho.liver.Ins.TC.ratio.RUV.pe")
 data("phospho.cells.Ins.pe")
 
 ppe1 <- phospho.L6.ratio.pe

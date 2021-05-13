@@ -25,13 +25,14 @@ A graphical plot
 \description{
 The `panel` parameter allows different type of visualisation for output
 object from PhosR.
-`panel = "all"` is used to create a 2*2 panel of plots including the following.
+`panel = "all"` is used to create a 2*2 panel of plots including the 
+following.
 `panel = "quantify"` is used to visualise percentage of quantification after
 imputataion.
-`panel = "dendrogram"` is used to visualise dendrogram (hierarchical clustering) of the
-input matrix.
-`panel = "abundance"` is used to visualise abundance level of samples from the input
-matrix.
+`panel = "dendrogram"` is used to visualise dendrogram (hierarchical 
+clustering) of the input matrix.
+`panel = "abundance"` is used to visualise abundance level of samples from 
+the input matrix.
 `panel = "pca"` is used to show PCA plot
 }
 \examples{
@@ -73,7 +74,7 @@ grps = gsub('_.+', '', rownames(
 )
 
 # Cleaning phosphosite label
-L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
+L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe),function(x)paste(x)),
                  ";",
                  sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
                  sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),

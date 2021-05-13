@@ -20,11 +20,11 @@ gene IDs.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes phosphosite (or gene) set enrichment analysis using Wilcoxon Rank Sum
-test.
+This function performes phosphosite (or gene) set enrichment analysis using 
+Wilcoxon Rank Sum test.
 }
 \examples{
-
+\donttest{
 library(limma)
 
 library(org.Rn.eg.db)
@@ -101,4 +101,5 @@ pathways = lapply(pathways, function(path) {
 path2 <- pathwayRankBasedEnrichment(Tc.gene[,1],
                                     annotation=pathways,
                                     alter = 'greater')
+}
 }

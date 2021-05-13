@@ -46,7 +46,7 @@ This function generates substrate scores for kinases that pass
 filtering based on both motifs and dynamic profiles
 }
 \examples{
-
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -78,5 +78,5 @@ L6.phos.seq <- Sequence(ppe)[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
-
+}
 }

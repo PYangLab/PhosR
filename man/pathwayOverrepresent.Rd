@@ -23,11 +23,11 @@ profiled dataset.}
 A matrix of pathways and their associated substrates and p-values.
 }
 \description{
-This function performes phosphosite (or gene) set over-representation analysis
-using Fisher's exact test.
+This function performes phosphosite (or gene) set 
+over-representation analysis using Fisher's exact test.
 }
 \examples{
-
+\donttest{
 library(limma)
 library(org.Rn.eg.db)
 library(reactome.db)
@@ -108,5 +108,5 @@ pathways = lapply(pathways, function(path) {
 # 1D gene-centric pathway analysis
 path1 <- pathwayOverrepresent(geneSet, annotation=pathways,
     universe = rownames(Tc.gene), alter = 'greater')
-
+}
 }

@@ -18,27 +18,31 @@ plotSignalomeMap <- function(signalomes, color) {
     
     df <- stack(signalomes$kinaseSubstrates)
     modules <- signalomes$proteinModule
-    names(modules) <- sapply(strsplit(as.character(names(signalomes$proteinModules)), ";"), "[[", 1)
+    names(modules) <- unlist(lapply(
+        strsplit(
+            as.character(names(signalomes$proteinModules)), 
+            ";"
+        ), "[[", 1))
     df$cluster <- modules[df$values]
     
     df_balloon <- df
-    df_balloon <- na.omit(df_balloon) %>% dplyr::count(cluster, ind)
+    df_balloon <- na.omit(df_balloon) %>% dplyr::count(.data$cluster, .data$ind)
     df_balloon$ind <- as.factor(df_balloon$ind)
     df_balloon$cluster <- as.factor(df_balloon$cluster)
-    df_balloon <- tidyr::spread(df_balloon, ind, n)[,-1]
+    df_balloon <- tidyr::spread(df_balloon, .data$ind, .data$n)[,-1]
     df_balloon[is.na(df_balloon)] <- 0
 
     df_balloon <- do.call(rbind, lapply(seq(nrow(df_balloon)), function(x) {
         
-        res <- sapply(df_balloon[x,], function(y) y/sum(df_balloon[x,])*100)
+        res <- unlist(lapply(df_balloon[x,], function(y) y/sum(df_balloon[x,])*100))
         
     }))
     
     df_balloon <- reshape2::melt(as.matrix(df_balloon))
     colnames(df_balloon) <- c("cluster", "ind", "n")
     
-    g <- ggplot2::ggplot(df_balloon, aes(x = ind, y = cluster)) + 
-        geom_point(aes(col=ind, size=n)) + 
+    g <- ggplot2::ggplot(df_balloon, aes(x = .data$ind, y = .data$cluster)) + 
+        geom_point(aes(col=.data$ind, size=.data$n)) + 
         scale_color_manual(values=color) + 
         scale_size_continuous(range = c(2, 17)) + 
         theme_classic() + 
@@ -127,8 +131,10 @@ plotKinaseNetwork <- function(KSR, predMatrix, threshold = 0.9, color=NULL,
         if (verbose) {
             print("Generating circular graph...")
         }
-        
-        grid.col <- kinase_all_color
+        if (is.null(color)) {
+            stop("Parameter color cannot be NULL.")
+        }
+        grid.col <- color
         names(grid.col) <- rownames(cor_mat)
         
         n = length(grid.col)

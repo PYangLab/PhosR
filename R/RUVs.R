@@ -74,7 +74,8 @@ RUVphospho <- function(mat, M, ctl, k = NULL, m = 1.6, s = 0.6,
     mat = RUV(mat = mat, M = M, ctl = ctl, k = k, m = m, s = s,
         keepImpute = keepImpute, ...)
     if (pe) {
-        SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
+        SummarizedExperiment::assay(mat.orig,"normalised",withDimnames=FALSE) = 
+            mat
         mat = mat.orig
     }
     mat
@@ -100,7 +101,8 @@ RUVproteome <- function(mat, M, ctl, k = NULL, m = 1.8, s = 0.3,
         keepImpute = keepImpute, ...)
     
     if (pe) {
-        SummarizedExperiment::assay(mat.orig, "normalised", withDimnames = FALSE) = mat
+        SummarizedExperiment::assay(mat.orig,"normalised",withDimnames=FALSE) = 
+            mat
         mat = mat.orig
     }
     mat

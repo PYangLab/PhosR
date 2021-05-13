@@ -265,7 +265,8 @@ given phosphosite to be retained.")
 
 #' @title Select phosphosites by localisation score
 #'
-#' @description Select phosphosites with a localisation score higher than the pre-defined probability score (default score = 0.75)
+#' @description Select phosphosites with a localisation score higher than the 
+#' pre-defined probability score (default score = 0.75)
 #'
 #' @usage selectLocalisedSites(mat, loc=NULL, prob = 0.75)
 #'
@@ -273,15 +274,15 @@ given phosphosite to be retained.")
 #' phosphosites and columns corresponding to samples in replicates for different 
 #' treatments.
 #' @param loc a vector of localisation scores
-#' @param prob a percent from 0 to 1, specifying the localisation probability of quantified
-#' values in across all samples for retaining a phosphosite for subsequent
-#' analysis.
+#' @param prob a percent from 0 to 1, specifying the localisation probability 
+#' of quantified values in across all samples for retaining a phosphosite for 
+#' subsequent analysis.
 #'
 #' @return a filtered matrix
 #'
 #' @examples
 #'
-#' data('phospho.cells.Ins.sample')
+#' data('phospho.cells.Ins.pe')
 #' ppe <- phospho.cells.Ins.pe
 #' ppe_mat <- as.data.frame(SummarizedExperiment::assay(ppe))
 #' # Before filtering
@@ -296,7 +297,8 @@ given phosphosite to be retained.")
 #' # Filter
 #' Localisation(ppe) <- localisation_scores
 #' ppe_filtered <- selectLocalisedSites(ppe, prob=0.75)
-#' ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, prob=0.75)
+#' ppe_mat_filtered <- selectLocalisedSites(ppe_mat, loc=localisation_scores, 
+#'      prob=0.75)
 #' 
 #' # After filtering
 #' dim(ppe_filtered)
@@ -315,7 +317,8 @@ given phosphosite to be retained.")
         stop("Parameter mat is missing!")
     if ((!is.null(prob)) && ((prob < 0) || (prob > 1)))
         stop("Parameter prob must be a numeric value between 0 and 1")
-    if ((is.null(loc)) && is.null(Localisation(mat)) && is.null(Localisation(mat)) && sum(is.na(Localisation(mat))) > 0)
+    if ((is.null(loc)) && is.null(Localisation(mat)) && 
+        is.null(Localisation(mat)) && sum(is.na(Localisation(mat))) > 0)
          stop("Some or all localisation scores are missing")
     if ((!is.null(loc)) && (length(loc) != nrow(mat)))
          stop("Length of loc should equal to the number of rows in mat")

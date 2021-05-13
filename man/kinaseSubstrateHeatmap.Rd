@@ -19,6 +19,7 @@ a pheatmap object.
 Kinase-substrate annotation prioritisation heatmap
 }
 \examples{
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -52,5 +53,5 @@ L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
     
 kinaseSubstrateHeatmap(L6.matrices)
-
+}
 }

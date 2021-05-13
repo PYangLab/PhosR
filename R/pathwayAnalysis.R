@@ -1,7 +1,7 @@
 #' phosphosite/Gene set over-representation analysis
 #'
-#' @description This function performes phosphosite (or gene) set over-representation analysis
-#' using Fisher's exact test.
+#' @description This function performes phosphosite (or gene) set 
+#' over-representation analysis using Fisher's exact test.
 #'
 #' @param geneSet an array of gene or phosphosite IDs (IDs are gene symbols etc
 #' that match to your pathway annotation list).
@@ -16,7 +16,7 @@
 #'
 #'
 #' @examples
-#'
+#' \donttest{
 #' library(limma)
 #' library(org.Rn.eg.db)
 #' library(reactome.db)
@@ -97,7 +97,7 @@
 #' # 1D gene-centric pathway analysis
 #' path1 <- pathwayOverrepresent(geneSet, annotation=pathways,
 #'     universe = rownames(Tc.gene), alter = 'greater')
-#'
+#' }
 #' @export
 pathwayOverrepresent <- function(geneSet, annotation, universe,
     alter = "greater") {
@@ -133,8 +133,8 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 
 #' Phosphosite/Gene set enrichment analysis
 #'
-#' This function performes phosphosite (or gene) set enrichment analysis using Wilcoxon Rank Sum
-#' test.
+#' This function performes phosphosite (or gene) set enrichment analysis using 
+#' Wilcoxon Rank Sum test.
 #'
 #' @param geneStats an array of statistics (e.g. log2 FC) of all quantified
 #' genes or phosphosite with names of the array as gene or phosphosite IDs.
@@ -147,7 +147,7 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 #'
 #'
 #' @examples
-#'
+#' \donttest{
 #' library(limma)
 #'
 #' library(org.Rn.eg.db)
@@ -224,6 +224,7 @@ pathwayOverrepresent <- function(geneSet, annotation, universe,
 #' path2 <- pathwayRankBasedEnrichment(Tc.gene[,1],
 #'                                     annotation=pathways,
 #'                                     alter = 'greater')
+#' }
 #' @export
 pathwayRankBasedEnrichment <- function(geneStats, annotation,
     alter = "greater") {

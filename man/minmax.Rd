@@ -17,22 +17,22 @@ Minmax standardised matrix
 Perform a minmax standardisation to scale data into 0 to 1 range
 }
 \examples{
-
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
 
 ppe <- phospho.L6.ratio.pe
-sites = paste(sapply(ppe@GeneSymbol, function(x)x),";",
-    sapply(ppe@Residue, function(x)x),
-    sapply(ppe@Site, function(x)x),
+sites = paste(sapply(GeneSymbol(ppe), function(x)x),";",
+    sapply(Residue(ppe), function(x)x),
+    sapply(Site(ppe), function(x)x),
     ";", sep = "")
 grps = gsub("_.+", "", colnames(ppe))
 design = model.matrix(~ grps - 1)
 ctl = which(sites \%in\% SPSs)
 ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 
-phosphoL6 = ppe@assays@data$normalised
+phosphoL6 = SummarizedExperiment::assay(ppe, "normalised")
 
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
@@ -44,7 +44,7 @@ L6.phos.std <- standardise(phosphoL6.reg)
 
 ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
 
-motif.mouse.list = PhosR::motif.mouse.list
+data(KinaseMotifs)
 
 numMotif = 5
 numSub = 1
@@ -61,7 +61,7 @@ motifScoreMatrix <-
 rownames(motifScoreMatrix) <- rownames(L6.phos.std)
 colnames(motifScoreMatrix) <- names(motif.mouse.list.filtered)
 
-L6.phos.seq <- ppe@Sequence[idx]
+L6.phos.seq <- Sequence(ppe)[idx]
 
 # extracting flanking sequences
 seqWin = mapply(function(x) {
@@ -78,5 +78,5 @@ for(i in seq_len(length(motif.mouse.list.filtered))) {
 }
 motifScoreMatrix <- minmax(motifScoreMatrix)
 
-
+}
 }

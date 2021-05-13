@@ -39,9 +39,10 @@ A list of 3 elements.
 A function to generate signalomes
 }
 \examples{
-
-data('phospho_L6_ratio.pe')
+\donttest{
+data('phospho_L6_ratio_pe')
 data('SPSs')
+data('PhosphoSitePlus')
 
 grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 
@@ -66,7 +67,7 @@ phosphoL6 = phospho.L6.ratio.RUV
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 aov <- matANOVA(mat=phosphoL6, grps=grps)
 phosphoL6.reg <- phosphoL6[(aov < 0.05) &
-                               (rowSums(phosphoL6.mean > 0.5) > 0),, drop = FALSE]
+                         (rowSums(phosphoL6.mean > 0.5) > 0),, drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)
 idx <- match(rownames(L6.phos.std), rownames(phospho.L6.ratio.pe))
 rownames(L6.phos.std) <- L6.sites[idx]
@@ -84,4 +85,6 @@ Signalomes_results <- Signalomes(KSR=L6.matrices,
                                  predMatrix=L6.predMat,
                                  exprsMat=L6.phos.std,
                                  KOI=kinaseOI)
+}
+
 }

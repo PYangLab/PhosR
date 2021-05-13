@@ -39,7 +39,7 @@ A machine learning approach for predicting specific kinase for a given
 substrate. This prediction framework utilise adaptive sampling.
 }
 \examples{
-
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -73,5 +73,5 @@ L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
 set.seed(1)
 L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
-
+}
 }

@@ -20,6 +20,7 @@ A vector of multiple testing adjusted p-values
 Performs an ANOVA test and returns its adjusted p-value
 }
 \examples{
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -30,18 +31,18 @@ grps = gsub('_.+', '', colnames(phospho.L6.ratio.pe))
 design = model.matrix(~ grps - 1)
 
 # phosphoproteomics data normalisation using RUV
-L6.sites = paste(sapply(phospho.L6.ratio.pe@GeneSymbol, function(x)paste(x)),
+L6.sites = paste(sapply(GeneSymbol(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";",
-                 sapply(phospho.L6.ratio.pe@Residue, function(x)paste(x)),
-                 sapply(phospho.L6.ratio.pe@Site, function(x)paste(x)),
+                 sapply(Residue(phospho.L6.ratio.pe), function(x)paste(x)),
+                 sapply(Site(phospho.L6.ratio.pe), function(x)paste(x)),
                  ";", sep = "")
 ctl = which(L6.sites \%in\% SPSs)
 phospho.L6.ratio.pe = RUVphospho(phospho.L6.ratio.pe,
                                  M = design, k = 3,ctl = ctl)
-phosphoL6 = phospho.L6.ratio.pe@assays@data$normalised
+phosphoL6 = SummarizedExperiment::assay(phospho.L6.ratio.pe, "normalised")
 
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 aov <- matANOVA(mat=phosphoL6, grps = grps)
-
+}
 }

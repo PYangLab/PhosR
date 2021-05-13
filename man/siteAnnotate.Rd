@@ -21,7 +21,7 @@ This function plots the combined scores of each of all kinases
 for a given phosphosites
 }
 \examples{
-
+\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -53,6 +53,7 @@ L6.phos.seq <- Sequence(ppe)[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
+    
 set.seed(1)
 L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
 dev.off()
@@ -60,5 +61,5 @@ dev.off()
 # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 site = "AAK1;S677;"
 siteAnnotate(site, L6.matrices, L6.predMat)
-
+}
 }

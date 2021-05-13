@@ -461,7 +461,8 @@ setReplaceMethod("UniprotID", signature="PhosphoExperiment", function(x, value) 
 #' Localisation
 #' Localisation<-
 #' @export
-setReplaceMethod("GeneSymbol", signature="PhosphoExperiment", function(x, value) {
+setReplaceMethod("GeneSymbol", signature="PhosphoExperiment", 
+    function(x, value) {
     x@GeneSymbol<- as.character(value)
     return(x)
 })
@@ -838,12 +839,18 @@ setMethod("cbind", "PhosphoExperiment", function(..., deparse.level=1) {
 #' 
 #' 
 #' @examples 
-#' quant <- as.matrix(PhosR::phospho.L6.ratio)
-#' uniprot <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
-#' symbol <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[2]]))
-#' site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
-#' res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),";"), function(x) x[[3]])))
-#' seq <- as.character(sapply(strsplit(rownames(quant),";"), function(x) x[[4]]))
+#' data(phospho_L6_ratio)
+#' quant <- as.matrix(phospho.L6.ratio)
+#' uniprot <- as.character(sapply(strsplit(rownames(quant),";"), 
+#'     function(x) x[[2]]))
+#' symbol <- as.character(sapply(strsplit(rownames(quant),";"), 
+#'     function(x) x[[2]]))
+#' site <- as.numeric(gsub("[STY]","",sapply(strsplit(rownames(quant),";"), 
+#'     function(x) x[[3]])))
+#' res <- as.character(gsub("[0-9]","",sapply(strsplit(rownames(quant),";"), 
+#'     function(x) x[[3]])))
+#' seq <- as.character(sapply(strsplit(rownames(quant),";"), 
+#'     function(x) x[[4]]))
 #' phosData <- PhosphoExperiment(assays = list(Quantification = quant), 
 #'     UniprotID = uniprot, Site = site, GeneSymbol = symbol, Residue = res, 
 #'     Sequence = seq)
@@ -866,7 +873,8 @@ PhosphoExperiment <- function(..., UniprotID=c(), GeneSymbol=c(), Site=c(),
 getResidue = function(Seqs) {
     splitSeqs = strsplit(Seqs, "")
     pos = round(nchar(Seqs)/2)
-    res = unlist(lapply(seq_along(splitSeqs), function(x) splitSeqs[[x]][pos[[x]]]))
+    res = unlist(lapply(seq_along(splitSeqs), function(x) 
+        splitSeqs[[x]][pos[[x]]]))
     if (sum(!names(table(res)) %in% c("S", "T", "Y", "X"))) {
         stop("One or more windows are not centered around the phosphosite")
     }
@@ -874,7 +882,8 @@ getResidue = function(Seqs) {
 }
 
 #' @importFrom methods new
-.se_to_pe = function(se, UniprotID=c(), GeneSymbol=c(), Site=c(), Residue=c(), Sequence=c(), Localisation = c()) {
+.se_to_pe = function(se, UniprotID=c(), GeneSymbol=c(), Site=c(), Residue=c(), 
+                    Sequence=c(), Localisation = c()) {
     out <- new("PhosphoExperiment", se)
     
     # Warning messages for missing inputs

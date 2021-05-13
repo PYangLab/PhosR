@@ -16,7 +16,7 @@
 #' library(stringr)
 #' 
 #' data("phospho_L6_ratio_pe")
-#' data("phospho_liverInsTC_RUV_pe")
+#' data("phospho.liver.Ins.TC.ratio.RUV.pe")
 #' data("phospho.cells.Ins.pe")
 #' 
 #' ppe1 <- phospho.L6.ratio.pe
@@ -80,14 +80,19 @@ getSPS <-function (phosData, assays="Quantification", conds, num = 100) {
             nrep <- ncol(phosData[[i]])/length(unique(conds[[i]]))
             if (nrep == 1) {
                 mat.mean <- SummarizedExperiment::assay(phosData[[i]], assays)
-            }
-            else {
+            } else {
                 grps <- conds[[i]]
                 mat.mean <- PhosR::meanAbundance(
                         SummarizedExperiment::assay(phosData[[i]], assays),grps)
             }
-            sites.mean <- t(sapply(split(as.data.frame(mat.mean), 
-                                         sites[[i]]), colMeans))
+            fun_val = (rep(0, ncol(mat.mean)))
+            names(fun_val) = colnames(mat.mean)
+            sites.mean <- 
+                t(
+                        vapply(split(as.data.frame(mat.mean), sites[[i]]),
+                               colMeans, FUN.VALUE = fun_val
+                        )
+                )
             sites.max <- apply(sites.mean, 1, function(x) {
                 x[which.max(abs(x))]
             })

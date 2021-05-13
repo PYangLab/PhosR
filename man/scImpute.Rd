@@ -41,9 +41,10 @@ phospho.cells.Ins.impute <-
     grps)[,colnames(phospho.cells.Ins.filtered)]
     
 # for PhosphoExperiment Object
-data('phospho.cells.Ins.sample.pe')
+data('phospho.cells.Ins.pe')
 grps = gsub('_[0-9]{1}', '', colnames(phospho.cells.Ins.pe))
-phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 0.5, n=1)
+phospho.cells.Ins.filtered <- selectGrps(phospho.cells.Ins.pe, grps, 
+    0.5, n=1)
 
 set.seed(123)
 phospho.cells.Ins.impute <-
