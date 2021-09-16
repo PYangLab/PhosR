@@ -92,7 +92,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/PYangLab/PhosR">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Site- and gene-centric analysis</h1>
             
-            <h4 class="date">19 May 2021</h4>
+            <h4 class="date">16 September 2021</h4>
       
       
       <div class="hidden name"><code>site_gene_analysis.Rmd</code></div>
@@ -203,8 +203,7 @@
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c1</span>, rep<span class="op">=</span><span class="fl">5</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
@@ -229,13 +228,11 @@
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c3</span>, rep<span class="op">=</span><span class="fl">10</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># Finding enriched pathways from each cluster</span>
+<code class="sourceCode R"><span class="co"># Finding enriched pathways from each cluster</span>
 <span class="va">best</span><span class="op">$</span><span class="va">enrichList</span>
 <span class="co">#&gt; $`cluster 1`</span>
 <span class="co">#&gt;      kinase   pvalue                 size</span>
@@ -256,13 +253,13 @@
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.0.5 (2021-03-31)</span>
+<span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib</span>
-<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Random number generation:</span>
 <span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span>
@@ -277,73 +274,74 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] PhosR_1.1.8          annotate_1.68.0      XML_3.99-0.6        </span>
-<span class="co">#&gt;  [4] org.Mm.eg.db_3.12.0  reactome.db_1.74.0   AnnotationDbi_1.52.0</span>
-<span class="co">#&gt;  [7] IRanges_2.24.1       S4Vectors_0.28.1     Biobase_2.50.0      </span>
-<span class="co">#&gt; [10] BiocGenerics_0.36.1  ClueR_1.4            e1071_1.7-6         </span>
-<span class="co">#&gt; [13] ggplot2_3.3.3       </span>
+<span class="co">#&gt;  [1] PhosR_1.1.8          annotate_1.70.0      XML_3.99-0.7        </span>
+<span class="co">#&gt;  [4] org.Mm.eg.db_3.13.0  reactome.db_1.76.0   AnnotationDbi_1.54.1</span>
+<span class="co">#&gt;  [7] IRanges_2.26.0       S4Vectors_0.30.0     Biobase_2.52.0      </span>
+<span class="co">#&gt; [10] BiocGenerics_0.38.0  ClueR_1.4            e1071_1.7-8         </span>
+<span class="co">#&gt; [13] ggplot2_3.3.5       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;   [1] colorspace_2.0-1            ggsignif_0.6.1             </span>
-<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-18               </span>
-<span class="co">#&gt;   [5] rio_0.5.26                  rprojroot_2.0.2            </span>
-<span class="co">#&gt;   [7] circlize_0.4.12             XVector_0.30.0             </span>
-<span class="co">#&gt;   [9] GenomicRanges_1.42.0        GlobalOptions_0.1.2        </span>
+<span class="co">#&gt;   [1] colorspace_2.0-2            ggsignif_0.6.3             </span>
+<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-19               </span>
+<span class="co">#&gt;   [5] rio_0.5.27                  rprojroot_2.0.2            </span>
+<span class="co">#&gt;   [7] circlize_0.4.13             XVector_0.32.0             </span>
+<span class="co">#&gt;   [9] GenomicRanges_1.44.0        GlobalOptions_0.1.2        </span>
 <span class="co">#&gt;  [11] ggdendro_0.1.22             fs_1.5.0                   </span>
-<span class="co">#&gt;  [13] proxy_0.4-25                farver_2.1.0               </span>
+<span class="co">#&gt;  [13] proxy_0.4-26                farver_2.1.0               </span>
 <span class="co">#&gt;  [15] ggpubr_0.4.0                bit64_4.0.5                </span>
-<span class="co">#&gt;  [17] fansi_0.4.2                 splines_4.0.5              </span>
-<span class="co">#&gt;  [19] cachem_1.0.5                knitr_1.33                 </span>
-<span class="co">#&gt;  [21] jsonlite_1.7.2              broom_0.7.6                </span>
-<span class="co">#&gt;  [23] pheatmap_1.0.12             BiocManager_1.30.15        </span>
-<span class="co">#&gt;  [25] compiler_4.0.5              httr_1.4.2                 </span>
-<span class="co">#&gt;  [27] backports_1.2.1             Matrix_1.3-2               </span>
-<span class="co">#&gt;  [29] fastmap_1.1.0               limma_3.46.0               </span>
-<span class="co">#&gt;  [31] htmltools_0.5.1.1           tools_4.0.5                </span>
-<span class="co">#&gt;  [33] igraph_1.2.6                gtable_0.3.0               </span>
-<span class="co">#&gt;  [35] glue_1.4.2                  GenomeInfoDbData_1.2.4     </span>
-<span class="co">#&gt;  [37] reshape2_1.4.4              dplyr_1.0.6                </span>
-<span class="co">#&gt;  [39] Rcpp_1.0.6                  carData_3.0-4              </span>
-<span class="co">#&gt;  [41] cellranger_1.1.0            jquerylib_0.1.4            </span>
-<span class="co">#&gt;  [43] pkgdown_1.6.1               vctrs_0.3.8                </span>
-<span class="co">#&gt;  [45] nlme_3.1-152                preprocessCore_1.52.1      </span>
-<span class="co">#&gt;  [47] xfun_0.23                   stringr_1.4.0              </span>
-<span class="co">#&gt;  [49] network_1.16.1              openxlsx_4.2.3             </span>
-<span class="co">#&gt;  [51] lifecycle_1.0.0             rstatix_0.7.0              </span>
-<span class="co">#&gt;  [53] dendextend_1.15.1           zlibbioc_1.36.0            </span>
-<span class="co">#&gt;  [55] MASS_7.3-53.1               scales_1.1.1               </span>
-<span class="co">#&gt;  [57] BiocStyle_2.18.1            pcaMethods_1.82.0          </span>
-<span class="co">#&gt;  [59] ragg_1.1.2                  hms_1.1.0                  </span>
-<span class="co">#&gt;  [61] MatrixGenerics_1.2.1        SummarizedExperiment_1.20.0</span>
-<span class="co">#&gt;  [63] RColorBrewer_1.1-2          yaml_2.2.1                 </span>
-<span class="co">#&gt;  [65] curl_4.3.1                  memoise_2.0.0              </span>
-<span class="co">#&gt;  [67] gridExtra_2.3               sass_0.4.0                 </span>
-<span class="co">#&gt;  [69] reshape_0.8.8               stringi_1.6.2              </span>
-<span class="co">#&gt;  [71] RSQLite_2.2.7               highr_0.9                  </span>
-<span class="co">#&gt;  [73] desc_1.3.0                  zip_2.1.1                  </span>
-<span class="co">#&gt;  [75] shape_1.4.5                 GenomeInfoDb_1.26.7        </span>
-<span class="co">#&gt;  [77] rlang_0.4.11                pkgconfig_2.0.3            </span>
-<span class="co">#&gt;  [79] systemfonts_1.0.2           matrixStats_0.58.0         </span>
-<span class="co">#&gt;  [81] bitops_1.0-7                evaluate_0.14              </span>
-<span class="co">#&gt;  [83] lattice_0.20-41             ruv_0.9.7.1                </span>
-<span class="co">#&gt;  [85] purrr_0.3.4                 labeling_0.4.2             </span>
-<span class="co">#&gt;  [87] bit_4.0.4                   tidyselect_1.1.1           </span>
-<span class="co">#&gt;  [89] GGally_2.1.1                plyr_1.8.6                 </span>
-<span class="co">#&gt;  [91] magrittr_2.0.1              R6_2.5.0                   </span>
-<span class="co">#&gt;  [93] generics_0.1.0              DelayedArray_0.16.3        </span>
-<span class="co">#&gt;  [95] DBI_1.1.1                   mgcv_1.8-34                </span>
-<span class="co">#&gt;  [97] pillar_1.6.1                haven_2.4.1                </span>
-<span class="co">#&gt;  [99] foreign_0.8-81              withr_2.4.2                </span>
-<span class="co">#&gt; [101] abind_1.4-5                 RCurl_1.98-1.3             </span>
-<span class="co">#&gt; [103] tibble_3.1.2                crayon_1.4.1               </span>
-<span class="co">#&gt; [105] car_3.0-10                  utf8_1.2.1                 </span>
-<span class="co">#&gt; [107] rmarkdown_2.8               viridis_0.6.1              </span>
-<span class="co">#&gt; [109] readxl_1.3.1                grid_4.0.5                 </span>
-<span class="co">#&gt; [111] data.table_1.14.0           blob_1.2.1                 </span>
-<span class="co">#&gt; [113] forcats_0.5.1               digest_0.6.27              </span>
-<span class="co">#&gt; [115] xtable_1.8-4                tidyr_1.1.3                </span>
-<span class="co">#&gt; [117] textshaping_0.3.4           munsell_0.5.0              </span>
-<span class="co">#&gt; [119] viridisLite_0.4.0           bslib_0.2.5.1</span></code></pre></div>
+<span class="co">#&gt;  [17] fansi_0.5.0                 splines_4.1.1              </span>
+<span class="co">#&gt;  [19] cachem_1.0.6                knitr_1.34                 </span>
+<span class="co">#&gt;  [21] broom_0.7.9                 png_0.1-7                  </span>
+<span class="co">#&gt;  [23] pheatmap_1.0.12             BiocManager_1.30.16        </span>
+<span class="co">#&gt;  [25] compiler_4.1.1              httr_1.4.2                 </span>
+<span class="co">#&gt;  [27] backports_1.2.1             Matrix_1.3-4               </span>
+<span class="co">#&gt;  [29] fastmap_1.1.0               limma_3.48.3               </span>
+<span class="co">#&gt;  [31] htmltools_0.5.2             tools_4.1.1                </span>
+<span class="co">#&gt;  [33] igraph_1.2.6                coda_0.19-4                </span>
+<span class="co">#&gt;  [35] gtable_0.3.0                glue_1.4.2                 </span>
+<span class="co">#&gt;  [37] GenomeInfoDbData_1.2.6      reshape2_1.4.4             </span>
+<span class="co">#&gt;  [39] dplyr_1.0.7                 Rcpp_1.0.7                 </span>
+<span class="co">#&gt;  [41] carData_3.0-4               statnet.common_4.5.0       </span>
+<span class="co">#&gt;  [43] cellranger_1.1.0            pkgdown_1.6.1              </span>
+<span class="co">#&gt;  [45] vctrs_0.3.8                 Biostrings_2.60.2          </span>
+<span class="co">#&gt;  [47] nlme_3.1-152                preprocessCore_1.54.0      </span>
+<span class="co">#&gt;  [49] xfun_0.26                   stringr_1.4.0              </span>
+<span class="co">#&gt;  [51] network_1.17.1              openxlsx_4.2.4             </span>
+<span class="co">#&gt;  [53] lifecycle_1.0.0             rstatix_0.7.0              </span>
+<span class="co">#&gt;  [55] dendextend_1.15.1           zlibbioc_1.38.0            </span>
+<span class="co">#&gt;  [57] MASS_7.3-54                 scales_1.1.1               </span>
+<span class="co">#&gt;  [59] BiocStyle_2.20.2            pcaMethods_1.84.0          </span>
+<span class="co">#&gt;  [61] ragg_1.1.3                  hms_1.1.0                  </span>
+<span class="co">#&gt;  [63] MatrixGenerics_1.4.3        SummarizedExperiment_1.22.0</span>
+<span class="co">#&gt;  [65] RColorBrewer_1.1-2          yaml_2.2.1                 </span>
+<span class="co">#&gt;  [67] curl_4.3.2                  memoise_2.0.0              </span>
+<span class="co">#&gt;  [69] gridExtra_2.3               reshape_0.8.8              </span>
+<span class="co">#&gt;  [71] stringi_1.7.4               RSQLite_2.2.8              </span>
+<span class="co">#&gt;  [73] highr_0.9                   desc_1.3.0                 </span>
+<span class="co">#&gt;  [75] zip_2.2.0                   shape_1.4.6                </span>
+<span class="co">#&gt;  [77] GenomeInfoDb_1.28.4         rlang_0.4.11               </span>
+<span class="co">#&gt;  [79] pkgconfig_2.0.3             systemfonts_1.0.2          </span>
+<span class="co">#&gt;  [81] matrixStats_0.60.1          bitops_1.0-7               </span>
+<span class="co">#&gt;  [83] evaluate_0.14               lattice_0.20-44            </span>
+<span class="co">#&gt;  [85] ruv_0.9.7.1                 purrr_0.3.4                </span>
+<span class="co">#&gt;  [87] labeling_0.4.2              bit_4.0.4                  </span>
+<span class="co">#&gt;  [89] tidyselect_1.1.1            GGally_2.1.2               </span>
+<span class="co">#&gt;  [91] plyr_1.8.6                  magrittr_2.0.1             </span>
+<span class="co">#&gt;  [93] R6_2.5.1                    generics_0.1.0             </span>
+<span class="co">#&gt;  [95] DelayedArray_0.18.0         DBI_1.1.1                  </span>
+<span class="co">#&gt;  [97] mgcv_1.8-36                 pillar_1.6.2               </span>
+<span class="co">#&gt;  [99] haven_2.4.3                 foreign_0.8-81             </span>
+<span class="co">#&gt; [101] withr_2.4.2                 abind_1.4-5                </span>
+<span class="co">#&gt; [103] KEGGREST_1.32.0             RCurl_1.98-1.4             </span>
+<span class="co">#&gt; [105] tibble_3.1.4                crayon_1.4.1               </span>
+<span class="co">#&gt; [107] car_3.0-11                  utf8_1.2.2                 </span>
+<span class="co">#&gt; [109] rmarkdown_2.11              viridis_0.6.1              </span>
+<span class="co">#&gt; [111] grid_4.1.1                  readxl_1.3.1               </span>
+<span class="co">#&gt; [113] data.table_1.14.0           blob_1.2.2                 </span>
+<span class="co">#&gt; [115] forcats_0.5.1               digest_0.6.27              </span>
+<span class="co">#&gt; [117] xtable_1.8-4                tidyr_1.1.3                </span>
+<span class="co">#&gt; [119] textshaping_0.3.5           munsell_0.5.0              </span>
+<span class="co">#&gt; [121] viridisLite_0.4.0</span></code></pre></div>
 </div>
   </div>
 

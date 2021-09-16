@@ -92,7 +92,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/PYangLab/PhosR">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Batch correction of phosphoproteomics dataset with PhosR</h1>
             
-            <h4 class="date">19 May 2021</h4>
+            <h4 class="date">16 September 2021</h4>
       
       
       <div class="hidden name"><code>batch_correction.Rmd</code></div>
@@ -242,14 +242,14 @@
 <code class="sourceCode R"><span class="co"># plot after batch correction</span>
 <span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span> <span class="op">)</span>
 <span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Before Batch correction"</span><span class="op">)</span>
 <span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"After Batch correction"</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/ggarrange.html">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div id="generating-spss" class="section level1">
@@ -300,13 +300,13 @@
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.0.5 (2021-03-31)</span>
+<span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib</span>
-<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; locale:</span>
 <span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
@@ -318,67 +318,66 @@
 <span class="co">#&gt; [1] stringr_1.4.0 PhosR_1.1.8  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;   [1] colorspace_2.0-1            ggsignif_0.6.1             </span>
-<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-18               </span>
-<span class="co">#&gt;   [5] rio_0.5.26                  rprojroot_2.0.2            </span>
-<span class="co">#&gt;   [7] circlize_0.4.12             markdown_1.1               </span>
-<span class="co">#&gt;   [9] XVector_0.30.0              GenomicRanges_1.42.0       </span>
+<span class="co">#&gt;   [1] colorspace_2.0-2            ggsignif_0.6.3             </span>
+<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-19               </span>
+<span class="co">#&gt;   [5] rio_0.5.27                  rprojroot_2.0.2            </span>
+<span class="co">#&gt;   [7] circlize_0.4.13             markdown_1.1               </span>
+<span class="co">#&gt;   [9] XVector_0.32.0              GenomicRanges_1.44.0       </span>
 <span class="co">#&gt;  [11] GlobalOptions_0.1.2         ggdendro_0.1.22            </span>
 <span class="co">#&gt;  [13] fs_1.5.0                    gridtext_0.1.4             </span>
-<span class="co">#&gt;  [15] ggtext_0.1.1                proxy_0.4-25               </span>
+<span class="co">#&gt;  [15] ggtext_0.1.1                proxy_0.4-26               </span>
 <span class="co">#&gt;  [17] farver_2.1.0                ggpubr_0.4.0               </span>
-<span class="co">#&gt;  [19] fansi_0.4.2                 xml2_1.3.2                 </span>
-<span class="co">#&gt;  [21] cachem_1.0.5                knitr_1.33                 </span>
-<span class="co">#&gt;  [23] jsonlite_1.7.2              broom_0.7.6                </span>
-<span class="co">#&gt;  [25] pheatmap_1.0.12             BiocManager_1.30.15        </span>
-<span class="co">#&gt;  [27] compiler_4.0.5              backports_1.2.1            </span>
-<span class="co">#&gt;  [29] Matrix_1.3-2                fastmap_1.1.0              </span>
-<span class="co">#&gt;  [31] limma_3.46.0                htmltools_0.5.1.1          </span>
-<span class="co">#&gt;  [33] tools_4.0.5                 igraph_1.2.6               </span>
+<span class="co">#&gt;  [19] fansi_0.5.0                 xml2_1.3.2                 </span>
+<span class="co">#&gt;  [21] cachem_1.0.6                knitr_1.34                 </span>
+<span class="co">#&gt;  [23] broom_0.7.9                 pheatmap_1.0.12            </span>
+<span class="co">#&gt;  [25] BiocManager_1.30.16         compiler_4.1.1             </span>
+<span class="co">#&gt;  [27] backports_1.2.1             Matrix_1.3-4               </span>
+<span class="co">#&gt;  [29] fastmap_1.1.0               limma_3.48.3               </span>
+<span class="co">#&gt;  [31] htmltools_0.5.2             tools_4.1.1                </span>
+<span class="co">#&gt;  [33] igraph_1.2.6                coda_0.19-4                </span>
 <span class="co">#&gt;  [35] gtable_0.3.0                glue_1.4.2                 </span>
-<span class="co">#&gt;  [37] GenomeInfoDbData_1.2.4      reshape2_1.4.4             </span>
-<span class="co">#&gt;  [39] dplyr_1.0.6                 Rcpp_1.0.6                 </span>
-<span class="co">#&gt;  [41] carData_3.0-4               Biobase_2.50.0             </span>
-<span class="co">#&gt;  [43] cellranger_1.1.0            jquerylib_0.1.4            </span>
+<span class="co">#&gt;  [37] GenomeInfoDbData_1.2.6      reshape2_1.4.4             </span>
+<span class="co">#&gt;  [39] dplyr_1.0.7                 Rcpp_1.0.7                 </span>
+<span class="co">#&gt;  [41] carData_3.0-4               Biobase_2.52.0             </span>
+<span class="co">#&gt;  [43] cellranger_1.1.0            statnet.common_4.5.0       </span>
 <span class="co">#&gt;  [45] pkgdown_1.6.1               vctrs_0.3.8                </span>
-<span class="co">#&gt;  [47] preprocessCore_1.52.1       xfun_0.23                  </span>
-<span class="co">#&gt;  [49] network_1.16.1              openxlsx_4.2.3             </span>
+<span class="co">#&gt;  [47] preprocessCore_1.54.0       xfun_0.26                  </span>
+<span class="co">#&gt;  [49] network_1.17.1              openxlsx_4.2.4             </span>
 <span class="co">#&gt;  [51] lifecycle_1.0.0             rstatix_0.7.0              </span>
-<span class="co">#&gt;  [53] dendextend_1.15.1           zlibbioc_1.36.0            </span>
-<span class="co">#&gt;  [55] MASS_7.3-53.1               scales_1.1.1               </span>
-<span class="co">#&gt;  [57] BiocStyle_2.18.1            ragg_1.1.2                 </span>
-<span class="co">#&gt;  [59] pcaMethods_1.82.0           hms_1.1.0                  </span>
-<span class="co">#&gt;  [61] MatrixGenerics_1.2.1        parallel_4.0.5             </span>
-<span class="co">#&gt;  [63] SummarizedExperiment_1.20.0 RColorBrewer_1.1-2         </span>
-<span class="co">#&gt;  [65] yaml_2.2.1                  curl_4.3.1                 </span>
+<span class="co">#&gt;  [53] dendextend_1.15.1           zlibbioc_1.38.0            </span>
+<span class="co">#&gt;  [55] MASS_7.3-54                 scales_1.1.1               </span>
+<span class="co">#&gt;  [57] BiocStyle_2.20.2            ragg_1.1.3                 </span>
+<span class="co">#&gt;  [59] pcaMethods_1.84.0           hms_1.1.0                  </span>
+<span class="co">#&gt;  [61] MatrixGenerics_1.4.3        parallel_4.1.1             </span>
+<span class="co">#&gt;  [63] SummarizedExperiment_1.22.0 RColorBrewer_1.1-2         </span>
+<span class="co">#&gt;  [65] yaml_2.2.1                  curl_4.3.2                 </span>
 <span class="co">#&gt;  [67] memoise_2.0.0               gridExtra_2.3              </span>
-<span class="co">#&gt;  [69] ggplot2_3.3.3               sass_0.4.0                 </span>
-<span class="co">#&gt;  [71] reshape_0.8.8               stringi_1.6.2              </span>
-<span class="co">#&gt;  [73] highr_0.9                   S4Vectors_0.28.1           </span>
-<span class="co">#&gt;  [75] desc_1.3.0                  e1071_1.7-6                </span>
-<span class="co">#&gt;  [77] BiocGenerics_0.36.1         zip_2.1.1                  </span>
-<span class="co">#&gt;  [79] shape_1.4.5                 GenomeInfoDb_1.26.7        </span>
-<span class="co">#&gt;  [81] rlang_0.4.11                pkgconfig_2.0.3            </span>
-<span class="co">#&gt;  [83] systemfonts_1.0.2           matrixStats_0.58.0         </span>
-<span class="co">#&gt;  [85] bitops_1.0-7                evaluate_0.14              </span>
-<span class="co">#&gt;  [87] lattice_0.20-41             purrr_0.3.4                </span>
-<span class="co">#&gt;  [89] ruv_0.9.7.1                 labeling_0.4.2             </span>
-<span class="co">#&gt;  [91] cowplot_1.1.1               tidyselect_1.1.1           </span>
-<span class="co">#&gt;  [93] GGally_2.1.1                plyr_1.8.6                 </span>
-<span class="co">#&gt;  [95] magrittr_2.0.1              R6_2.5.0                   </span>
-<span class="co">#&gt;  [97] IRanges_2.24.1              generics_0.1.0             </span>
-<span class="co">#&gt;  [99] DelayedArray_0.16.3         pillar_1.6.1               </span>
-<span class="co">#&gt; [101] haven_2.4.1                 foreign_0.8-81             </span>
-<span class="co">#&gt; [103] abind_1.4-5                 RCurl_1.98-1.3             </span>
-<span class="co">#&gt; [105] tibble_3.1.2                crayon_1.4.1               </span>
-<span class="co">#&gt; [107] car_3.0-10                  utf8_1.2.1                 </span>
-<span class="co">#&gt; [109] rmarkdown_2.8               viridis_0.6.1              </span>
-<span class="co">#&gt; [111] grid_4.0.5                  readxl_1.3.1               </span>
-<span class="co">#&gt; [113] data.table_1.14.0           forcats_0.5.1              </span>
-<span class="co">#&gt; [115] digest_0.6.27               tidyr_1.1.3                </span>
-<span class="co">#&gt; [117] textshaping_0.3.4           stats4_4.0.5               </span>
-<span class="co">#&gt; [119] munsell_0.5.0               viridisLite_0.4.0          </span>
-<span class="co">#&gt; [121] bslib_0.2.5.1</span></code></pre></div>
+<span class="co">#&gt;  [69] ggplot2_3.3.5               reshape_0.8.8              </span>
+<span class="co">#&gt;  [71] stringi_1.7.4               highr_0.9                  </span>
+<span class="co">#&gt;  [73] S4Vectors_0.30.0            desc_1.3.0                 </span>
+<span class="co">#&gt;  [75] e1071_1.7-8                 BiocGenerics_0.38.0        </span>
+<span class="co">#&gt;  [77] zip_2.2.0                   shape_1.4.6                </span>
+<span class="co">#&gt;  [79] GenomeInfoDb_1.28.4         rlang_0.4.11               </span>
+<span class="co">#&gt;  [81] pkgconfig_2.0.3             systemfonts_1.0.2          </span>
+<span class="co">#&gt;  [83] matrixStats_0.60.1          bitops_1.0-7               </span>
+<span class="co">#&gt;  [85] evaluate_0.14               lattice_0.20-44            </span>
+<span class="co">#&gt;  [87] purrr_0.3.4                 ruv_0.9.7.1                </span>
+<span class="co">#&gt;  [89] labeling_0.4.2              cowplot_1.1.1              </span>
+<span class="co">#&gt;  [91] tidyselect_1.1.1            GGally_2.1.2               </span>
+<span class="co">#&gt;  [93] plyr_1.8.6                  magrittr_2.0.1             </span>
+<span class="co">#&gt;  [95] R6_2.5.1                    IRanges_2.26.0             </span>
+<span class="co">#&gt;  [97] generics_0.1.0              DelayedArray_0.18.0        </span>
+<span class="co">#&gt;  [99] pillar_1.6.2                haven_2.4.3                </span>
+<span class="co">#&gt; [101] foreign_0.8-81              abind_1.4-5                </span>
+<span class="co">#&gt; [103] RCurl_1.98-1.4              tibble_3.1.4               </span>
+<span class="co">#&gt; [105] crayon_1.4.1                car_3.0-11                 </span>
+<span class="co">#&gt; [107] utf8_1.2.2                  rmarkdown_2.11             </span>
+<span class="co">#&gt; [109] viridis_0.6.1               grid_4.1.1                 </span>
+<span class="co">#&gt; [111] readxl_1.3.1                data.table_1.14.0          </span>
+<span class="co">#&gt; [113] forcats_0.5.1               digest_0.6.27              </span>
+<span class="co">#&gt; [115] tidyr_1.1.3                 textshaping_0.3.5          </span>
+<span class="co">#&gt; [117] stats4_4.1.1                munsell_0.5.0              </span>
+<span class="co">#&gt; [119] viridisLite_0.4.0</span></code></pre></div>
 </div>
   </div>
 
