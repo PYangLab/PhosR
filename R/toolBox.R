@@ -39,7 +39,7 @@
 #'
 #' @export
 #'
-medianScaling <- function(mat, scale = TRUE, grps = NULL, reorder = FALSE, 
+medianScaling <- function(mat, scale = FALSE, grps = NULL, reorder = FALSE, 
                           assay = NULL) {
     pe = FALSE
     if (methods::is(mat, "PhosphoExperiment")) {
