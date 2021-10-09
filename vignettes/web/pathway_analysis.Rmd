@@ -44,7 +44,7 @@ data("PhosphoSitePlus")
 We will use the `ppe_RUV` matrix from [batch_correction](https://pyanglab.github.io/PhosR/articles/batch_correction.html).
 
 ```{r, include = FALSE}
-data("phospho_L6_ratio")
+data("phospho_L6_ratio_pe")
 data("SPSs")
 
 ##### Run batch correction
