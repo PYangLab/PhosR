@@ -48,6 +48,7 @@ As before, we will set up the data by cleaning up the phoshophosite labels and p
 ```{r}
 data("phospho_L6_ratio_pe")
 data("SPSs")
+data("PhosphoSitePlus")
 
 ##### Run batch correction
 ppe <- phospho.L6.ratio.pe

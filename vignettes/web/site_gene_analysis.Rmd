@@ -97,6 +97,7 @@ best <- clustOptimal(c1, rep=5, mfrow=c(2, 3), visualize = TRUE)
 Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.
 
 ```{r}
+data("PhosphoSitePlus")
 RNGkind("L'Ecuyer-CMRG")
 set.seed(1)
 PhosphoSite.mouse2 = mapply(function(kinase) {
