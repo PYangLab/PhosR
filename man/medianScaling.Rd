@@ -4,7 +4,7 @@
 \alias{medianScaling}
 \title{Median centering and scaling}
 \usage{
-medianScaling(mat, scale = TRUE, grps = NULL, reorder = FALSE, assay = NULL)
+medianScaling(mat, scale = FALSE, grps = NULL, reorder = FALSE, assay = NULL)
 }
 \arguments{
 \item{mat}{a matrix with rows correspond to phosphosites and columns

@@ -1,0 +1,46 @@
+citHeader("To cite PhosR in publications use:")
+citEntry(
+    entry = "Article",
+    title = "PhosR enables processing and functional analysis of phosphoproteomic data",
+    author = personList(
+        as.person("Hani Jieun Kim"),
+        as.person("Taiyun Kim"),
+        as.person("Nolan J Hoffman"),
+        as.person("Di Xiao"),
+        as.person("David E James"),
+        as.person("Sean J Humphrey"),
+        as.person("Pengyi Yang")),
+    journal      = "Cell Reports",
+    year         = "2021",
+    volume       = "34",
+    number       = "8",
+    url          = "https://doi.org/10.1016/j.celrep.2021.108771",
+    textVersion  =
+        paste(
+            "Kim, HJ., Kim, T., Hoffman, NJ., Xiao, D., James, DE., Humphrey, SJ., Yang, P.",
+            "PhosR enables processing and functional analysis of phosphoproteomic data",
+            "Cell Reports, 34, 8 (2021)",
+            "doi: https://doi.org/10.1016/j.celrep.2021.108771"
+        )
+)
+citEntry(
+    entry = "Article",
+    title = "Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR",
+    author = personList(
+        as.person("Hani Jieun Kim"),
+        as.person("Taiyun Kim"),
+        as.person("Di Xiao"),
+        as.person("Pengyi Yang")),
+    journal      = "STAR Protocols",
+    year         = "2021",
+    volume       = "2",
+    number       = "2",
+    url          = "https://doi.org/10.1016/j.xpro.2021.100585",
+    textVersion  =
+        paste(
+            "Kim, HJ., Kim, T., Xiao, D., Yang, P.",
+            "Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR",
+            "STAR Protocols, 2, 2 (2021)",
+            "doi: https://doi.org/10.1016/j.xpro.2021.100585"
+        )
+)

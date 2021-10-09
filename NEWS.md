@@ -1,3 +1,14 @@
+## PhosR 1.2.1
+
+* Included Cell Reporta citation
+* rainbow colour palette is used for `plotQC` function
+
+
+## PhosR 1.2.0
+
+* Bioconductor release version
+
+
 ## PhosR 1.1.9
 
 * Fixes in documentation, examples and styles to meet BioC requirements

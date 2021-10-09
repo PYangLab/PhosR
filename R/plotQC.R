@@ -30,7 +30,7 @@
 #' @importFrom pcaMethods pca
 #' @importFrom ggpubr ggarrange
 #' @importFrom ggdendro ggdendrogram
-#' 
+#' @importFrom grDevices rainbow
 #'
 #' @examples
 #' # Imputation
@@ -150,6 +150,7 @@ quantPlot = function(mat, grps, labels) {
         Sample = labels,
         Groups = grps
     )
+    gNum = length(table(grps))
     ggplot2::ggplot(dat, ggplot2::aes(x = .data$Sample, y = .data$Quantification, 
         fill = .data$Groups)) +
         ggplot2::geom_bar(stat = "identity") +
@@ -157,21 +158,25 @@ quantPlot = function(mat, grps, labels) {
         ggplot2::ggtitle("Quantification per sample") +
         ggplot2::labs(y = "Quantification (%)") +
         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, 
-                                                        vjust = 1, hjust = 1))    
+                                                        vjust = 1, hjust = 1)) +
+        ggplot2::scale_fill_manual(values = grDevices::rainbow(gNum))
 }
 
 #' @importFrom ggdendro ggdendrogram
 #' @importFrom ggplot2 ggtitle
 dendPlot = function(mat, grps, labels) {
     dend <- stats::hclust(stats::dist(t(mat)))
-    label_colors <- grps[stats::order.dendrogram(as.dendrogram(dend))]
+    label_grps <- grps[stats::order.dendrogram(as.dendrogram(dend))]
     
     dendr = ggdendro::dendro_data(dend, type = "rectangle")
-        
+    
+    nGrps = length(table(label_grps))
+    label_colors = grDevices::rainbow(nGrps)[factor(label_grps)]
+    
     ggdendro::ggdendrogram(dend) +
         ggplot2::ggtitle("Sample hierarchical clustering") +
         ggplot2::theme(
-            axis.text.x = ggtext::element_markdown(color = factor(label_colors))
+            axis.text.x = ggtext::element_markdown(color = label_colors)
         )
     
 }
@@ -189,11 +194,12 @@ abundPlot = function(mat, grps, labels) {
         dplyr::mutate(
             Groups = rep(grps, rep_num)
         )
-    
+    nGrps = length(table(dat$Groups))
     ggplot2::ggplot(dat, ggplot2::aes(x = .data$Samples, y = .data$abundance, 
         fill = .data$Groups)) +
         ggplot2::geom_boxplot() +
-        ggplot2::labs(y = "Expression/Abundance level")
+        ggplot2::labs(y = "Expression/Abundance level") +
+        ggplot2::scale_fill_manual(values = grDevices::rainbow(nGrps))
 }
 
 #' @importFrom ggplot2 ggplot geom_point geom_text labs aes
@@ -207,6 +213,8 @@ pcaPlot = function(mat, grps, labels) {
         grps = grps,
         Samples = labels
     )
+    nGrps = length(table(grps))
+    
     ggplot2::ggplot(dat, ggplot2::aes(x = .data$PC1, y = .data$PC2, 
         color = .data$grps, label = .data$Samples)) +
         ggplot2::geom_point(size = 2) +
@@ -214,5 +222,6 @@ pcaPlot = function(mat, grps, labels) {
         ggplot2::labs(
             x = paste("PC1", round(pcaMethods::R2cum(result)[1] * 100), "%"),
             y = paste("PC2", round(pcaMethods::R2cum(result)[2] * 100), "%")
-        )
+        ) + 
+        ggplot2::scale_colour_manual(values = grDevices::rainbow(nGrps))
 }
