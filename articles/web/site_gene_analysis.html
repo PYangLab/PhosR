@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Site- and gene-centric analysis</h1>
             
-            <h4 class="date">16 September 2021</h4>
+            <h4 class="date">9 October 2021</h4>
       
       
       <div class="hidden name"><code>site_gene_analysis.Rmd</code></div>
@@ -203,7 +203,8 @@
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c1</span>, rep<span class="op">=</span><span class="fl">5</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
@@ -212,7 +213,8 @@
 <a href="#site-centric-analyses-of-the-liver-phosphoproteome-data" class="anchor"></a>Site-centric analyses of the liver phosphoproteome data</h1>
 <p>Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"PhosphoSitePlus"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">PhosphoSite.mouse2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html">mapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">kinase</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"(.*)(;[A-Z])([0-9]+;)"</span>, <span class="st">"\\1;\\3"</span>, <span class="va">kinase</span><span class="op">)</span>
@@ -228,11 +230,13 @@
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c3</span>, rep<span class="op">=</span><span class="fl">10</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Finding enriched pathways from each cluster</span>
+<code class="sourceCode R">
+<span class="co"># Finding enriched pathways from each cluster</span>
 <span class="va">best</span><span class="op">$</span><span class="va">enrichList</span>
 <span class="co">#&gt; $`cluster 1`</span>
 <span class="co">#&gt;      kinase   pvalue                 size</span>
@@ -274,10 +278,10 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] PhosR_1.1.8          annotate_1.70.0      XML_3.99-0.7        </span>
+<span class="co">#&gt;  [1] PhosR_1.3.1          annotate_1.70.0      XML_3.99-0.8        </span>
 <span class="co">#&gt;  [4] org.Mm.eg.db_3.13.0  reactome.db_1.76.0   AnnotationDbi_1.54.1</span>
-<span class="co">#&gt;  [7] IRanges_2.26.0       S4Vectors_0.30.0     Biobase_2.52.0      </span>
-<span class="co">#&gt; [10] BiocGenerics_0.38.0  ClueR_1.4            e1071_1.7-8         </span>
+<span class="co">#&gt;  [7] IRanges_2.26.0       S4Vectors_0.30.2     Biobase_2.52.0      </span>
+<span class="co">#&gt; [10] BiocGenerics_0.38.0  ClueR_1.4            e1071_1.7-9         </span>
 <span class="co">#&gt; [13] ggplot2_3.3.5       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
@@ -290,7 +294,7 @@
 <span class="co">#&gt;  [13] proxy_0.4-26                farver_2.1.0               </span>
 <span class="co">#&gt;  [15] ggpubr_0.4.0                bit64_4.0.5                </span>
 <span class="co">#&gt;  [17] fansi_0.5.0                 splines_4.1.1              </span>
-<span class="co">#&gt;  [19] cachem_1.0.6                knitr_1.34                 </span>
+<span class="co">#&gt;  [19] cachem_1.0.6                knitr_1.36                 </span>
 <span class="co">#&gt;  [21] broom_0.7.9                 png_0.1-7                  </span>
 <span class="co">#&gt;  [23] pheatmap_1.0.12             BiocManager_1.30.16        </span>
 <span class="co">#&gt;  [25] compiler_4.1.1              httr_1.4.2                 </span>
@@ -307,21 +311,21 @@
 <span class="co">#&gt;  [47] nlme_3.1-152                preprocessCore_1.54.0      </span>
 <span class="co">#&gt;  [49] xfun_0.26                   stringr_1.4.0              </span>
 <span class="co">#&gt;  [51] network_1.17.1              openxlsx_4.2.4             </span>
-<span class="co">#&gt;  [53] lifecycle_1.0.0             rstatix_0.7.0              </span>
+<span class="co">#&gt;  [53] lifecycle_1.0.1             rstatix_0.7.0              </span>
 <span class="co">#&gt;  [55] dendextend_1.15.1           zlibbioc_1.38.0            </span>
 <span class="co">#&gt;  [57] MASS_7.3-54                 scales_1.1.1               </span>
 <span class="co">#&gt;  [59] BiocStyle_2.20.2            pcaMethods_1.84.0          </span>
-<span class="co">#&gt;  [61] ragg_1.1.3                  hms_1.1.0                  </span>
+<span class="co">#&gt;  [61] ragg_1.1.3                  hms_1.1.1                  </span>
 <span class="co">#&gt;  [63] MatrixGenerics_1.4.3        SummarizedExperiment_1.22.0</span>
 <span class="co">#&gt;  [65] RColorBrewer_1.1-2          yaml_2.2.1                 </span>
 <span class="co">#&gt;  [67] curl_4.3.2                  memoise_2.0.0              </span>
 <span class="co">#&gt;  [69] gridExtra_2.3               reshape_0.8.8              </span>
-<span class="co">#&gt;  [71] stringi_1.7.4               RSQLite_2.2.8              </span>
-<span class="co">#&gt;  [73] highr_0.9                   desc_1.3.0                 </span>
+<span class="co">#&gt;  [71] stringi_1.7.5               RSQLite_2.2.8              </span>
+<span class="co">#&gt;  [73] highr_0.9                   desc_1.4.0                 </span>
 <span class="co">#&gt;  [75] zip_2.2.0                   shape_1.4.6                </span>
 <span class="co">#&gt;  [77] GenomeInfoDb_1.28.4         rlang_0.4.11               </span>
 <span class="co">#&gt;  [79] pkgconfig_2.0.3             systemfonts_1.0.2          </span>
-<span class="co">#&gt;  [81] matrixStats_0.60.1          bitops_1.0-7               </span>
+<span class="co">#&gt;  [81] matrixStats_0.61.0          bitops_1.0-7               </span>
 <span class="co">#&gt;  [83] evaluate_0.14               lattice_0.20-44            </span>
 <span class="co">#&gt;  [85] ruv_0.9.7.1                 purrr_0.3.4                </span>
 <span class="co">#&gt;  [87] labeling_0.4.2              bit_4.0.4                  </span>
@@ -329,17 +333,17 @@
 <span class="co">#&gt;  [91] plyr_1.8.6                  magrittr_2.0.1             </span>
 <span class="co">#&gt;  [93] R6_2.5.1                    generics_0.1.0             </span>
 <span class="co">#&gt;  [95] DelayedArray_0.18.0         DBI_1.1.1                  </span>
-<span class="co">#&gt;  [97] mgcv_1.8-36                 pillar_1.6.2               </span>
+<span class="co">#&gt;  [97] mgcv_1.8-36                 pillar_1.6.3               </span>
 <span class="co">#&gt;  [99] haven_2.4.3                 foreign_0.8-81             </span>
 <span class="co">#&gt; [101] withr_2.4.2                 abind_1.4-5                </span>
-<span class="co">#&gt; [103] KEGGREST_1.32.0             RCurl_1.98-1.4             </span>
-<span class="co">#&gt; [105] tibble_3.1.4                crayon_1.4.1               </span>
+<span class="co">#&gt; [103] KEGGREST_1.32.0             RCurl_1.98-1.5             </span>
+<span class="co">#&gt; [105] tibble_3.1.5                crayon_1.4.1               </span>
 <span class="co">#&gt; [107] car_3.0-11                  utf8_1.2.2                 </span>
 <span class="co">#&gt; [109] rmarkdown_2.11              viridis_0.6.1              </span>
 <span class="co">#&gt; [111] grid_4.1.1                  readxl_1.3.1               </span>
-<span class="co">#&gt; [113] data.table_1.14.0           blob_1.2.2                 </span>
-<span class="co">#&gt; [115] forcats_0.5.1               digest_0.6.27              </span>
-<span class="co">#&gt; [117] xtable_1.8-4                tidyr_1.1.3                </span>
+<span class="co">#&gt; [113] data.table_1.14.2           blob_1.2.2                 </span>
+<span class="co">#&gt; [115] forcats_0.5.1               digest_0.6.28              </span>
+<span class="co">#&gt; [117] xtable_1.8-4                tidyr_1.1.4                </span>
 <span class="co">#&gt; [119] textshaping_0.3.5           munsell_0.5.0              </span>
 <span class="co">#&gt; [121] viridisLite_0.4.0</span></code></pre></div>
 </div>
