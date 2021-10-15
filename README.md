@@ -7,7 +7,7 @@
 
 # PhosR
 
-`PhosR` is a package for the comprehensive analysis of phosphoproteomic data. There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, which enables integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.
+`PhosR` is a package for the comprehensive analysis of phosphoproteomic data (https://doi.org/10.1016/j.celrep.2021.108771). There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, which enables integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.
 
 ## PhosR overview
 
@@ -38,6 +38,9 @@ Please find the links to our vignette below. Note that the vignette utilises sub
      * [Site- and gene-centric analysis](https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html)
      * [Kinase-substrate relationship scoring and signalome construction](https://PYangLab.github.io/PhosR/articles/web/signalomes.html)
 
+## Reference
+1. Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771.
+2. Kim, H., Kim, T., Xiao, D. & Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585.
 
 ## Contact us
 
