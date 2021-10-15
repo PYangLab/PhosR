@@ -39,8 +39,8 @@ Please find the links to our vignette below. Note that the vignette utilises sub
      * [Kinase-substrate relationship scoring and signalome construction](https://PYangLab.github.io/PhosR/articles/web/signalomes.html)
 
 ## Reference
-1. Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771.
-2. Kim, H., Kim, T., Xiao, D. & Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585.
+1. Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771. (https://doi.org/10.1016/j.celrep.2021.108771)
+2. Kim, H., Kim, T., Xiao, D. & Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585. (https://doi.org/10.1016/j.xpro.2021.100585)
 
 ## Contact us
 
