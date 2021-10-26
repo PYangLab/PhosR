@@ -1,7 +1,7 @@
 Package: PhosR
 Type: Package
 Title: A set of methods and tools for comprehensive analysis of phosphoproteomics data
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut", "cre")),
