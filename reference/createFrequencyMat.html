@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -175,15 +175,15 @@
     <p>A frequency matrix of amino acid from substrates.seq.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"phospho_L6_ratio_pe"</span><span class='op'>)</span>
-
-<span class='co'># We will create a frequency matrix of Tfg S198 phosphosite.</span>
-<span class='va'>idx</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span><span class='op'>(</span><span class='st'>"TFG\\;S198\\;"</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>substrate.seq</span> <span class='op'>=</span> <span class='fu'><a href='PPE-accessors.html'>Sequence</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span><span class='op'>[</span><span class='va'>idx</span><span class='op'>]</span>
-<span class='va'>freq.mat</span> <span class='op'>=</span> <span class='fu'>createFrequencyMat</span><span class='op'>(</span><span class='va'>substrate.seq</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"phospho_L6_ratio_pe"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># We will create a frequency matrix of Tfg S198 phosphosite.</span></span>
+<span class='r-in'><span class='va'>idx</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span><span class='op'>(</span><span class='st'>"TFG\\;S198\\;"</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>substrate.seq</span> <span class='op'>=</span> <span class='fu'><a href='PPE-accessors.html'>Sequence</a></span><span class='op'>(</span><span class='va'>phospho.L6.ratio.pe</span><span class='op'>)</span><span class='op'>[</span><span class='va'>idx</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>freq.mat</span> <span class='op'>=</span> <span class='fu'>createFrequencyMat</span><span class='op'>(</span><span class='va'>substrate.seq</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

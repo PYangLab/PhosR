@@ -73,7 +73,7 @@ given percentage of samples" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -195,17 +195,19 @@ object.</p></td>
     <p>a filtered matrix</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'phospho.cells.Ins.sample'</span><span class='op'>)</span>
-
-<span class='va'>phospho.cells.Ins.filtered</span> <span class='op'>&lt;-</span> <span class='fu'>selectOverallPercent</span><span class='op'>(</span><span class='va'>phospho.cells.Ins</span>, <span class='fl'>0.5</span><span class='op'>)</span>
-
-<span class='co'># Before filtering</span>
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 5000   24</div><div class='input'><span class='co'># After filtering</span>
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1154   24</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>'phospho.cells.Ins.sample'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>phospho.cells.Ins.filtered</span> <span class='op'>&lt;-</span> <span class='fu'>selectOverallPercent</span><span class='op'>(</span><span class='va'>phospho.cells.Ins</span>, <span class='fl'>0.5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Before filtering</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 5000   24</span>
+<span class='r-in'><span class='co'># After filtering</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>phospho.cells.Ins.filtered</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1154   24</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
