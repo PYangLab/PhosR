@@ -220,8 +220,8 @@ pcaPlot = function(mat, grps, labels) {
         ggplot2::geom_point(size = 2) +
         ggplot2::geom_text(hjust = 0, vjust = 0) +
         ggplot2::labs(
-            x = paste("PC1", round(pcaMethods::R2cum(result)[1] * 100), "%"),
-            y = paste("PC2", round(pcaMethods::R2cum(result)[2] * 100), "%")
+            x = paste("PC1", round(result@R2[1] * 100), "%"),
+            y = paste("PC2", round(result@R2[2] * 100), "%")
         ) + 
         ggplot2::scale_colour_manual(values = grDevices::rainbow(nGrps))
 }

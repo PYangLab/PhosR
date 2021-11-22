@@ -1,6 +1,23 @@
+## PhosR 1.4.1
+
+* Bug fix in PCA plot variance
+
+## PhosR 1.4.0
+
+* BioC release 3.14
+
+
+## PhosR 1.3.1
+
+* Bug fixes in the vignette
+
+## PhosR 1.3.0
+
+* Bioconductor development version
+
 ## PhosR 1.2.1
 
-* Included Cell Reporta citation
+* Included Cell Report citation
 * rainbow colour palette is used for `plotQC` function
 
 
