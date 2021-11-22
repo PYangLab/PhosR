@@ -1,3 +1,7 @@
+## PhosR 1.5.1
+
+* Development version
+
 ## PhosR 1.4.1
 
 * Bug fix in PCA plot variance
