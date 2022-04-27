@@ -255,6 +255,10 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @param phosScoringMatrices a matrix returned from kinaseSubstrateScore.
 #' @param top the number of top ranked phosphosites for each kinase to be
 #' included in the heatmap. Default is 1.
+#' @param printPlot indicate whether the plot should be saved as a PDF
+#' in the current directory. Default is NULL, otherwise specify TRUE.
+#' @param width width of PDF.
+#' @param height height of PDF.
 #'
 #' @return a pheatmap object.
 #'
@@ -296,9 +300,11 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #'     
 #' kinaseSubstrateHeatmap(L6.matrices)
+#' kinaseSubstrateHeatmap(L6.matrices, printPlot=TRUE)
 #' }
 #' @export
-kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
+kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL,
+                                   width=10, height=10) {
     # KinaseFamily = PhosR::KinaseFamily
     utils::data("KinaseFamily", envir = environment())
     ####### heatmap 1
@@ -316,11 +322,24 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
         "kinase_family"])
     rownames(annotation_col) <- o
 
-    pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
+    if (is.null(printPlot)==TRUE) {
+        
+        pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
         ], annotation_col = annotation_col,
         cluster_rows = TRUE, cluster_cols = TRUE,
         fontsize = 7, main = paste("Top",
-            top, "phosphosite(s) for each kinase"))
+                                   top, "phosphosite(s) for each kinase"))
+        
+    } else {
+        
+        pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
+        ], annotation_col = annotation_col,
+        cluster_rows = TRUE, cluster_cols = TRUE,
+        fontsize = 7, main = paste("Top",
+                                   top, "phosphosite(s) for each kinase"),
+        filename="./kinaseSubstrateHeatmap.pdf", width=width, height=height)
+        
+    }
 }
 
 #' @title Phosphosite annotation

@@ -1,3 +1,7 @@
+## PhosR 1.5.2
+
+* Added plotting parameters in kinaseSubstrateHeatmap function
+
 ## PhosR 1.5.1
 
 * Development version
