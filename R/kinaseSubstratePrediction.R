@@ -263,6 +263,7 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @return a pheatmap object.
 #'
 #' @import pheatmap
+#' @import broom
 #' @importFrom utils data
 #'
 #' @examples
