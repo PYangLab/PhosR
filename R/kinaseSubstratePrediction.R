@@ -263,7 +263,6 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @return a pheatmap object.
 #'
 #' @import pheatmap
-#' @import broom
 #' @importFrom utils data
 #'
 #' @examples
@@ -333,13 +332,15 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL,
         
     } else {
         
+        pdf (file="./kinaseSubstrateHeatmap.pdf", width=width, height=height)
+        
         pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
         ], annotation_col = annotation_col,
         cluster_rows = TRUE, cluster_cols = TRUE,
         fontsize = 7, main = paste("Top",
-                                   top, "phosphosite(s) for each kinase"),
-        filename="./kinaseSubstrateHeatmap.pdf", width=width, height=height)
+                                   top, "phosphosite(s) for each kinase"))
         
+        dev.off()
     }
 }
 
