@@ -264,6 +264,8 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #'
 #' @import pheatmap
 #' @importFrom utils data
+#' @importFrom grDevices dev.off
+#' @importFrom grDevices pdf
 #'
 #' @examples
 #' \donttest{
