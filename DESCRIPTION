@@ -41,7 +41,8 @@ Imports:
     ggpubr,
     network,
     reshape2,
-    ggtext
+    ggtext,
+    broom
 Encoding: UTF-8
 LazyData: false
 RoxygenNote: 7.1.2
