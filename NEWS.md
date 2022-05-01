@@ -3,6 +3,7 @@
 * Bug fix in plotQC
 * Minor improvements in documentations of functions
 * Included motif list for other species in KinaseSubstrateScore function
+* Added plotting parameters in kinaseSubstrateHeatmap function
 
 ## PhosR 1.5.1
 

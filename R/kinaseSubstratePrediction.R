@@ -74,11 +74,11 @@ kinaseSubstrateScore <- function(substrate.list, mat, seqs, numMotif = 5,
     }
     
     if (species == "mouse") {
-        motif.list = motif.mouse.list
+        motif.list <- motif.mouse.list
     } else if (species == "human") {
-        motif.list = motif.human.list
+        motif.list <- motif.human.list
     } else if (species == "rat") {
-        motif.list = motif.rat.list
+        motif.list <- motif.rat.list
     }
     
     if (verbose) {
@@ -226,7 +226,7 @@ kinaseSubstrateProfile <- function(substrate.list, mat) {
     # ks.profile.list$NumSub <-
     # sapply(substrate.list, function(x){
     # sum(x %in% rownames(mat)) })
-    ks.profile.list$NumSub = mapply(function(x,
+    ks.profile.list$NumSub <- mapply(function(x,
         mat) {
         sum(x %in% rownames(mat))
     }, substrate.list, MoreArgs = list(mat = mat))
@@ -256,11 +256,17 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @param phosScoringMatrices a matrix returned from kinaseSubstrateScore.
 #' @param top the number of top ranked phosphosites for each kinase to be
 #' included in the heatmap. Default is 1.
+#' @param printPlot indicate whether the plot should be saved as a PDF
+#' in the current directory. Default is NULL, otherwise specify TRUE.
+#' @param width width of PDF.
+#' @param height height of PDF.
 #'
 #' @return a pheatmap object.
 #'
 #' @import pheatmap
 #' @importFrom utils data
+#' @importFrom grDevices dev.off
+#' @importFrom grDevices pdf
 #'
 #' @examples
 #' \donttest{
@@ -297,9 +303,11 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #'     
 #' kinaseSubstrateHeatmap(L6.matrices)
+#' kinaseSubstrateHeatmap(L6.matrices, printPlot=TRUE)
 #' }
 #' @export
-kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
+kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL,
+                                   width=10, height=10) {
     # KinaseFamily = PhosR::KinaseFamily
     utils::data("KinaseFamily", envir = environment())
     ####### heatmap 1
@@ -317,11 +325,26 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
         "kinase_family"])
     rownames(annotation_col) <- o
 
-    pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
+    if (is.null(printPlot)==TRUE) {
+        
+        pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
         ], annotation_col = annotation_col,
         cluster_rows = TRUE, cluster_cols = TRUE,
         fontsize = 7, main = paste("Top",
-            top, "phosphosite(s) for each kinase"))
+                                   top, "phosphosite(s) for each kinase"))
+        
+    } else {
+        
+        pdf (file="./kinaseSubstrateHeatmap.pdf", width=width, height=height)
+        
+        pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
+        ], annotation_col = annotation_col,
+        cluster_rows = TRUE, cluster_cols = TRUE,
+        fontsize = 7, main = paste("Top",
+                                   top, "phosphosite(s) for each kinase"))
+        
+        dev.off()
+    }
 }
 
 #' @title Phosphosite annotation

@@ -12,7 +12,7 @@ Description: PhosR is a package for the comprenhensive analysis of phosphoproteo
     including filtering, imputation, normalisation, and functional analysis
     for inferring active kinases and signalling pathways.
 License: GPL-3 + file LICENSE
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.2.0)
 Imports:
     ruv,
     e1071,

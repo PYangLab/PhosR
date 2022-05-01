@@ -4,13 +4,26 @@
 \alias{kinaseSubstrateHeatmap}
 \title{Kinase-substrate annotation prioritisation heatmap}
 \usage{
-kinaseSubstrateHeatmap(phosScoringMatrices, top = 3)
+kinaseSubstrateHeatmap(
+  phosScoringMatrices,
+  top = 3,
+  printPlot = NULL,
+  width = 10,
+  height = 10
+)
 }
 \arguments{
 \item{phosScoringMatrices}{a matrix returned from kinaseSubstrateScore.}
 
 \item{top}{the number of top ranked phosphosites for each kinase to be
 included in the heatmap. Default is 1.}
+
+\item{printPlot}{indicate whether the plot should be saved as a PDF
+in the current directory. Default is NULL, otherwise specify TRUE.}
+
+\item{width}{width of PDF.}
+
+\item{height}{height of PDF.}
 }
 \value{
 a pheatmap object.
@@ -53,5 +66,6 @@ L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
     
 kinaseSubstrateHeatmap(L6.matrices)
+kinaseSubstrateHeatmap(L6.matrices, printPlot=TRUE)
 }
 }
