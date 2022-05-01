@@ -20,7 +20,6 @@ A vector of multiple testing adjusted p-values
 Performs an ANOVA test and returns its adjusted p-value
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -44,5 +43,4 @@ phosphoL6 = SummarizedExperiment::assay(phospho.L6.ratio.pe, "normalised")
 # filter for up-regulated phosphosites
 phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 aov <- matANOVA(mat=phosphoL6, grps = grps)
-}
 }

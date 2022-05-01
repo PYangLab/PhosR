@@ -21,7 +21,6 @@ This function generates substrate profiles for kinases that have
 one or more substrates quantified in the phosphoproteome data.
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -47,5 +46,4 @@ phosphoL6.reg <- phosphoL6[idx, ,drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)
 
 ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
-}
 }

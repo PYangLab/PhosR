@@ -17,7 +17,6 @@ Minmax standardised matrix
 Perform a minmax standardisation to scale data into 0 to 1 range
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -78,5 +77,4 @@ for(i in seq_len(length(motif.mouse.list.filtered))) {
 }
 motifScoreMatrix <- minmax(motifScoreMatrix)
 
-}
 }

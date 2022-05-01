@@ -188,7 +188,7 @@ abundPlot = function(mat, grps, labels) {
     rep_num = nrow(mat)
     dat = mat %>%
         as.data.frame() %>%
-        dplyr::mutate(sites = rownames(.data)) %>%
+        dplyr::mutate(sites = rownames(.)) %>%
         tidyr::pivot_longer(-.data$sites, names_to = "Samples", 
             values_to = "abundance") %>%
         dplyr::mutate(

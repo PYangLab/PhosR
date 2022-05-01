@@ -5,32 +5,36 @@
 \title{Kinase substrate scoring}
 \usage{
 kinaseSubstrateScore(
-    substrate.list,
-    mat,
-    seqs,
-    numMotif = 5, 
-    numSub = 1, 
-    verbose = TRUE
+  substrate.list,
+  mat,
+  seqs,
+  numMotif = 5,
+  numSub = 1,
+  species = "mouse",
+  verbose = TRUE
 )
 }
 \arguments{
-\item{substrate.list}{a list of kinases with each element containing an array
+\item{substrate.list}{A list of kinases with each element containing an array
 of substrates.}
 
-\item{mat}{a matrix with rows correspond to phosphosites and columns
+\item{mat}{A matrix with rows correspond to phosphosites and columns
 correspond to samples.}
 
-\item{seqs}{an array containing aa sequences surrounding each of all
+\item{seqs}{An array containing aa sequences surrounding each of all
 phosphosites.
 Each sequence has length of 15 (-7, p, +7).}
 
-\item{numMotif}{minimum number of sequences used for compiling motif for
+\item{numMotif}{Minimum number of sequences used for compiling motif for
 each kinase.
 Default is 5.}
 
-\item{numSub}{minimum number of phosphosites used for compiling
+\item{numSub}{Minimum number of phosphosites used for compiling
 phosphorylation
 profile for each kinase. Default is 1.}
+
+\item{species}{Motif list species to be used. Currently there are 
+\code{mouse} (default), \code{human} and \code{rat}.}
 
 \item{verbose}{Default to \code{TRUE} to show messages during the progress.
 All messages will be suppressed if set to \code{FALSE}}
@@ -46,7 +50,6 @@ This function generates substrate scores for kinases that pass
 filtering based on both motifs and dynamic profiles
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -78,5 +81,4 @@ L6.phos.seq <- Sequence(ppe)[idx]
 
 L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
     L6.phos.seq, numMotif = 5, numSub = 1)
-}
 }

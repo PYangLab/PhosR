@@ -105,7 +105,6 @@ medianScale <- function(mat, scale) {
 #' @return A standardised matrix
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #'
@@ -133,7 +132,6 @@ medianScale <- function(mat, scale) {
 #'                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #'
-#' }
 #' @export
 #'
 standardise <- function(mat) {
@@ -246,7 +244,6 @@ mUnion <- function(x, y, ...) {
 #' @return Minmax standardised matrix
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -307,7 +304,6 @@ mUnion <- function(x, y, ...) {
 #' }
 #' motifScoreMatrix <- minmax(motifScoreMatrix)
 #'
-#' }
 #' @export
 #'
 minmax <- function(mat) {
@@ -445,7 +441,6 @@ phosCollapse <- function(mat, id, stat, by = "min") {
 #' @return A vector of multiple testing adjusted p-values
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -469,7 +464,6 @@ phosCollapse <- function(mat, id, stat, by = "min") {
 #' # filter for up-regulated phosphosites
 #' phosphoL6.mean <- meanAbundance(phosphoL6, grps = grps)
 #' aov <- matANOVA(mat=phosphoL6, grps = grps)
-#' }
 #' @export
 matANOVA <- function(mat, grps) {
     ps <- apply(mat, 1, function(x) {

@@ -4,30 +4,22 @@
 #'
 #' @description This function generates substrate scores for kinases that pass
 #' filtering based on both motifs and dynamic profiles
-#' 
-#' @usage 
-#' kinaseSubstrateScore(
-#'     substrate.list,
-#'     mat,
-#'     seqs,
-#'     numMotif = 5, 
-#'     numSub = 1, 
-#'     verbose = TRUE
-#' )
 #'
-#' @param substrate.list a list of kinases with each element containing an array
+#' @param substrate.list A list of kinases with each element containing an array
 #'  of substrates.
-#' @param mat a matrix with rows correspond to phosphosites and columns
+#' @param mat A matrix with rows correspond to phosphosites and columns
 #' correspond to samples.
-#' @param seqs an array containing aa sequences surrounding each of all
+#' @param seqs An array containing aa sequences surrounding each of all
 #' phosphosites.
 #' Each sequence has length of 15 (-7, p, +7).
-#' @param numMotif minimum number of sequences used for compiling motif for
+#' @param numMotif Minimum number of sequences used for compiling motif for
 #' each kinase.
 #' Default is 5.
-#' @param numSub minimum number of phosphosites used for compiling
+#' @param numSub Minimum number of phosphosites used for compiling
 #' phosphorylation
 #' profile for each kinase. Default is 1.
+#' @param species Motif list species to be used. Currently there are 
+#' \code{mouse} (default), \code{human} and \code{rat}.
 #' @param verbose Default to \code{TRUE} to show messages during the progress.
 #' All messages will be suppressed if set to \code{FALSE}
 #'
@@ -40,7 +32,6 @@
 #' and their \code{weights}.
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -72,26 +63,38 @@
 #' 
 #' L6.matrices <- kinaseSubstrateScore(PhosphoSite.mouse, L6.phos.std,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
-#' }
 #' @export
-kinaseSubstrateScore <- function(substrate.list, mat, seqs,
-                                numMotif = 5, numSub = 1, verbose = TRUE) {
+kinaseSubstrateScore <- function(substrate.list, mat, seqs, numMotif = 5, 
+                                numSub = 1, species = "mouse", verbose = TRUE) {
     ks.profile.list <- kinaseSubstrateProfile(substrate.list, mat)
     # motif.mouse.list = PhosR::motif.mouse.list
     utils::data("KinaseMotifs", envir = environment())
+    if (!(species %in% c("mouse", "human", "rat"))) {
+        stop("Parameter 'species' must be one of 'mouse', 'human' or 'rat'")
+    }
+    
+    if (species == "mouse") {
+        motif.list = motif.mouse.list
+    } else if (species == "human") {
+        motif.list = motif.human.list
+    } else if (species == "rat") {
+        motif.list = motif.rat.list
+    }
+    
     if (verbose) {
-        message(paste("Number of kinases passed motif size filtering:",
-            sum(motif.mouse.list$NumInputSeq >= numMotif)))
+        message(paste("Number of kinases passed motif size filtering:", 
+                      sum(motif.list$NumInputSeq >= numMotif)))
         message(paste("Number of kinases passed profile size filtering:",
             sum(ks.profile.list$NumSub >= numSub)))
     }
-    motif.mouse.list.filtered <- motif.mouse.list[
-        which(motif.mouse.list$NumInputSeq >= numMotif) ]
+    
+    motif.list.filtered <- motif.list[
+        which(motif.list$NumInputSeq >= numMotif) ]
     ks.profile.list.filtered <- ks.profile.list[
         which(ks.profile.list$NumSub >= numSub) ]
     # scoring all phosphosites against all motifs
     motifScoreMatrix =
-        scorePhosphositesMotifs(mat, motif.mouse.list.filtered, seqs, verbose)
+        scorePhosphositesMotifs(mat, motif.list.filtered, seqs, verbose)
     if (verbose) {
         message("done.")
         # scoring all phosphosites against all profiles
@@ -110,7 +113,7 @@ by motifs and phospho profiles:")
     colnames(combinedScoreMatrix) <- o
     rownames(combinedScoreMatrix) <- rownames(motifScoreMatrix)
     # normalising weights for the two parts
-    w1 <- log(rank(motif.mouse.list$NumInputSeq[o]) + 1)
+    w1 <- log(rank(motif.list$NumInputSeq[o]) + 1)
     w2 <- log(rank(ks.profile.list$NumSub[o]) + 1)
     w3 <- w1 + w2
     for (i in seq_len(length(o))) {
@@ -177,7 +180,6 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' @return Kinase profile list.
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -203,7 +205,6 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' L6.phos.std <- standardise(phosphoL6.reg)
 #'
 #' ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
-#' }
 #' @export
 kinaseSubstrateProfile <- function(substrate.list, mat) {
     # generate kinase substrate profile list
@@ -336,7 +337,6 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' @return A graphical plot
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -376,7 +376,6 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3) {
 #' # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 #' site = "AAK1;S677;"
 #' siteAnnotate(site, L6.matrices, L6.predMat)
-#' }
 #' @export
 siteAnnotate <- function(site, phosScoringMatrices,
     predMatrix) {
@@ -430,7 +429,6 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #' @return Kinase prediction matrix
 #'
 #' @examples
-#' \donttest{
 #' data('phospho_L6_ratio_pe')
 #' data('SPSs')
 #' data('PhosphoSitePlus')
@@ -464,7 +462,6 @@ siteAnnotate <- function(site, phosScoringMatrices,
 #'     L6.phos.seq, numMotif = 5, numSub = 1)
 #' set.seed(1)
 #' L6.predMat <- kinaseSubstratePred(L6.matrices, top=30)
-#' }
 #' @export
 #'
 kinaseSubstratePred <- function(phosScoringMatrices,
@@ -531,7 +528,9 @@ substrateList = function(phosScoringMatrices, top, cs, inclusion) {
                 colnames(phosScoringMatrices$combinedScoreMatrix)[i])
         }
     }
-    names(substrate.list) <- kinaseSel
+    if (length(substrate.list)) { # If substrate.list is not empty
+        names(substrate.list) <- kinaseSel
+    }
     substrate.list
 }
 

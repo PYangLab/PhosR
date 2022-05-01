@@ -21,7 +21,6 @@ This function plots the combined scores of each of all kinases
 for a given phosphosites
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 data('PhosphoSitePlus')
@@ -61,5 +60,4 @@ dev.off()
 # We will look at the phosphosite AAK1;S677 for demonstration purpose.
 site = "AAK1;S677;"
 siteAnnotate(site, L6.matrices, L6.predMat)
-}
 }

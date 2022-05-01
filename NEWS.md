@@ -1,3 +1,9 @@
+## PhosR 1.5.2
+
+* Bug fix in plotQC
+* Minor improvements in documentations of functions
+* Included motif list for other species in KinaseSubstrateScore function
+
 ## PhosR 1.5.1
 
 * Development version

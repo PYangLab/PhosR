@@ -17,7 +17,6 @@ A standardised matrix
 Standardisation by z-score transformation.
 }
 \examples{
-\donttest{
 data('phospho_L6_ratio_pe')
 data('SPSs')
 
@@ -45,5 +44,4 @@ phosphoL6.reg <- phosphoL6[(aov < 0.05) &
                         (rowSums(phosphoL6.mean > 0.5) > 0),,drop = FALSE]
 L6.phos.std <- standardise(phosphoL6.reg)
 
-}
 }
