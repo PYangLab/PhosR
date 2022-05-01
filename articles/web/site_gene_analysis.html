@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,14 +33,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     PhosR
      
     <span class="caret"></span>
@@ -50,7 +52,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Preprocessing
      
     <span class="caret"></span>
@@ -65,7 +67,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Downstream analysis
      
     <span class="caret"></span>
@@ -91,7 +93,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PYangLab/PhosR">
+  <a href="https://github.com/PYangLab/PhosR" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -111,7 +113,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Site- and gene-centric analysis</h1>
             
-            <h4 class="date">22 November 2021</h4>
+            <h4 data-toc-skip class="date">1 May 2022</h4>
       
       
       <div class="hidden name"><code>site_gene_analysis.Rmd</code></div>
@@ -120,29 +122,29 @@
 
     
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>While 1, 2, and 3D pathway analyses are useful for data generated from experiments with different treatment/conditions, analysis designed for time-course data may be better suited to analysis experiments that profile multiple time points.</p>
-<p>Here, we will apply <code>ClueR</code> which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403">Yang et al. 2015</a>.</p>
+<p>Here, we will apply <code>ClueR</code> which is an R package specifically designed for time-course proteomic and phosphoproteomic data analysis <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004403" class="external-link">Yang et al. 2015</a>.</p>
 </div>
-<div id="loading-packages-and-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#loading-packages-and-data" class="anchor"></a>Loading packages and data</h1>
+<div class="section level2">
+<h2 id="loading-packages-and-data">Loading packages and data<a class="anchor" aria-label="anchor" href="#loading-packages-and-data"></a>
+</h2>
 <p>We will load the PhosR package with few other packages we will use for this tutorial.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ClueR</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">reactome.db</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">annotate</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ClueR</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">reactome.db</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">annotate</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>We will load a dataset integrated from two time-course datasets of early and intermediate insulin signalling in mouse liver upon insulin stimulation to demonstrate the time-course phosphoproteomic data analyses.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"phospho.liver.Ins.TC.ratio.RUV.pe"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho.liver.Ins.TC.ratio.RUV.pe"</span><span class="op">)</span>
 <span class="va">ppe</span> <span class="op">&lt;-</span> <span class="va">phospho.liver.Ins.TC.ratio.RUV.pe</span>
 <span class="va">ppe</span>
 <span class="co">#&gt; class: PhosphoExperiment </span>
@@ -155,84 +157,84 @@
 <span class="co">#&gt;   ... Intensity.Liver_Ins_10m_Bio5 Intensity.Liver_Ins_10m_Bio6</span>
 <span class="co">#&gt; colData names(0):</span></code></pre></div>
 </div>
-<div id="gene-centric-analyses-of-the-liver-phosphoproteome-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#gene-centric-analyses-of-the-liver-phosphoproteome-data" class="anchor"></a>Gene-centric analyses of the liver phosphoproteome data</h1>
+<div class="section level2">
+<h2 id="gene-centric-analyses-of-the-liver-phosphoproteome-data">Gene-centric analyses of the liver phosphoproteome data<a class="anchor" aria-label="anchor" href="#gene-centric-analyses-of-the-liver-phosphoproteome-data"></a>
+</h2>
 <p>Let us start with gene-centric analysis. Such analysis can be directly applied to proteomics data. It can also be applied to phosphoproteomic data by using the <code>phosCollapse</code> function to summarise phosphosite information to proteins.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># take grouping information</span>
-<span class="va">grps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, <span class="st">"_"</span><span class="op">)</span>, 
+<span class="va">grps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, <span class="st">"_"</span><span class="op">)</span>, 
             <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co"># select differentially phosphorylated sites</span>
 <span class="va">sites.p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/matANOVA.html">matANOVA</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, 
                     <span class="va">grps</span><span class="op">)</span>
 <span class="va">ppm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/meanAbundance.html">meanAbundance</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, <span class="va">grps</span><span class="op">)</span>
-<span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">(</span><span class="va">sites.p</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+<span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">(</span><span class="va">sites.p</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ppm_filtered</span> <span class="op">&lt;-</span> <span class="va">ppm</span><span class="op">[</span><span class="va">sel</span>,<span class="op">]</span>
 
 <span class="co"># summarise phosphosites information into gene level</span>
 <span class="va">ppm_gene</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/phosCollapse.html">phosCollapse</a></span><span class="op">(</span><span class="va">ppm_filtered</span>, 
-            <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">";.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">ppm_filtered</span><span class="op">)</span><span class="op">)</span>, 
-                stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">ppm_filtered</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span>
+            <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">";.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">ppm_filtered</span><span class="op">)</span><span class="op">)</span>, 
+                stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ppm_filtered</span><span class="op">)</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span>
 
 <span class="co"># perform ClueR to identify optimal number of clusters</span>
-<span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/BimapFormatting.html">as.list</a></span><span class="op">(</span><span class="va">reactomePATHID2EXTID</span><span class="op">)</span>
+<span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/BimapFormatting.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">reactomePATHID2EXTID</span><span class="op">)</span>
 
-<span class="va">pathways</span> <span class="op">=</span> <span class="va">pathways</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"R-MMU"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
+<span class="va">pathways</span> <span class="op">=</span> <span class="va">pathways</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"R-MMU"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pathways</span><span class="op">)</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
 
-<span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">pathways</span>, <span class="kw">function</span><span class="op">(</span><span class="va">path</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">gene_name</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/annotate/man/getSYMBOL.html">getSYMBOL</a></span><span class="op">(</span><span class="va">path</span>, data <span class="op">=</span> <span class="st">"org.Mm.eg"</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">gene_name</span><span class="op">)</span><span class="op">)</span>
+<span class="va">pathways</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">pathways</span>, <span class="kw">function</span><span class="op">(</span><span class="va">path</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">gene_name</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/annotate/man/getSYMBOL.html" class="external-link">getSYMBOL</a></span><span class="op">(</span><span class="va">path</span>, data <span class="op">=</span> <span class="st">"org.Mm.eg"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_name</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/runClue.html">runClue</a></span><span class="op">(</span><span class="va">ppm_gene</span>, annotation<span class="op">=</span><span class="va">pathways</span>, 
-            kRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>, rep <span class="op">=</span> <span class="fl">5</span>, effectiveSize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span>, 
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/runClue.html" class="external-link">runClue</a></span><span class="op">(</span><span class="va">ppm_gene</span>, annotation<span class="op">=</span><span class="va">pathways</span>, 
+            kRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>, rep <span class="op">=</span> <span class="fl">5</span>, effectiveSize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span>, 
             pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
 
 <span class="co"># Visualise the evaluation results</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Success<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">c1</span><span class="op">$</span><span class="va">evlMat</span><span class="op">)</span>, Freq<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>, each<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="va">myplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Freq</span>, y<span class="op">=</span><span class="va">Success</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span>, fill<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">stat_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"loess"</span>, colour<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">3</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"# of cluster"</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Enrichment score"</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Success<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">c1</span><span class="op">$</span><span class="va">evlMat</span><span class="op">)</span>, Freq<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>, each<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+<span class="va">myplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Freq</span>, y<span class="op">=</span><span class="va">Success</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span>, fill<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">stat_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"loess"</span>, colour<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">3</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"# of cluster"</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Enrichment score"</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c1</span>, rep<span class="op">=</span><span class="fl">5</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html" class="external-link">clustOptimal</a></span><span class="op">(</span><span class="va">c1</span>, rep<span class="op">=</span><span class="fl">5</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
-<div id="site-centric-analyses-of-the-liver-phosphoproteome-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#site-centric-analyses-of-the-liver-phosphoproteome-data" class="anchor"></a>Site-centric analyses of the liver phosphoproteome data</h1>
+<div class="section level2">
+<h2 id="site-centric-analyses-of-the-liver-phosphoproteome-data">Site-centric analyses of the liver phosphoproteome data<a class="anchor" aria-label="anchor" href="#site-centric-analyses-of-the-liver-phosphoproteome-data"></a>
+</h2>
 <p>Phosphosite-centric analyses will perform using kinase-substrate annotation information from PhosphoSitePlus.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"PhosphoSitePlus"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">PhosphoSite.mouse2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html">mapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">kinase</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"(.*)(;[A-Z])([0-9]+;)"</span>, <span class="st">"\\1;\\3"</span>, <span class="va">kinase</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"PhosphoSitePlus"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></span><span class="op">(</span><span class="st">"L'Ecuyer-CMRG"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">PhosphoSite.mouse2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">kinase</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)(;[A-Z])([0-9]+;)"</span>, <span class="st">"\\1;\\3"</span>, <span class="va">kinase</span><span class="op">)</span>
 <span class="op">}</span>, <span class="va">PhosphoSite.mouse</span><span class="op">)</span>
 
 <span class="co"># perform ClueR to identify optimal number of clusters</span>
-<span class="va">c3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/runClue.html">runClue</a></span><span class="op">(</span><span class="va">ppm_filtered</span>, annotation<span class="op">=</span><span class="va">PhosphoSite.mouse2</span>, kRange <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, rep <span class="op">=</span> <span class="fl">5</span>, effectiveSize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span>, pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">c3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/runClue.html" class="external-link">runClue</a></span><span class="op">(</span><span class="va">ppm_filtered</span>, annotation<span class="op">=</span><span class="va">PhosphoSite.mouse2</span>, kRange <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, rep <span class="op">=</span> <span class="fl">5</span>, effectiveSize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span>, pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
 
 <span class="co"># Visualise the evaluation results</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Success<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">c3</span><span class="op">$</span><span class="va">evlMat</span><span class="op">)</span>, Freq<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, each<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="va">myplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Freq</span>, y<span class="op">=</span><span class="va">Success</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span>, fill<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">stat_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"loess"</span>, colour<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">3</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"# of cluster"</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Enrichment score"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Success<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">c3</span><span class="op">$</span><span class="va">evlMat</span><span class="op">)</span>, Freq<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">10</span>, each<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+<span class="va">myplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Freq</span>, y<span class="op">=</span><span class="va">Success</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span>, fill<span class="op">=</span><span class="st">"gray"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">stat_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"loess"</span>, colour<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">3</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"# of cluster"</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Enrichment score"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">myplot</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html">clustOptimal</a></span><span class="op">(</span><span class="va">c3</span>, rep<span class="op">=</span><span class="fl">10</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ClueR/man/clustOptimal.html" class="external-link">clustOptimal</a></span><span class="op">(</span><span class="va">c3</span>, rep<span class="op">=</span><span class="fl">10</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, visualize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="site_gene_analysis_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -252,18 +254,18 @@
 <span class="co">#&gt; [1,] "TSC2;939;|PFKFB2;486;|FOXO3;252;|FOXO1;316;|GSK3A;21;"            </span>
 <span class="co">#&gt; [2,] "AKT1S1;247;|TSC2;939;|PFKFB2;486;|FOXO3;252;|FOXO1;316;|GSK3A;21;"</span></code></pre></div>
 </div>
-<div id="sessioninfo" class="section level1">
-<h1 class="hasAnchor">
-<a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
+<div class="section level2">
+<h2 id="sessioninfo">SessionInfo<a class="anchor" aria-label="anchor" href="#sessioninfo"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.1.2 (2021-11-01)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.2.0 (2022-04-22)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
-<span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
+<span class="co">#&gt; Running under: macOS Big Sur/Monterey 10.16</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib</span>
-<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Random number generation:</span>
 <span class="co">#&gt;  RNG:     L'Ecuyer-CMRG </span>
@@ -278,68 +280,71 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] PhosR_1.5.1          annotate_1.70.0      XML_3.99-0.8        </span>
-<span class="co">#&gt;  [4] org.Mm.eg.db_3.13.0  reactome.db_1.76.0   AnnotationDbi_1.54.1</span>
-<span class="co">#&gt;  [7] IRanges_2.26.0       S4Vectors_0.30.2     Biobase_2.52.0      </span>
-<span class="co">#&gt; [10] BiocGenerics_0.38.0  ClueR_1.4            e1071_1.7-9         </span>
+<span class="co">#&gt;  [1] PhosR_1.5.2          annotate_1.74.0      XML_3.99-0.9        </span>
+<span class="co">#&gt;  [4] org.Mm.eg.db_3.15.0  reactome.db_1.79.0   AnnotationDbi_1.58.0</span>
+<span class="co">#&gt;  [7] IRanges_2.30.0       S4Vectors_0.34.0     Biobase_2.56.0      </span>
+<span class="co">#&gt; [10] BiocGenerics_0.42.0  ClueR_1.4            e1071_1.7-9         </span>
 <span class="co">#&gt; [13] ggplot2_3.3.5       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;   [1] colorspace_2.0-2            ggsignif_0.6.3             </span>
-<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-19               </span>
-<span class="co">#&gt;   [5] rprojroot_2.0.2             circlize_0.4.13            </span>
-<span class="co">#&gt;   [7] XVector_0.32.0              GenomicRanges_1.44.0       </span>
-<span class="co">#&gt;   [9] GlobalOptions_0.1.2         ggdendro_0.1.22            </span>
-<span class="co">#&gt;  [11] fs_1.5.0                    proxy_0.4-26               </span>
+<span class="co">#&gt;   [1] colorspace_2.0-3            ggsignif_0.6.3             </span>
+<span class="co">#&gt;   [3] ellipsis_0.3.2              class_7.3-20               </span>
+<span class="co">#&gt;   [5] rprojroot_2.0.3             circlize_0.4.14            </span>
+<span class="co">#&gt;   [7] XVector_0.36.0              GenomicRanges_1.48.0       </span>
+<span class="co">#&gt;   [9] GlobalOptions_0.1.2         ggdendro_0.1.23            </span>
+<span class="co">#&gt;  [11] fs_1.5.2                    proxy_0.4-26               </span>
 <span class="co">#&gt;  [13] farver_2.1.0                ggpubr_0.4.0               </span>
-<span class="co">#&gt;  [15] bit64_4.0.5                 fansi_0.5.0                </span>
-<span class="co">#&gt;  [17] splines_4.1.2               cachem_1.0.6               </span>
-<span class="co">#&gt;  [19] knitr_1.36                  broom_0.7.10               </span>
-<span class="co">#&gt;  [21] png_0.1-7                   pheatmap_1.0.12            </span>
-<span class="co">#&gt;  [23] BiocManager_1.30.16         compiler_4.1.2             </span>
-<span class="co">#&gt;  [25] httr_1.4.2                  backports_1.3.0            </span>
-<span class="co">#&gt;  [27] Matrix_1.3-4                fastmap_1.1.0              </span>
-<span class="co">#&gt;  [29] limma_3.48.3                htmltools_0.5.2            </span>
-<span class="co">#&gt;  [31] tools_4.1.2                 igraph_1.2.8               </span>
-<span class="co">#&gt;  [33] coda_0.19-4                 gtable_0.3.0               </span>
-<span class="co">#&gt;  [35] glue_1.5.0                  GenomeInfoDbData_1.2.6     </span>
-<span class="co">#&gt;  [37] reshape2_1.4.4              dplyr_1.0.7                </span>
-<span class="co">#&gt;  [39] Rcpp_1.0.7                  carData_3.0-4              </span>
-<span class="co">#&gt;  [41] statnet.common_4.5.0        pkgdown_1.6.1              </span>
-<span class="co">#&gt;  [43] vctrs_0.3.8                 Biostrings_2.60.2          </span>
-<span class="co">#&gt;  [45] nlme_3.1-153                preprocessCore_1.54.0      </span>
-<span class="co">#&gt;  [47] xfun_0.28                   stringr_1.4.0              </span>
-<span class="co">#&gt;  [49] network_1.17.1              lifecycle_1.0.1            </span>
-<span class="co">#&gt;  [51] rstatix_0.7.0               dendextend_1.15.2          </span>
-<span class="co">#&gt;  [53] zlibbioc_1.38.0             MASS_7.3-54                </span>
-<span class="co">#&gt;  [55] scales_1.1.1                BiocStyle_2.20.2           </span>
-<span class="co">#&gt;  [57] ragg_1.1.3                  pcaMethods_1.84.0          </span>
-<span class="co">#&gt;  [59] MatrixGenerics_1.4.3        SummarizedExperiment_1.22.0</span>
-<span class="co">#&gt;  [61] RColorBrewer_1.1-2          yaml_2.2.1                 </span>
-<span class="co">#&gt;  [63] memoise_2.0.0               gridExtra_2.3              </span>
-<span class="co">#&gt;  [65] reshape_0.8.8               stringi_1.7.5              </span>
-<span class="co">#&gt;  [67] RSQLite_2.2.8               highr_0.9                  </span>
-<span class="co">#&gt;  [69] desc_1.4.0                  shape_1.4.6                </span>
-<span class="co">#&gt;  [71] GenomeInfoDb_1.28.4         rlang_0.4.12               </span>
-<span class="co">#&gt;  [73] pkgconfig_2.0.3             systemfonts_1.0.2          </span>
-<span class="co">#&gt;  [75] matrixStats_0.61.0          bitops_1.0-7               </span>
-<span class="co">#&gt;  [77] evaluate_0.14               lattice_0.20-45            </span>
-<span class="co">#&gt;  [79] purrr_0.3.4                 ruv_0.9.7.1                </span>
-<span class="co">#&gt;  [81] labeling_0.4.2              bit_4.0.4                  </span>
-<span class="co">#&gt;  [83] tidyselect_1.1.1            GGally_2.1.2               </span>
-<span class="co">#&gt;  [85] plyr_1.8.6                  magrittr_2.0.1             </span>
-<span class="co">#&gt;  [87] R6_2.5.1                    generics_0.1.1             </span>
-<span class="co">#&gt;  [89] DelayedArray_0.18.0         DBI_1.1.1                  </span>
-<span class="co">#&gt;  [91] mgcv_1.8-38                 pillar_1.6.4               </span>
-<span class="co">#&gt;  [93] withr_2.4.2                 KEGGREST_1.32.0            </span>
-<span class="co">#&gt;  [95] abind_1.4-5                 RCurl_1.98-1.5             </span>
-<span class="co">#&gt;  [97] tibble_3.1.6                crayon_1.4.2               </span>
-<span class="co">#&gt;  [99] car_3.0-12                  utf8_1.2.2                 </span>
-<span class="co">#&gt; [101] rmarkdown_2.11              viridis_0.6.2              </span>
-<span class="co">#&gt; [103] grid_4.1.2                  blob_1.2.2                 </span>
-<span class="co">#&gt; [105] digest_0.6.28               xtable_1.8-4               </span>
-<span class="co">#&gt; [107] tidyr_1.1.4                 textshaping_0.3.6          </span>
-<span class="co">#&gt; [109] munsell_0.5.0               viridisLite_0.4.0</span></code></pre></div>
+<span class="co">#&gt;  [15] bit64_4.0.5                 fansi_1.0.3                </span>
+<span class="co">#&gt;  [17] splines_4.2.0               cachem_1.0.6               </span>
+<span class="co">#&gt;  [19] knitr_1.39                  jsonlite_1.8.0             </span>
+<span class="co">#&gt;  [21] broom_0.8.0                 png_0.1-7                  </span>
+<span class="co">#&gt;  [23] pheatmap_1.0.12             BiocManager_1.30.17        </span>
+<span class="co">#&gt;  [25] compiler_4.2.0              httr_1.4.2                 </span>
+<span class="co">#&gt;  [27] backports_1.4.1             Matrix_1.4-1               </span>
+<span class="co">#&gt;  [29] fastmap_1.1.0               limma_3.52.0               </span>
+<span class="co">#&gt;  [31] cli_3.3.0                   htmltools_0.5.2            </span>
+<span class="co">#&gt;  [33] tools_4.2.0                 igraph_1.3.1               </span>
+<span class="co">#&gt;  [35] coda_0.19-4                 gtable_0.3.0               </span>
+<span class="co">#&gt;  [37] glue_1.6.2                  GenomeInfoDbData_1.2.8     </span>
+<span class="co">#&gt;  [39] reshape2_1.4.4              dplyr_1.0.9                </span>
+<span class="co">#&gt;  [41] Rcpp_1.0.8.3                carData_3.0-5              </span>
+<span class="co">#&gt;  [43] statnet.common_4.5.0        jquerylib_0.1.4            </span>
+<span class="co">#&gt;  [45] pkgdown_2.0.3               vctrs_0.4.1                </span>
+<span class="co">#&gt;  [47] Biostrings_2.64.0           nlme_3.1-157               </span>
+<span class="co">#&gt;  [49] preprocessCore_1.58.0       xfun_0.30                  </span>
+<span class="co">#&gt;  [51] stringr_1.4.0               network_1.17.1             </span>
+<span class="co">#&gt;  [53] lifecycle_1.0.1             rstatix_0.7.0              </span>
+<span class="co">#&gt;  [55] dendextend_1.15.2           zlibbioc_1.42.0            </span>
+<span class="co">#&gt;  [57] MASS_7.3-56                 scales_1.2.0               </span>
+<span class="co">#&gt;  [59] BiocStyle_2.24.0            pcaMethods_1.88.0          </span>
+<span class="co">#&gt;  [61] ragg_1.2.2                  MatrixGenerics_1.8.0       </span>
+<span class="co">#&gt;  [63] SummarizedExperiment_1.26.0 RColorBrewer_1.1-3         </span>
+<span class="co">#&gt;  [65] yaml_2.3.5                  memoise_2.0.1              </span>
+<span class="co">#&gt;  [67] gridExtra_2.3               sass_0.4.1                 </span>
+<span class="co">#&gt;  [69] reshape_0.8.9               stringi_1.7.6              </span>
+<span class="co">#&gt;  [71] RSQLite_2.2.13              highr_0.9                  </span>
+<span class="co">#&gt;  [73] desc_1.4.1                  shape_1.4.6                </span>
+<span class="co">#&gt;  [75] GenomeInfoDb_1.32.1         rlang_1.0.2                </span>
+<span class="co">#&gt;  [77] pkgconfig_2.0.3             systemfonts_1.0.4          </span>
+<span class="co">#&gt;  [79] matrixStats_0.62.0          bitops_1.0-7               </span>
+<span class="co">#&gt;  [81] evaluate_0.15               lattice_0.20-45            </span>
+<span class="co">#&gt;  [83] ruv_0.9.7.1                 purrr_0.3.4                </span>
+<span class="co">#&gt;  [85] labeling_0.4.2              bit_4.0.4                  </span>
+<span class="co">#&gt;  [87] tidyselect_1.1.2            GGally_2.1.2               </span>
+<span class="co">#&gt;  [89] plyr_1.8.7                  magrittr_2.0.3             </span>
+<span class="co">#&gt;  [91] R6_2.5.1                    generics_0.1.2             </span>
+<span class="co">#&gt;  [93] DelayedArray_0.22.0         DBI_1.1.2                  </span>
+<span class="co">#&gt;  [95] mgcv_1.8-40                 pillar_1.7.0               </span>
+<span class="co">#&gt;  [97] withr_2.5.0                 KEGGREST_1.36.0            </span>
+<span class="co">#&gt;  [99] abind_1.4-5                 RCurl_1.98-1.6             </span>
+<span class="co">#&gt; [101] tibble_3.1.6                crayon_1.5.1               </span>
+<span class="co">#&gt; [103] car_3.0-12                  utf8_1.2.2                 </span>
+<span class="co">#&gt; [105] rmarkdown_2.14              viridis_0.6.2              </span>
+<span class="co">#&gt; [107] grid_4.2.0                  blob_1.2.3                 </span>
+<span class="co">#&gt; [109] digest_0.6.29               xtable_1.8-4               </span>
+<span class="co">#&gt; [111] tidyr_1.2.0                 textshaping_0.3.6          </span>
+<span class="co">#&gt; [113] munsell_0.5.0               viridisLite_0.4.0          </span>
+<span class="co">#&gt; [115] bslib_0.3.1</span></code></pre></div>
 </div>
   </div>
 
@@ -354,11 +359,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Pengyi Yang, Taiyun Kim, Hani Jieun Kim.</p>
+  <p></p>
+<p>Developed by Pengyi Yang, Taiyun Kim, Hani Jieun Kim.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -366,6 +373,8 @@
 
   
 
+
+  
 
   </body>
 </html>

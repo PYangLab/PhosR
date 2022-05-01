@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,14 +37,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     PhosR
      
     <span class="caret"></span>
@@ -54,7 +56,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Preprocessing
      
     <span class="caret"></span>
@@ -69,7 +71,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Downstream analysis
      
     <span class="caret"></span>
@@ -95,7 +97,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/PYangLab/PhosR">
+  <a href="https://github.com/PYangLab/PhosR" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -115,61 +117,54 @@
 
 <p><img src="reference/figures/PhosR_logo.png" align="right" width="200" height="250"></p>
 <!-- badges: start -->
-<p><a href="https://github.com/PYangLab/PhosR/actions"><img src="https://github.com/PYangLab/PhosR/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
-<div id="phosr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#phosr" class="anchor"></a>PhosR</h1></div>
-<p><code>PhosR</code> is a package for the comprehensive analysis of phosphoproteomic data (<a href="https://doi.org/10.1016/j.celrep.2021.108771" class="uri">https://doi.org/10.1016/j.celrep.2021.108771</a>). There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, which enables integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.</p>
-<div id="phosr-overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#phosr-overview" class="anchor"></a>PhosR overview</h2>
+<div class="section level1">
+<div class="page-header"><h1 id="phosr">PhosR<a class="anchor" aria-label="anchor" href="#phosr"></a>
+</h1></div>
+<p><code>PhosR</code> is a package for the comprehensive analysis of phosphoproteomic data (<a href="https://doi.org/10.1016/j.celrep.2021.108771" class="external-link uri">https://doi.org/10.1016/j.celrep.2021.108771</a>). There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, which enables integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.</p>
+<div class="section level2">
+<h2 id="phosr-overview">PhosR overview<a class="anchor" aria-label="anchor" href="#phosr-overview"></a>
+</h2>
 <p><img src="https://raw.githubusercontent.com/PYangLab/PhosR/master/inst/graphical_abstract.png" align="center"></p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>Install the development version from GitHub using the <code>devtools</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"PYangLab/PhosR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="vignette" class="section level2">
-<h2 class="hasAnchor">
-<a href="#vignette" class="anchor"></a>Vignette</h2>
-<!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/PhosR.html-->
-<p>Please find the links to our vignette below. Note that the vignette utilises subsets of the full phosphoproteomic datasets that were used in <a href="https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full">our pre-print</a>, meaning that the results will not be identical and are for demonstration purposes only.</p>
+<div class="section level2">
+<h2 id="vignette">Vignette<a class="anchor" aria-label="anchor" href="#vignette"></a>
+</h2>
+<!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/PhosR.html--><p>Please find the links to our vignette below. Note that the vignette utilises subsets of the full phosphoproteomic datasets that were used in <a href="https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full" class="external-link">our pre-print</a>, meaning that the results will not be identical and are for demonstration purposes only.</p>
 <ul>
-<li>Introduction
-<ul>
-<li><a href="https://pyanglab.github.io/PhosR/articles/PhosR.html">Full vignette</a></li>
+<li>Introduction<ul><li><a href="https://pyanglab.github.io/PhosR/articles/PhosR.html" class="external-link">Full vignette</a></li></ul>
+</li>
+<li>Processing of phosphoproteomic data<ul>
+<li><a href="https://PYangLab.github.io/PhosR/articles/web/imputation.html" class="external-link">Imputation</a></li>
+<li><a href="https://PYangLab.github.io/PhosR/articles/web/batch_correction.html" class="external-link">Batch correction</a></li>
 </ul>
 </li>
-<li>Processing of phosphoproteomic data
-<ul>
-<li><a href="https://PYangLab.github.io/PhosR/articles/web/imputation.html">Imputation</a></li>
-<li><a href="https://PYangLab.github.io/PhosR/articles/web/batch_correction.html">Batch correction</a></li>
-</ul>
-</li>
-<li>Downstream analysis of phosphoproteomic data
-<ul>
-<li><a href="https://PYangLab.github.io/PhosR/articles/web/pathway_analysis.html">Pathway analysis</a></li>
-<li><a href="https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html">Site- and gene-centric analysis</a></li>
-<li><a href="https://PYangLab.github.io/PhosR/articles/web/signalomes.html">Kinase-substrate relationship scoring and signalome construction</a></li>
+<li>Downstream analysis of phosphoproteomic data<ul>
+<li><a href="https://PYangLab.github.io/PhosR/articles/web/pathway_analysis.html" class="external-link">Pathway analysis</a></li>
+<li><a href="https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html" class="external-link">Site- and gene-centric analysis</a></li>
+<li><a href="https://PYangLab.github.io/PhosR/articles/web/signalomes.html" class="external-link">Kinase-substrate relationship scoring and signalome construction</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div id="reference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h2>
-<ol>
-<li>Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771. (<a href="https://doi.org/10.1016/j.celrep.2021.108771" class="uri">https://doi.org/10.1016/j.celrep.2021.108771</a>)</li>
-<li>Kim, H., Kim, T., Xiao, D. &amp; Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585. (<a href="https://doi.org/10.1016/j.xpro.2021.100585" class="uri">https://doi.org/10.1016/j.xpro.2021.100585</a>)</li>
+<div class="section level2">
+<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771. (<a href="https://doi.org/10.1016/j.celrep.2021.108771" class="external-link uri">https://doi.org/10.1016/j.celrep.2021.108771</a>)</li>
+<li>Kim, H., Kim, T., Xiao, D. &amp; Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585. (<a href="https://doi.org/10.1016/j.xpro.2021.100585" class="external-link uri">https://doi.org/10.1016/j.xpro.2021.100585</a>)</li>
 </ol>
 </div>
-<div id="contact-us" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contact-us" class="anchor"></a>Contact us</h2>
+<div class="section level2">
+<h2 id="contact-us">Contact us<a class="anchor" aria-label="anchor" href="#contact-us"></a>
+</h2>
 <p>If you have any enquiries, especially about performing PhosR to analyse your phosphoproteomic data, please contact <a href="mailto:taiyun.kim@sydney.edu.au" class="email">taiyun.kim@sydney.edu.au</a> or <a href="mailto:hani.kim@sydney.edu.au" class="email">hani.kim@sydney.edu.au</a>. We are also happy to receive any suggestions and comments.</p>
 </div>
 </div>
@@ -178,32 +173,42 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/PhosR">https://​www.bioconductor.org/​packages/​PhosR</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/PhosR" class="external-link">View on Bioconductor</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> + file <a href="LICENSE-text.html">LICENSE</a>
+<a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing PhosR</a></li>
+<li><a href="authors.html#citation">Citing PhosR</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Pengyi Yang <br><small class="roles"> Author </small>  </li>
 <li>Taiyun Kim <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Hani Jieun Kim <br><small class="roles"> Author </small>  </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/PYangLab/PhosR/actions" class="external-link"><img src="https://github.com/PYangLab/PhosR/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 
@@ -212,11 +217,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Pengyi Yang, Taiyun Kim, Hani Jieun Kim.</p>
+  <p></p>
+<p>Developed by Pengyi Yang, Taiyun Kim, Hani Jieun Kim.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -224,6 +231,8 @@
 
   
 
+
+  
 
   </body>
 </html>
