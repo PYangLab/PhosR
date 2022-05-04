@@ -73,6 +73,11 @@ kinaseSubstrateScore <- function(substrate.list, mat, seqs, numMotif = 5,
         stop("Parameter 'species' must be one of 'mouse', 'human' or 'rat'")
     }
     
+    if (any(is.na(mat))) {
+        stop("Phosphosite quantification matrix contains NAs. Please remove NAs in mat.")
+    }
+    
+    
     if (species == "mouse") {
         motif.list <- motif.mouse.list
     } else if (species == "human") {
@@ -207,6 +212,11 @@ scorePhosphositeProfile = function(mat, ks.profile.list.filtered) {
 #' ks.profile.list <- kinaseSubstrateProfile(PhosphoSite.mouse, L6.phos.std)
 #' @export
 kinaseSubstrateProfile <- function(substrate.list, mat) {
+    
+    if (any(is.na(mat))) {
+        stop("Phosphosite quantification matrix contains NAs. Please remove NAs in mat.")
+    }
+    
     # generate kinase substrate profile list
     ks.profile.list <- lapply(substrate.list,
         function(x) {
