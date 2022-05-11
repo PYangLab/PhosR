@@ -8,6 +8,7 @@ kinaseSubstrateHeatmap(
   phosScoringMatrices,
   top = 3,
   printPlot = NULL,
+  filePath = "./kinaseSubstrateHeatmap.pdf",
   width = 10,
   height = 10
 )
@@ -19,7 +20,10 @@ kinaseSubstrateHeatmap(
 included in the heatmap. Default is 1.}
 
 \item{printPlot}{indicate whether the plot should be saved as a PDF
-in the current directory. Default is NULL, otherwise specify TRUE.}
+in the specified directory. Default is NULL, otherwise specify TRUE.}
+
+\item{filePath}{path name to save the plot as a PDF file.
+Default saves in the working directory.}
 
 \item{width}{width of PDF.}
 

@@ -267,7 +267,9 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' @param top the number of top ranked phosphosites for each kinase to be
 #' included in the heatmap. Default is 1.
 #' @param printPlot indicate whether the plot should be saved as a PDF
-#' in the current directory. Default is NULL, otherwise specify TRUE.
+#' in the specified directory. Default is NULL, otherwise specify TRUE.
+#' @param filePath path name to save the plot as a PDF file.
+#' Default saves in the working directory.
 #' @param width width of PDF.
 #' @param height height of PDF.
 #'
@@ -316,7 +318,7 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' kinaseSubstrateHeatmap(L6.matrices, printPlot=TRUE)
 #' }
 #' @export
-kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL,
+kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL, filePath="./kinaseSubstrateHeatmap.pdf",
                                    width=10, height=10) {
     # KinaseFamily = PhosR::KinaseFamily
     utils::data("KinaseFamily", envir = environment())
@@ -345,7 +347,7 @@ kinaseSubstrateHeatmap <- function(phosScoringMatrices, top = 3, printPlot=NULL,
         
     } else {
         
-        pdf (file="./kinaseSubstrateHeatmap.pdf", width=width, height=height)
+        pdf(file=filePath, width=width, height=height)
         
         pheatmap(phosScoringMatrices$combinedScoreMatrix[sites,
         ], annotation_col = annotation_col,
