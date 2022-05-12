@@ -268,8 +268,7 @@ kinaseActivityHeatmap <- function(ksProfileMatrix) {
 #' included in the heatmap. Default is 1.
 #' @param printPlot indicate whether the plot should be saved as a PDF
 #' in the specified directory. Default is NULL, otherwise specify TRUE.
-#' @param filePath path name to save the plot as a PDF file.
-#' Default saves in the working directory.
+#' @param filePath path name to save the plot as a PDF file. Default saves in the working directory.
 #' @param width width of PDF.
 #' @param height height of PDF.
 #'
