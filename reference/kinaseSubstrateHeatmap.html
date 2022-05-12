@@ -96,6 +96,7 @@
   <span class="va">phosScoringMatrices</span>,
   top <span class="op">=</span> <span class="fl">3</span>,
   printPlot <span class="op">=</span> <span class="cn">NULL</span>,
+  filePath <span class="op">=</span> <span class="st">"./kinaseSubstrateHeatmap.pdf"</span>,
   width <span class="op">=</span> <span class="fl">10</span>,
   height <span class="op">=</span> <span class="fl">10</span>
 <span class="op">)</span></code></pre></div>
@@ -110,7 +111,9 @@
 included in the heatmap. Default is 1.</p></dd>
 <dt>printPlot</dt>
 <dd><p>indicate whether the plot should be saved as a PDF
-in the current directory. Default is NULL, otherwise specify TRUE.</p></dd>
+in the specified directory. Default is NULL, otherwise specify TRUE.</p></dd>
+<dt>filePath</dt>
+<dd><p>path name to save the plot as a PDF file. Default saves in the working directory.</p></dd>
 <dt>width</dt>
 <dd><p>width of PDF.</p></dd>
 <dt>height</dt>
