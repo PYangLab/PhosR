@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -92,62 +92,67 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">frequencyScoring</span><span class="op">(</span><span class="va">sequence.list</span>, <span class="va">frequency.mat</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">frequencyScoring</span><span class="op">(</span><span class="va">sequence.list</span>, <span class="va">frequency.mat</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>sequence.list</dt>
 <dd><p>A vector list of sequences</p></dd>
+
+
 <dt>frequency.mat</dt>
 <dd><p>A matrix output from `createFrequencyMat`</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of frequency score</p>
+    
+
+<p>A vector of frequency score</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'KinaseMotifs'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Extracting first 10 sequences for demonstration purpose</span></span>
-<span class="r-in"><span class="va">seqs</span> <span class="op">=</span> <span class="fu"><a href="PhosphoExperiment-methods.html">Sequence</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">seqs</span> <span class="op">=</span> <span class="va">seqs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extracting flanking sequences</span></span>
-<span class="r-in"><span class="va">seqWin</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">mid</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">x</span>, start<span class="op">=</span><span class="op">(</span><span class="va">mid</span><span class="op">-</span><span class="fl">7</span><span class="op">)</span>, stop<span class="op">=</span><span class="op">(</span><span class="va">mid</span><span class="op">+</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span>, <span class="va">seqs</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The first 10 for demonstration purpose</span></span>
-<span class="r-in"><span class="va">phospho.L6.ratio</span> <span class="op">=</span> <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, </span>
-<span class="r-in">    <span class="st">"Quantification"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>,<span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># minimum number of sequences used for compiling motif for each kinase.</span></span>
-<span class="r-in"><span class="va">numMotif</span><span class="op">=</span><span class="fl">5</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">motif.mouse.list.filtered</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="va">motif.mouse.list</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">motif.mouse.list</span><span class="op">$</span><span class="va">NumInputSeq</span> <span class="op">&gt;=</span> <span class="va">numMotif</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># scoring all phosphosites against all motifs</span></span>
-<span class="r-in"><span class="va">motifScoreMatrix</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span>
-<span class="r-in">        ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">motifScoreMatrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">motifScoreMatrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Scoring phosphosites against kinase motifs</span></span>
-<span class="r-in"><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">motifScoreMatrix</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span class="r-in">        <span class="fu">frequencyScoring</span><span class="op">(</span><span class="va">seqWin</span>, <span class="va">motif.mouse.list.filtered</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">i</span>, <span class="st">'.'</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'KinaseMotifs'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Extracting first 10 sequences for demonstration purpose</span></span></span>
+<span class="r-in"><span><span class="va">seqs</span> <span class="op">=</span> <span class="fu"><a href="PhosphoExperiment-methods.html">Sequence</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seqs</span> <span class="op">=</span> <span class="va">seqs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extracting flanking sequences</span></span></span>
+<span class="r-in"><span><span class="va">seqWin</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">mid</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">x</span>, start<span class="op">=</span><span class="op">(</span><span class="va">mid</span><span class="op">-</span><span class="fl">7</span><span class="op">)</span>, stop<span class="op">=</span><span class="op">(</span><span class="va">mid</span><span class="op">+</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span>, <span class="va">seqs</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The first 10 for demonstration purpose</span></span></span>
+<span class="r-in"><span><span class="va">phospho.L6.ratio</span> <span class="op">=</span> <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, </span></span>
+<span class="r-in"><span>    <span class="st">"Quantification"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># minimum number of sequences used for compiling motif for each kinase.</span></span></span>
+<span class="r-in"><span><span class="va">numMotif</span><span class="op">=</span><span class="fl">5</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">motif.mouse.list.filtered</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>    <span class="va">motif.mouse.list</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">motif.mouse.list</span><span class="op">$</span><span class="va">NumInputSeq</span> <span class="op">&gt;=</span> <span class="va">numMotif</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># scoring all phosphosites against all motifs</span></span></span>
+<span class="r-in"><span><span class="va">motifScoreMatrix</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">motifScoreMatrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">motifScoreMatrix</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Scoring phosphosites against kinase motifs</span></span></span>
+<span class="r-in"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">motif.mouse.list.filtered</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">motifScoreMatrix</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>        <span class="fu">frequencyScoring</span><span class="op">(</span><span class="va">seqWin</span>, <span class="va">motif.mouse.list.filtered</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">i</span>, <span class="st">'.'</span>, sep<span class="op">=</span><span class="st">''</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.20.21.22.23.24.25.26.27.28.29.30.31.32.33.34.35.36.37.38.39.40.41.42.43.44.45.46.47.48.49.50.51.52.53.54.55.56.57.58.59.60.61.62.63.64.65.66.67.68.69.70.71.72.73.74.75.76.77.78.79.80.81.82.83.84.85.86.87.88.89.90.91.92.93.94.95.96.97.98.99.100.101.102.103.104.105.106.107.108.109.110.111.112.113.114.</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -162,7 +167,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

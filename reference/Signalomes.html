@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -92,81 +92,103 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Signalomes</span><span class="op">(</span><span class="va">KSR</span>, <span class="va">predMatrix</span>, <span class="va">exprsMat</span>, <span class="va">KOI</span>, threskinaseNetwork<span class="op">=</span><span class="fl">0.9</span>,
-signalomeCutoff<span class="op">=</span><span class="fl">0.5</span>, module_res <span class="op">=</span> <span class="cn">NULL</span>, filter <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Signalomes</span><span class="op">(</span><span class="va">KSR</span>, <span class="va">predMatrix</span>, <span class="va">exprsMat</span>, <span class="va">KOI</span>, threskinaseNetwork<span class="op">=</span><span class="fl">0.9</span>,</span>
+<span>signalomeCutoff<span class="op">=</span><span class="fl">0.5</span>, module_res <span class="op">=</span> <span class="cn">NULL</span>, filter <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>KSR</dt>
 <dd><p>kinase-substrate relationship scoring results</p></dd>
+
+
 <dt>predMatrix</dt>
 <dd><p>output of kinaseSubstratePred function</p></dd>
+
+
 <dt>exprsMat</dt>
 <dd><p>a matrix with rows corresponding to phosphosites and columns
 corresponding to samples</p></dd>
+
+
 <dt>KOI</dt>
 <dd><p>a character vector that contains kinases of interest for which
 expanded signalomes will be generated</p></dd>
+
+
 <dt>threskinaseNetwork</dt>
 <dd><p>threshold used to select interconnected kinases for
 the expanded signalomes</p></dd>
+
+
 <dt>signalomeCutoff</dt>
 <dd><p>threshold used to filter kinase-substrate
 relationships</p></dd>
+
+
 <dt>module_res</dt>
 <dd><p>parameter to select number of final modules</p></dd>
+
+
 <dt>filter</dt>
 <dd><p>parameter to filter modules with only few proteins</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Default to <code>TRUE</code> to show messages during the progress.
 All messages will be suppressed if set to <code>FALSE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of 3 elements.
-<code>Signalomes</code>, <code>proteinModules</code> and <code>kinaseSubstrates</code></p>
+    
+
+<p>A list of 3 elements.</p>
+<p></p>
+<p><code>Signalomes</code>, <code>proteinModules</code> and <code>kinaseSubstrates</code></p>
+
+
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'SPSs'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'PhosphoSitePlus'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_.+'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Construct a design matrix by condition</span></span>
-<span class="r-in"><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># phosphoproteomics data normalisation using RUV</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">L6.sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">GeneSymbol</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="st">";"</span>,</span>
-<span class="r-in">                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Residue</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Site</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">L6.sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.L6.ratio.RUV</span> <span class="op">=</span> <span class="fu"><a href="RUVphospho.html">RUVphospho</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span>, </span>
-<span class="r-in">    M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">phosphoL6</span> <span class="op">=</span> <span class="va">phospho.L6.ratio.RUV</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># filter for up-regulated phosphosites</span></span>
-<span class="r-in"><span class="va">phosphoL6.mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="meanAbundance.html">meanAbundance</a></span><span class="op">(</span><span class="va">phosphoL6</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">aov</span> <span class="op">&lt;-</span> <span class="fu"><a href="matANOVA.html">matANOVA</a></span><span class="op">(</span>mat<span class="op">=</span><span class="va">phosphoL6</span>, grps<span class="op">=</span><span class="va">grps</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phosphoL6.reg</span> <span class="op">&lt;-</span> <span class="va">phosphoL6</span><span class="op">[</span><span class="op">(</span><span class="va">aov</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">                         <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">phosphoL6.mean</span> <span class="op">&gt;</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>,, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">L6.phos.std</span> <span class="op">&lt;-</span> <span class="fu"><a href="standardise.html">standardise</a></span><span class="op">(</span><span class="va">phosphoL6.reg</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">L6.phos.std</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">L6.phos.std</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">L6.sites</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">L6.phos.seq</span> <span class="op">&lt;-</span> <span class="fu"><a href="PhosphoExperiment-methods.html">Sequence</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">L6.matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="kinaseSubstrateScore.html">kinaseSubstrateScore</a></span><span class="op">(</span><span class="va">PhosphoSite.mouse</span>, <span class="va">L6.phos.std</span>,</span>
-<span class="r-in">                                    <span class="va">L6.phos.seq</span>, numMotif <span class="op">=</span> <span class="fl">5</span>, numSub <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'SPSs'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'PhosphoSitePlus'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_.+'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Construct a design matrix by condition</span></span></span>
+<span class="r-in"><span><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># phosphoproteomics data normalisation using RUV</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">L6.sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">GeneSymbol</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">";"</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Residue</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Site</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">L6.sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.L6.ratio.RUV</span> <span class="op">=</span> <span class="fu"><a href="RUVphospho.html">RUVphospho</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>    M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">phosphoL6</span> <span class="op">=</span> <span class="va">phospho.L6.ratio.RUV</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># filter for up-regulated phosphosites</span></span></span>
+<span class="r-in"><span><span class="va">phosphoL6.mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="meanAbundance.html">meanAbundance</a></span><span class="op">(</span><span class="va">phosphoL6</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">aov</span> <span class="op">&lt;-</span> <span class="fu"><a href="matANOVA.html">matANOVA</a></span><span class="op">(</span>mat<span class="op">=</span><span class="va">phosphoL6</span>, grps<span class="op">=</span><span class="va">grps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phosphoL6.reg</span> <span class="op">&lt;-</span> <span class="va">phosphoL6</span><span class="op">[</span><span class="op">(</span><span class="va">aov</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>                         <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">phosphoL6.mean</span> <span class="op">&gt;</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>,, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">L6.phos.std</span> <span class="op">&lt;-</span> <span class="fu"><a href="standardise.html">standardise</a></span><span class="op">(</span><span class="va">phosphoL6.reg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">L6.phos.std</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">L6.phos.std</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">L6.sites</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">L6.phos.seq</span> <span class="op">&lt;-</span> <span class="fu"><a href="PhosphoExperiment-methods.html">Sequence</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">L6.matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="kinaseSubstrateScore.html">kinaseSubstrateScore</a></span><span class="op">(</span><span class="va">PhosphoSite.mouse</span>, <span class="va">L6.phos.std</span>,</span></span>
+<span class="r-in"><span>                                    <span class="va">L6.phos.seq</span>, numMotif <span class="op">=</span> <span class="fl">5</span>, numSub <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of kinases passed motif size filtering: 114</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of kinases passed profile size filtering: 44</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scoring phosphosites against kinase motifs:</span>
@@ -291,8 +313,8 @@ All messages will be suppressed if set to <code>FALSE</code></p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> by motifs and phospho profiles:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done.</span>
 <span class="r-plt img"><img src="Signalomes-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">L6.predMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="kinaseSubstratePred.html">kinaseSubstratePred</a></span><span class="op">(</span><span class="va">L6.matrices</span>, top<span class="op">=</span><span class="fl">30</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">L6.predMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="kinaseSubstratePred.html">kinaseSubstratePred</a></span><span class="op">(</span><span class="va">L6.matrices</span>, top<span class="op">=</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Predicting kinases for phosphosites:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2.</span>
@@ -321,18 +343,18 @@ All messages will be suppressed if set to <code>FALSE</code></p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 25.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 26.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> done</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">kinaseOI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PRKAA1'</span>, <span class="st">'AKT1'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">Signalomes_results</span> <span class="op">&lt;-</span> <span class="fu">Signalomes</span><span class="op">(</span>KSR<span class="op">=</span><span class="va">L6.matrices</span>,</span>
-<span class="r-in">                                 predMatrix<span class="op">=</span><span class="va">L6.predMat</span>,</span>
-<span class="r-in">                                 exprsMat<span class="op">=</span><span class="va">L6.phos.std</span>,</span>
-<span class="r-in">                                 KOI<span class="op">=</span><span class="va">kinaseOI</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">kinaseOI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'PRKAA1'</span>, <span class="st">'AKT1'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">Signalomes_results</span> <span class="op">&lt;-</span> <span class="fu">Signalomes</span><span class="op">(</span>KSR<span class="op">=</span><span class="va">L6.matrices</span>,</span></span>
+<span class="r-in"><span>                                 predMatrix<span class="op">=</span><span class="va">L6.predMat</span>,</span></span>
+<span class="r-in"><span>                                 exprsMat<span class="op">=</span><span class="va">L6.phos.std</span>,</span></span>
+<span class="r-in"><span>                                 KOI<span class="op">=</span><span class="va">kinaseOI</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> calculating optimal number of clusters...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> optimal number of clusters = 3</span>
 <span class="r-plt img"><img src="Signalomes-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -347,7 +369,7 @@ All messages will be suppressed if set to <code>FALSE</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

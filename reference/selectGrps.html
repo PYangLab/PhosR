@@ -19,7 +19,7 @@ in n groups."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@ in n groups.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selectGrps</span><span class="op">(</span><span class="va">mat</span>, <span class="va">grps</span>, <span class="va">percent</span>, <span class="va">n</span>, <span class="va">assay</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selectGrps</span><span class="op">(</span><span class="va">mat</span>, <span class="va">grps</span>, <span class="va">percent</span>, <span class="va">n</span>, <span class="va">assay</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -105,21 +105,32 @@ in n groups.</p>
 <dd><p>a matrix (PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples in replicates for different 
 treatments.</p></dd>
+
+
 <dt>grps</dt>
 <dd><p>a string specifying the grouping (replicates).</p></dd>
+
+
 <dt>percent</dt>
 <dd><p>a percent from 0 to 1, specifying the percentage of quantified
 values in any treatment group.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>an integer indicating n or more replicates pass the percentage
 filtering for a phosphosite to be included.</p></dd>
+
+
 <dt>assay</dt>
 <dd><p>an assay to be selected if <code>mat</code> is a PhosphoExperiment 
 object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a filtered matrix (or a PhosphoExperiment Oject) with at least 
+    
+
+<p>a filtered matrix (or a PhosphoExperiment Oject) with at least 
 'percent' quantification in one or more conditions. If an input <code>mat</code> is 
 a SummarizedExperiment object, filtered SummarizedExperiment object will be 
 returned.</p>
@@ -131,15 +142,15 @@ returned.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu">selectGrps</span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># For PhosphoExperiment object</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.pe'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.pe</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu">selectGrps</span><span class="op">(</span><span class="va">phospho.cells.Ins.pe</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu">selectGrps</span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For PhosphoExperiment object</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.pe'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.pe</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu">selectGrps</span><span class="op">(</span><span class="va">phospho.cells.Ins.pe</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -154,7 +165,7 @@ returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

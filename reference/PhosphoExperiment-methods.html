@@ -19,7 +19,7 @@ This provides some convenience for users."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -96,79 +96,86 @@ This provides some convenience for users.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="fu">Site</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">Site</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="fu">Residue</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">Residue</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Site</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Residue</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Site</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Residue</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span>
-
-<span class="co"># S4 method for PhosphoExperiment</span>
-<span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="fu">Site</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">Site</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="fu">Residue</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">Residue</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Site</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Residue</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span>, withDimnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Site</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Residue</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Sequence</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for PhosphoExperiment</span></span>
+<span><span class="fu">Localisation</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code>PhosphoExperiment</code> object to be assigned to.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Ignored for accessors.</p></dd>
+
+
 <dt>value</dt>
 <dd><p>A vector of values to set to respective accessor. See section 
 <code>Available methods</code> for more details.</p></dd>
+
+
 <dt>withDimnames</dt>
 <dd><p>A <code>logical(1)</code>, indicating whether the names of the 
 vector should be applied.</p></dd>
+
 </dl></div>
     <div id="available-methods">
     <h2>Available methods</h2>
@@ -208,10 +215,10 @@ vector</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">PhosphoExperiment</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">UniprotID</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">uniprot</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">PhosphoExperiment</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">uniprot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">UniprotID</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               "TFG" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
@@ -224,9 +231,9 @@ vector</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                            "MAP3K3" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                           "ERCC6L2" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">symbol</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">symbol</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">GeneSymbol</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               "TFG" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
@@ -239,9 +246,9 @@ vector</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                            "MAP3K3" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                           "ERCC6L2" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">Site</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">site</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Site</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">Site</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">site</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Site</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 198 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
@@ -254,9 +261,9 @@ vector</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 175 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 913 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">Residue</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">res</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Residue</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">Residue</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">res</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Residue</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 "S" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
@@ -269,9 +276,9 @@ vector</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 "S" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 "S" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">Sequence</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">seq</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Sequence</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">Sequence</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">seq</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Sequence</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   "MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
@@ -284,22 +291,22 @@ vector</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   "PRSRHLSVSSQNPGRSSPPPGYVPERQQHIA" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   "RVPKNPICCKLLLGESEDSETEDPVKVNHDD" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">Localisation</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Localisation</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">Localisation</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">Localisation</span><span class="op">(</span><span class="va">phosData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Q6AYR1;TFG;S198;MSAFGLTDDQVSGPPSAPTEDRSGTPDSIAS </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                          1.05455439 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                           1.1994620 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   D3ZRN2;MED1;T1035;STGGSKSPGSSGRCQTPPGVATPPIPKITIQ </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         -1.03665796 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          -0.6535208 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    D3ZUD5;OFD1;S780;SSSPCLDRPSESPAASPTPCPERTPQPSSVP </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         -0.03837552 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                           1.2540863 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Q68FR3;INTS12;S127;DVPKKPRLEKPETRSSPITVQTSKDLAMADL </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         -0.22830366 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          -0.1581687 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  B5DF98;MAP3K3;S175;PRSRHLSVSSQNPGRSSPPPGYVPERQQHIA </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                          0.18994387 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          -0.7854773 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D3ZPU4;ERCC6L2;S913;RVPKNPICCKLLLGESEDSETEDPVKVNHDD </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         -0.01242549 </span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          -1.6609642 </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -314,7 +321,7 @@ vector</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

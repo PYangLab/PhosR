@@ -18,7 +18,7 @@ pre-defined probability score (default score = 0.75)"><!-- mathjax --><script sr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@ pre-defined probability score (default score = 0.75)</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">mat</span>, loc<span class="op">=</span><span class="cn">NULL</span>, prob <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">mat</span>, loc<span class="op">=</span><span class="cn">NULL</span>, prob <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -103,50 +103,57 @@ pre-defined probability score (default score = 0.75)</p>
 <dd><p>a matrix (or PhosphoExperiment object) with rows corresponding to 
 phosphosites and columns corresponding to samples in replicates for different 
 treatments.</p></dd>
+
+
 <dt>loc</dt>
 <dd><p>a vector of localisation scores</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>a percent from 0 to 1, specifying the localisation probability 
 of quantified values in across all samples for retaining a phosphosite for 
 subsequent analysis.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a filtered matrix</p>
+    
+
+<p>a filtered matrix</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.pe'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ppe</span> <span class="op">&lt;-</span> <span class="va">phospho.cells.Ins.pe</span></span>
-<span class="r-in"><span class="va">ppe_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Before filtering</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.pe'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ppe</span> <span class="op">&lt;-</span> <span class="va">phospho.cells.Ins.pe</span></span></span>
+<span class="r-in"><span><span class="va">ppe_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Before filtering</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5000   24</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_mat</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_mat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5000   24</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Generate arbitrary localisation probabilities for each phosphosite</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">localisation_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, <span class="fl">0.8</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">localisation_scores</span> <span class="op">&gt;=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate arbitrary localisation probabilities for each phosphosite</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">localisation_scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, <span class="fl">0.8</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">localisation_scores</span> <span class="op">&gt;=</span> <span class="fl">0.75</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   709  4291 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Filter</span></span>
-<span class="r-in"><span class="fu"><a href="PhosphoExperiment-methods.html">Localisation</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">localisation_scores</span></span>
-<span class="r-in"><span class="va">ppe_filtered</span> <span class="op">&lt;-</span> <span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">ppe</span>, prob<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ppe_mat_filtered</span> <span class="op">&lt;-</span> <span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">ppe_mat</span>, loc<span class="op">=</span><span class="va">localisation_scores</span>, </span>
-<span class="r-in">     prob<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># After filtering</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Filter</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="PhosphoExperiment-methods.html">Localisation</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">localisation_scores</span></span></span>
+<span class="r-in"><span><span class="va">ppe_filtered</span> <span class="op">&lt;-</span> <span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">ppe</span>, prob<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ppe_mat_filtered</span> <span class="op">&lt;-</span> <span class="fu">selectLocalisedSites</span><span class="op">(</span><span class="va">ppe_mat</span>, loc<span class="op">=</span><span class="va">localisation_scores</span>, </span></span>
+<span class="r-in"><span>     prob<span class="op">=</span><span class="fl">0.75</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># After filtering</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_filtered</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4291   24</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_mat_filtered</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe_mat_filtered</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4291   24</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -161,7 +168,7 @@ subsequent analysis.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

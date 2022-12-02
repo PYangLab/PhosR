@@ -27,7 +27,7 @@ the input matrix.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -112,8 +112,8 @@ the input matrix.
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plotQC</span><span class="op">(</span><span class="va">mat</span>, <span class="va">grps</span>, <span class="va">labels</span>, panel <span class="op">=</span> 
-<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantify"</span>, <span class="st">"dendrogram"</span>, <span class="st">"abundance"</span>, <span class="st">"pca"</span>, <span class="st">"all"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotQC</span><span class="op">(</span><span class="va">mat</span>, <span class="va">grps</span>, <span class="va">labels</span>, panel <span class="op">=</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantify"</span>, <span class="st">"dendrogram"</span>, <span class="st">"abundance"</span>, <span class="st">"pca"</span>, <span class="st">"all"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,102 +121,111 @@ the input matrix.
     <dl><dt>mat</dt>
 <dd><p>A p by n matrix, where p is the number of phosphosites and n is
 the number of samples.</p></dd>
+
+
 <dt>grps</dt>
 <dd><p>A vector of colours to be used in the plot. The length should be
 equal to the columns of the mat.</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>A vector of sample names. Used the label points in PCA plot
 (panel=4)</p></dd>
+
+
 <dt>panel</dt>
 <dd><p>A type of plot to output. See description for details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A graphical plot</p>
+    
+
+<p>A graphical plot</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Imputation</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.impute</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="fu"><a href="scImpute.html">scImpute</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="va">phospho.cells.Ins.filtered</span>,</span>
-<span class="r-in">        <span class="fl">0.5</span>,</span>
-<span class="r-in">        <span class="va">grps</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="ptImpute.html">ptImpute</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">10</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">    <span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>, </span>
-<span class="r-in">    percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Imputation</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.impute</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="scImpute.html">scImpute</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="va">phospho.cells.Ins.filtered</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>        <span class="va">grps</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="ptImpute.html">ptImpute</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">10</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    <span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span>    percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> idx1: 34</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.impute</span>,</span>
-<span class="r-in">                                    scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span>,</span>
-<span class="r-in">        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span>,</span>
-<span class="r-in">        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.cells.Ins.ms</span>,</span>
-<span class="r-in">        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.ms</span><span class="op">)</span>,</span>
-<span class="r-in">        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.ms</span> <span class="op">&lt;-</span> <span class="fu"><a href="medianScaling.html">medianScaling</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.impute</span>,</span></span>
+<span class="r-in"><span>                                    scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span>,</span></span>
+<span class="r-in"><span>        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.cells.Ins.ms</span>,</span></span>
+<span class="r-in"><span>        labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.ms</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        panel <span class="op">=</span> <span class="st">"quantify"</span>, grps <span class="op">=</span> <span class="va">grps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotQC-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Batch correction</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'SPSs'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_.+'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Cleaning phosphosite label</span></span>
-<span class="r-in"><span class="va">L6.sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">GeneSymbol</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="st">";"</span>,</span>
-<span class="r-in">                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Residue</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Site</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.L6.ratio</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span><span class="op">)</span>, </span>
-<span class="r-in">    <span class="va">L6.sites</span><span class="op">)</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.site.names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>, <span class="va">L6.sites</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Construct a design matrix by condition</span></span>
-<span class="r-in"><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># phosphoproteomics data normalisation using RUV</span></span>
-<span class="r-in"><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.L6.ratio.RUV</span> <span class="op">=</span> <span class="fu"><a href="RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">                                  ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span>
-<span class="r-in">                                  </span>
-<span class="r-in"><span class="co"># plot after batch correction</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps<span class="op">=</span><span class="va">grps</span>,</span>
-<span class="r-in">         labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio.RUV</span>, grps<span class="op">=</span><span class="va">grps</span>,</span>
-<span class="r-in">        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span>
-<span class="r-in">        panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Batch correction</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho_L6_ratio_pe'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'SPSs'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_.+'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Cleaning phosphosite label</span></span></span>
+<span class="r-in"><span><span class="va">L6.sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">GeneSymbol</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">";"</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Residue</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="PhosphoExperiment-methods.html">Site</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.L6.ratio</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>    <span class="va">L6.sites</span><span class="op">)</span>,<span class="va">colMeans</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.site.names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">phospho.L6.ratio.pe</span>, <span class="st">"Quantification"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>, <span class="va">L6.sites</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Construct a design matrix by condition</span></span></span>
+<span class="r-in"><span><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># phosphoproteomics data normalisation using RUV</span></span></span>
+<span class="r-in"><span><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.L6.ratio.RUV</span> <span class="op">=</span> <span class="fu"><a href="RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>                                  ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                  </span></span>
+<span class="r-in"><span><span class="co"># plot after batch correction</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps<span class="op">=</span><span class="va">grps</span>,</span></span>
+<span class="r-in"><span>         labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio.RUV</span>, grps<span class="op">=</span><span class="va">grps</span>,</span></span>
+<span class="r-in"><span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotQC-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>,</span>
-<span class="r-in">        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'Before Batch correction'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio.RUV</span>, grps<span class="op">=</span><span class="va">grps</span>,</span>
-<span class="r-in">        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span>
-<span class="r-in">        panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'After Batch correction'</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>,</span></span>
+<span class="r-in"><span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'Before Batch correction'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu">plotQC</span><span class="op">(</span><span class="va">phospho.L6.ratio.RUV</span>, grps<span class="op">=</span><span class="va">grps</span>,</span></span>
+<span class="r-in"><span>        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.L6.ratio</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'After Batch correction'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotQC-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -231,7 +240,7 @@ equal to the columns of the mat.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

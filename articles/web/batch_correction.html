@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Batch correction of phosphoproteomics dataset with PhosR</h1>
             
-            <h4 data-toc-skip class="date">12 May 2022</h4>
+            <h4 data-toc-skip class="date">2 December 2022</h4>
       
       
       <div class="hidden name"><code>batch_correction.Rmd</code></div>
@@ -133,61 +133,61 @@
 </h2>
 <p>If you haven’t already done so, load the PhosR package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">PhosR</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to <a href="https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full" class="external-link">our preprint</a> for the full list of the datasets used). The <code>SPSs</code> will be used as our <code>negative control</code> in RUV normalisation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_L6_ratio_pe"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"SPSs"</span><span class="op">)</span>
-
-<span class="va">ppe</span> <span class="op">&lt;-</span> <span class="va">phospho.L6.ratio.pe</span>
-<span class="va">ppe</span>
-<span class="co">#&gt; class: PhosphoExperiment </span>
-<span class="co">#&gt; dim: 6654 12 </span>
-<span class="co">#&gt; metadata(0):</span>
-<span class="co">#&gt; assays(1): Quantification</span>
-<span class="co">#&gt; rownames(6654): D3ZNS8;AAAS;S495;THIPLYFVNAQFPRFSPVLGRAQEPPAGGGG</span>
-<span class="co">#&gt;   Q9R0Z7;AAGAB;S210;RSVGSAESCQCEQEPSPTAERTESLPGHRSG ...</span>
-<span class="co">#&gt;   D3ZG78;ZZEF1;S1516;SGPSAAEVSTAEEPSSPSTPTRRPPFTRGRL</span>
-<span class="co">#&gt;   D3ZG78;ZZEF1;S1535;PTRRPPFTRGRLRLLSFRSMEETRPVPTVKE</span>
-<span class="co">#&gt; rowData names(0):</span>
-<span class="co">#&gt; colnames(12): AICAR_exp1 AICAR_exp2 ... AICARIns_exp3 AICARIns_exp4</span>
-<span class="co">#&gt; colData names(0):</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_L6_ratio_pe"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"SPSs"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ppe</span> <span class="op">&lt;-</span> <span class="va">phospho.L6.ratio.pe</span></span>
+<span><span class="va">ppe</span></span>
+<span><span class="co">#&gt; class: PhosphoExperiment </span></span>
+<span><span class="co">#&gt; dim: 6654 12 </span></span>
+<span><span class="co">#&gt; metadata(0):</span></span>
+<span><span class="co">#&gt; assays(1): Quantification</span></span>
+<span><span class="co">#&gt; rownames(6654): D3ZNS8;AAAS;S495;THIPLYFVNAQFPRFSPVLGRAQEPPAGGGG</span></span>
+<span><span class="co">#&gt;   Q9R0Z7;AAGAB;S210;RSVGSAESCQCEQEPSPTAERTESLPGHRSG ...</span></span>
+<span><span class="co">#&gt;   D3ZG78;ZZEF1;S1516;SGPSAAEVSTAEEPSSPSTPTRRPPFTRGRL</span></span>
+<span><span class="co">#&gt;   D3ZG78;ZZEF1;S1535;PTRRPPFTRGRLRLLSFRSMEETRPVPTVKE</span></span>
+<span><span class="co">#&gt; rowData names(0):</span></span>
+<span><span class="co">#&gt; colnames(12): AICAR_exp1 AICAR_exp2 ... AICARIns_exp3 AICARIns_exp4</span></span>
+<span><span class="co">#&gt; colData names(0):</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="setting-up-the-data">Setting up the data<a class="anchor" aria-label="anchor" href="#setting-up-the-data"></a>
 </h2>
 <p>The L6 myotube data contains phosphoproteomic samples from three treatment conditions each with quadruplicates. Myotube cells were treated with either AICAR or Insulin (Ins), which are both important modulators of the insulin signalling pathway, or both (AICARIns) before phosphoproteomic analysis.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"AICAR_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt; [1] "AICAR_exp1" "AICAR_exp2" "AICAR_exp3" "AICAR_exp4"</span>
-<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^Ins_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt; [1] "Ins_exp1" "Ins_exp2" "Ins_exp3" "Ins_exp4"</span>
-<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"AICARIns_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt; [1] "AICARIns_exp1" "AICARIns_exp2" "AICARIns_exp3" "AICARIns_exp4"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"AICAR_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "AICAR_exp1" "AICAR_exp2" "AICAR_exp3" "AICAR_exp4"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^Ins_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "Ins_exp1" "Ins_exp2" "Ins_exp3" "Ins_exp4"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"AICARIns_"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "AICARIns_exp1" "AICARIns_exp2" "AICARIns_exp3" "AICARIns_exp4"</span></span></code></pre></div>
 <p>Note that we have in total 6654 quantified phosphosites and 12 samples in total.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>
-<span class="co">#&gt; [1] 6654   12</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 6654   12</span></span></code></pre></div>
 <p>We have already performed the relevant processing steps to generate a dense matrix. Please refer to the <code>imputation</code> page to perform filtering and imputation of phosphosites in order to generate a matrix without any missing values.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
 <p>We will extract phosphosite labels.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,
-                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Residue</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,
-                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Site</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,
-                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,</span>
+<span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Residue</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>                 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Site</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>                 <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
 <p>Lastly, we will take the grouping information from <code>colnames</code> of our matrix.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># take the grouping information</span>
-<span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span>
-<span class="va">grps</span>
-<span class="co">#&gt;  [1] "AICAR"    "AICAR"    "AICAR"    "AICAR"    "Ins"      "Ins"     </span>
-<span class="co">#&gt;  [7] "Ins"      "Ins"      "AICARIns" "AICARIns" "AICARIns" "AICARIns"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># take the grouping information</span></span>
+<span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">grps</span></span>
+<span><span class="co">#&gt;  [1] "AICAR"    "AICAR"    "AICAR"    "AICAR"    "Ins"      "Ins"     </span></span>
+<span><span class="co">#&gt;  [7] "Ins"      "Ins"      "AICARIns" "AICARIns" "AICARIns" "AICARIns"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="diagnosing-batch-effect">Diagnosing batch effect<a class="anchor" aria-label="anchor" href="#diagnosing-batch-effect"></a>
@@ -195,13 +195,13 @@
 <p>There are a number of ways to diagnose batch effect. In <code>PhosR</code>, we make use of two visualisation methods to detect batch effect: dendrogram of hierarchical clustering and a principal component analysis (PCA) plot. We use the <code>plotQC</code> function we introduced in the <em>imputation</em> section of the vignette.</p>
 <p>By setting <em>panel = dendrogram</em>, we can plot the dendrogram illustrating the results of unsupervised hierarchical clustering of our 12 samples. Clustering results of the samples demonstrate that there is a strong batch effect (where batch denoted as <em>expX</em>, where X refers to the batch number). This is particularly evident for samples from <em>Ins</em> and <em>AICARIns</em> treated conditions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>We can also visualise the samples in PCA space by setting <em>panel = pca</em>. The PCA plot demonstrates aggregation of samples by batch rather than treatment groups (each point represents a sample coloured by treatment condition). It has become clearer that even within the <em>AICAR</em> treated samples, there is some degree of batch effect as data points are separated between samples from batches 1 and 2 and those from batches 3 and 4.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before batch correction"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -210,48 +210,48 @@
 <p>We have now diagnosed that our dataset exhibits batch effect that is driven by experiment runs for samples treated with three different conditions. To address this batch effect, we correct for this unwanted variation in the data by utilising our pre-defined SPSs as a negative control for <code>RUVphospho</code>.</p>
 <p>First, we construct a design matrix by condition.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">design</span>
-<span class="co">#&gt;    grpsAICAR grpsAICARIns grpsIns</span>
-<span class="co">#&gt; 1          1            0       0</span>
-<span class="co">#&gt; 2          1            0       0</span>
-<span class="co">#&gt; 3          1            0       0</span>
-<span class="co">#&gt; 4          1            0       0</span>
-<span class="co">#&gt; 5          0            0       1</span>
-<span class="co">#&gt; 6          0            0       1</span>
-<span class="co">#&gt; 7          0            0       1</span>
-<span class="co">#&gt; 8          0            0       1</span>
-<span class="co">#&gt; 9          0            1       0</span>
-<span class="co">#&gt; 10         0            1       0</span>
-<span class="co">#&gt; 11         0            1       0</span>
-<span class="co">#&gt; 12         0            1       0</span>
-<span class="co">#&gt; attr(,"assign")</span>
-<span class="co">#&gt; [1] 1 1 1</span>
-<span class="co">#&gt; attr(,"contrasts")</span>
-<span class="co">#&gt; attr(,"contrasts")$grps</span>
-<span class="co">#&gt; [1] "contr.treatment"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">grps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">design</span></span>
+<span><span class="co">#&gt;    grpsAICAR grpsAICARIns grpsIns</span></span>
+<span><span class="co">#&gt; 1          1            0       0</span></span>
+<span><span class="co">#&gt; 2          1            0       0</span></span>
+<span><span class="co">#&gt; 3          1            0       0</span></span>
+<span><span class="co">#&gt; 4          1            0       0</span></span>
+<span><span class="co">#&gt; 5          0            0       1</span></span>
+<span><span class="co">#&gt; 6          0            0       1</span></span>
+<span><span class="co">#&gt; 7          0            0       1</span></span>
+<span><span class="co">#&gt; 8          0            0       1</span></span>
+<span><span class="co">#&gt; 9          0            1       0</span></span>
+<span><span class="co">#&gt; 10         0            1       0</span></span>
+<span><span class="co">#&gt; 11         0            1       0</span></span>
+<span><span class="co">#&gt; 12         0            1       0</span></span>
+<span><span class="co">#&gt; attr(,"assign")</span></span>
+<span><span class="co">#&gt; [1] 1 1 1</span></span>
+<span><span class="co">#&gt; attr(,"contrasts")</span></span>
+<span><span class="co">#&gt; attr(,"contrasts")$grps</span></span>
+<span><span class="co">#&gt; [1] "contr.treatment"</span></span></code></pre></div>
 <p>We will then use the <code>RUVphospho</code> function to normalise the data. Besides the quantification matrix and the design matrix, there are two other important inputs to <code>RUVphospho</code>: 1) the <em>ctl</em> argument is an integer vector denoting the position of SPSs within the quantification matrix 2) <em>k</em> parameter is an integer denoting the expected number of experimental (e.g., <em>treatment</em>) groups within the data</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># phosphoproteomics data normalisation and batch correction using RUV</span>
-<span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span>
-<span class="va">ppe</span> <span class="op">=</span> <span class="fu"><a href="../../reference/RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">ppe</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># phosphoproteomics data normalisation and batch correction using RUV</span></span>
+<span><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">SPSs</span><span class="op">)</span></span>
+<span><span class="va">ppe</span> <span class="op">=</span> <span class="fu"><a href="../../reference/RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">ppe</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a>
 </h2>
 <p>As quality control, we will demonstrate and evaluate our normalisation method with hierarchical clustering and PCA plot using again <code>plotQC</code>. Both the hierarchical clustering and PCA results demonstrate the normalisation procedure in <code>PhosR</code> facilitates effective batch correction.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plot after batch correction</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span> <span class="op">)</span>
-<span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># plot after batch correction</span></span>
+<span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel <span class="op">=</span> <span class="st">"dendrogram"</span> <span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"dendrogram"</span><span class="op">)</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before Batch correction"</span><span class="op">)</span>
-<span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After Batch correction"</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span>, panel <span class="op">=</span> <span class="st">"pca"</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Before Batch correction"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="../../reference/plotQC.html">plotQC</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">normalised</span>, grps<span class="op">=</span><span class="va">grps</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">)</span>, panel<span class="op">=</span><span class="st">"pca"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"After Batch correction"</span><span class="op">)</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="batch_correction_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -260,122 +260,122 @@
 <p>We note that the current <em>SPS</em> are derived from phosphoproteomic datasets derived from mouse cells. To enable users working on phosphoproteomic datasets derived from other species, we have developed a function <code>getSPS</code> that takes in multiple phosphoproteomics datasets stored as phosphoExperiment objects to generate set of <em>SPS</em>. Users can use their in-house or public datasets derived from the same speciies to generate species-specific <em>SPS</em>, which they can use to normalise their data.Below demonstrate the usage of the <code>getSPS</code> function.</p>
 <p>First, load datasets to use for SPS generation.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_L6_ratio_pe"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho.liver.Ins.TC.ratio.RUV.pe"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho.cells.Ins.pe"</span><span class="op">)</span>
-
-<span class="va">ppe1</span> <span class="op">&lt;-</span> <span class="va">phospho.L6.ratio.pe</span>
-<span class="va">ppe2</span> <span class="op">&lt;-</span> <span class="va">phospho.liver.Ins.TC.ratio.RUV.pe</span>
-<span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="va">phospho.cells.Ins.pe</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_L6_ratio_pe"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho.liver.Ins.TC.ratio.RUV.pe"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho.cells.Ins.pe"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ppe1</span> <span class="op">&lt;-</span> <span class="va">phospho.L6.ratio.pe</span></span>
+<span><span class="va">ppe2</span> <span class="op">&lt;-</span> <span class="va">phospho.liver.Ins.TC.ratio.RUV.pe</span></span>
+<span><span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="va">phospho.cells.Ins.pe</span></span></code></pre></div>
 <p>Filter, impute, and transform ppe3 (other inputs have already been processed).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">grp3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span>
-<span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">ppe3</span>, grps <span class="op">=</span> <span class="va">grp3</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/tImpute.html">tImpute</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span>
-<span class="va">FL83B.ratio</span> <span class="op">&lt;-</span> <span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"FL83B_Control"</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Hepa.ratio</span> <span class="op">&lt;-</span> <span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>, <span class="fl">13</span><span class="op">:</span><span class="fl">24</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Hepa1.6_Control"</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/PhosphoExperiment-operate.html">cbind</a></span><span class="op">(</span><span class="va">FL83B.ratio</span>, <span class="va">Hepa.ratio</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">grp3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">ppe3</span>, grps <span class="op">=</span> <span class="va">grp3</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">ppe3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/tImpute.html">tImpute</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span></span>
+<span><span class="va">FL83B.ratio</span> <span class="op">&lt;-</span> <span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"FL83B_Control"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">Hepa.ratio</span> <span class="op">&lt;-</span> <span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>, <span class="fl">13</span><span class="op">:</span><span class="fl">24</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">imputed</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"Hepa1.6_Control"</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">ppe3</span><span class="op">@</span><span class="va">assays</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">Quantification</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/PhosphoExperiment-operate.html">cbind</a></span><span class="op">(</span><span class="va">FL83B.ratio</span>, <span class="va">Hepa.ratio</span><span class="op">)</span></span></code></pre></div>
 <p>Generate inputs of <code>getSPS</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ppe.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ppe1</span>, <span class="va">ppe2</span>, <span class="va">ppe3</span><span class="op">)</span>
-<span class="va">cond.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>grp1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe1</span><span class="op">)</span><span class="op">)</span>,
-                  grp2 <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe2</span><span class="op">)</span>, end<span class="op">=</span><span class="op">-</span><span class="fl">5</span><span class="op">)</span>,
-                  grp3 <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span>, end<span class="op">=</span><span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ppe.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ppe1</span>, <span class="va">ppe2</span>, <span class="va">ppe3</span><span class="op">)</span></span>
+<span><span class="va">cond.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>grp1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_.+"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                  grp2 <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe2</span><span class="op">)</span>, end<span class="op">=</span><span class="op">-</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>                  grp3 <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppe3</span><span class="op">)</span>, end<span class="op">=</span><span class="op">-</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Finally run <code>getSPS</code> to generate list of SPSs.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">inhouse_SPSs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/getSPS.html">getSPS</a></span><span class="op">(</span><span class="va">ppe.list</span>, conds <span class="op">=</span> <span class="va">cond.list</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inhouse_SPSs</span><span class="op">)</span>
-<span class="co">#&gt; [1] "TMPO;S67;"    "RBM5;S621;"   "SRRM1;S427;"  "THOC2;S1417;" "SSB;S92;"    </span>
-<span class="co">#&gt; [6] "PPIG;S252;"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">inhouse_SPSs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/getSPS.html">getSPS</a></span><span class="op">(</span><span class="va">ppe.list</span>, conds <span class="op">=</span> <span class="va">cond.list</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">inhouse_SPSs</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "TMPO;S67;"    "RBM5;S621;"   "SRRM1;S427;"  "THOC2;S1417;" "SSB;S92;"    </span></span>
+<span><span class="co">#&gt; [6] "PPIG;S252;"</span></span></code></pre></div>
 <p>Run <code>RUVphospho</code> using the newly generateed SPSs. (<strong>NOTE</strong> that we do not expect the results to be reproducible as the exempler SPSs have been generated from dummy datasets that have been heavily filtered.)</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Residue</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Site</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>, <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-
-<span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">inhouse_SPSs</span><span class="op">)</span>
-<span class="va">ppe</span> <span class="op">=</span> <span class="fu"><a href="../../reference/RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">ppe</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sites</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">GeneSymbol</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,<span class="st">";"</span>,</span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Residue</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">ppe</span><span class="op">@</span><span class="va">Site</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="va">x</span><span class="op">)</span>, <span class="st">";"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ctl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sites</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">inhouse_SPSs</span><span class="op">)</span></span>
+<span><span class="va">ppe</span> <span class="op">=</span> <span class="fu"><a href="../../reference/RUVphospho.html">RUVphospho</a></span><span class="op">(</span><span class="va">ppe</span>, M <span class="op">=</span> <span class="va">design</span>, k <span class="op">=</span> <span class="fl">3</span>, ctl <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sessioninfo">SessionInfo<a class="anchor" aria-label="anchor" href="#sessioninfo"></a>
 </h2>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.2.0 (2022-04-22)</span>
-<span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span>
-<span class="co">#&gt; Running under: macOS Big Sur/Monterey 10.16</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span>
-<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; locale:</span>
-<span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attached base packages:</span>
-<span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] stringr_1.4.0 PhosR_1.5.2  </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;   [1] ggtext_0.1.1                bitops_1.0-7               </span>
-<span class="co">#&gt;   [3] matrixStats_0.62.0          fs_1.5.2                   </span>
-<span class="co">#&gt;   [5] RColorBrewer_1.1-3          rprojroot_2.0.3            </span>
-<span class="co">#&gt;   [7] GenomeInfoDb_1.32.1         tools_4.2.0                </span>
-<span class="co">#&gt;   [9] backports_1.4.1             bslib_0.3.1                </span>
-<span class="co">#&gt;  [11] utf8_1.2.2                  R6_2.5.1                   </span>
-<span class="co">#&gt;  [13] BiocGenerics_0.42.0         colorspace_2.0-3           </span>
-<span class="co">#&gt;  [15] tidyselect_1.1.2            gridExtra_2.3              </span>
-<span class="co">#&gt;  [17] GGally_2.1.2                preprocessCore_1.58.0      </span>
-<span class="co">#&gt;  [19] compiler_4.2.0              textshaping_0.3.6          </span>
-<span class="co">#&gt;  [21] cli_3.3.0                   Biobase_2.56.0             </span>
-<span class="co">#&gt;  [23] xml2_1.3.3                  network_1.17.1             </span>
-<span class="co">#&gt;  [25] desc_1.4.1                  DelayedArray_0.22.0        </span>
-<span class="co">#&gt;  [27] ggdendro_0.1.23             labeling_0.4.2             </span>
-<span class="co">#&gt;  [29] sass_0.4.1                  scales_1.2.0               </span>
-<span class="co">#&gt;  [31] proxy_0.4-26                pkgdown_2.0.3              </span>
-<span class="co">#&gt;  [33] systemfonts_1.0.4           digest_0.6.29              </span>
-<span class="co">#&gt;  [35] rmarkdown_2.14              XVector_0.36.0             </span>
-<span class="co">#&gt;  [37] pkgconfig_2.0.3             htmltools_0.5.2            </span>
-<span class="co">#&gt;  [39] MatrixGenerics_1.8.0        highr_0.9                  </span>
-<span class="co">#&gt;  [41] ruv_0.9.7.1                 limma_3.52.0               </span>
-<span class="co">#&gt;  [43] fastmap_1.1.0               rlang_1.0.2                </span>
-<span class="co">#&gt;  [45] GlobalOptions_0.1.2         farver_2.1.0               </span>
-<span class="co">#&gt;  [47] shape_1.4.6                 jquerylib_0.1.4            </span>
-<span class="co">#&gt;  [49] generics_0.1.2              jsonlite_1.8.0             </span>
-<span class="co">#&gt;  [51] statnet.common_4.6.0        dendextend_1.15.2          </span>
-<span class="co">#&gt;  [53] dplyr_1.0.9                 car_3.0-13                 </span>
-<span class="co">#&gt;  [55] RCurl_1.98-1.6              magrittr_2.0.3             </span>
-<span class="co">#&gt;  [57] GenomeInfoDbData_1.2.8      Matrix_1.4-1               </span>
-<span class="co">#&gt;  [59] Rcpp_1.0.8.3                munsell_0.5.0              </span>
-<span class="co">#&gt;  [61] S4Vectors_0.34.0            fansi_1.0.3                </span>
-<span class="co">#&gt;  [63] abind_1.4-5                 viridis_0.6.2              </span>
-<span class="co">#&gt;  [65] lifecycle_1.0.1             stringi_1.7.6              </span>
-<span class="co">#&gt;  [67] yaml_2.3.5                  carData_3.0-5              </span>
-<span class="co">#&gt;  [69] MASS_7.3-56                 SummarizedExperiment_1.26.1</span>
-<span class="co">#&gt;  [71] zlibbioc_1.42.0             plyr_1.8.7                 </span>
-<span class="co">#&gt;  [73] grid_4.2.0                  crayon_1.5.1               </span>
-<span class="co">#&gt;  [75] lattice_0.20-45             cowplot_1.1.1              </span>
-<span class="co">#&gt;  [77] gridtext_0.1.4              circlize_0.4.15            </span>
-<span class="co">#&gt;  [79] knitr_1.39                  pillar_1.7.0               </span>
-<span class="co">#&gt;  [81] igraph_1.3.1                ggpubr_0.4.0               </span>
-<span class="co">#&gt;  [83] GenomicRanges_1.48.0        markdown_1.1               </span>
-<span class="co">#&gt;  [85] ggsignif_0.6.3              reshape2_1.4.4             </span>
-<span class="co">#&gt;  [87] stats4_4.2.0                glue_1.6.2                 </span>
-<span class="co">#&gt;  [89] evaluate_0.15               pcaMethods_1.88.0          </span>
-<span class="co">#&gt;  [91] BiocManager_1.30.17         vctrs_0.4.1                </span>
-<span class="co">#&gt;  [93] gtable_0.3.0                purrr_0.3.4                </span>
-<span class="co">#&gt;  [95] tidyr_1.2.0                 reshape_0.8.9              </span>
-<span class="co">#&gt;  [97] cachem_1.0.6                ggplot2_3.3.6              </span>
-<span class="co">#&gt;  [99] xfun_0.31                   broom_0.8.0                </span>
-<span class="co">#&gt; [101] e1071_1.7-9                 coda_0.19-4                </span>
-<span class="co">#&gt; [103] rstatix_0.7.0               ragg_1.2.2                 </span>
-<span class="co">#&gt; [105] class_7.3-20                viridisLite_0.4.0          </span>
-<span class="co">#&gt; [107] tibble_3.1.7                pheatmap_1.0.12            </span>
-<span class="co">#&gt; [109] memoise_2.0.1               IRanges_2.30.0             </span>
-<span class="co">#&gt; [111] ellipsis_0.3.2              BiocStyle_2.24.0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.2.2 (2022-10-31)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
+<span><span class="co">#&gt; Running under: macOS Big Sur ... 10.16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span></span>
+<span><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] stringr_1.4.1 PhosR_1.9.1  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;   [1] ggtext_0.1.2                bitops_1.0-7               </span></span>
+<span><span class="co">#&gt;   [3] matrixStats_0.63.0          fs_1.5.2                   </span></span>
+<span><span class="co">#&gt;   [5] RColorBrewer_1.1-3          rprojroot_2.0.3            </span></span>
+<span><span class="co">#&gt;   [7] GenomeInfoDb_1.34.3         tools_4.2.2                </span></span>
+<span><span class="co">#&gt;   [9] backports_1.4.1             bslib_0.4.1                </span></span>
+<span><span class="co">#&gt;  [11] utf8_1.2.2                  R6_2.5.1                   </span></span>
+<span><span class="co">#&gt;  [13] BiocGenerics_0.44.0         colorspace_2.0-3           </span></span>
+<span><span class="co">#&gt;  [15] withr_2.5.0                 tidyselect_1.2.0           </span></span>
+<span><span class="co">#&gt;  [17] gridExtra_2.3               GGally_2.1.2               </span></span>
+<span><span class="co">#&gt;  [19] preprocessCore_1.60.0       compiler_4.2.2             </span></span>
+<span><span class="co">#&gt;  [21] textshaping_0.3.6           cli_3.4.1                  </span></span>
+<span><span class="co">#&gt;  [23] Biobase_2.58.0              xml2_1.3.3                 </span></span>
+<span><span class="co">#&gt;  [25] network_1.18.0              desc_1.4.2                 </span></span>
+<span><span class="co">#&gt;  [27] DelayedArray_0.24.0         ggdendro_0.1.23            </span></span>
+<span><span class="co">#&gt;  [29] labeling_0.4.2              sass_0.4.4                 </span></span>
+<span><span class="co">#&gt;  [31] scales_1.2.1                proxy_0.4-27               </span></span>
+<span><span class="co">#&gt;  [33] pkgdown_2.0.6               commonmark_1.8.1           </span></span>
+<span><span class="co">#&gt;  [35] systemfonts_1.0.4           digest_0.6.30              </span></span>
+<span><span class="co">#&gt;  [37] rmarkdown_2.18              XVector_0.38.0             </span></span>
+<span><span class="co">#&gt;  [39] pkgconfig_2.0.3             htmltools_0.5.3            </span></span>
+<span><span class="co">#&gt;  [41] MatrixGenerics_1.10.0       highr_0.9                  </span></span>
+<span><span class="co">#&gt;  [43] ruv_0.9.7.1                 limma_3.54.0               </span></span>
+<span><span class="co">#&gt;  [45] fastmap_1.1.0               rlang_1.0.6                </span></span>
+<span><span class="co">#&gt;  [47] GlobalOptions_0.1.2         farver_2.1.1               </span></span>
+<span><span class="co">#&gt;  [49] shape_1.4.6                 jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt;  [51] generics_0.1.3              jsonlite_1.8.3             </span></span>
+<span><span class="co">#&gt;  [53] statnet.common_4.7.0        dendextend_1.16.0          </span></span>
+<span><span class="co">#&gt;  [55] dplyr_1.0.10                car_3.1-1                  </span></span>
+<span><span class="co">#&gt;  [57] RCurl_1.98-1.9              magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt;  [59] GenomeInfoDbData_1.2.9      Matrix_1.5-1               </span></span>
+<span><span class="co">#&gt;  [61] Rcpp_1.0.9                  munsell_0.5.0              </span></span>
+<span><span class="co">#&gt;  [63] S4Vectors_0.36.0            fansi_1.0.3                </span></span>
+<span><span class="co">#&gt;  [65] abind_1.4-5                 viridis_0.6.2              </span></span>
+<span><span class="co">#&gt;  [67] lifecycle_1.0.3             stringi_1.7.8              </span></span>
+<span><span class="co">#&gt;  [69] yaml_2.3.6                  carData_3.0-5              </span></span>
+<span><span class="co">#&gt;  [71] MASS_7.3-58.1               SummarizedExperiment_1.28.0</span></span>
+<span><span class="co">#&gt;  [73] zlibbioc_1.44.0             plyr_1.8.8                 </span></span>
+<span><span class="co">#&gt;  [75] grid_4.2.2                  lattice_0.20-45            </span></span>
+<span><span class="co">#&gt;  [77] cowplot_1.1.1               gridtext_0.1.5             </span></span>
+<span><span class="co">#&gt;  [79] circlize_0.4.15             knitr_1.41                 </span></span>
+<span><span class="co">#&gt;  [81] pillar_1.8.1                igraph_1.3.5               </span></span>
+<span><span class="co">#&gt;  [83] ggpubr_0.5.0                GenomicRanges_1.50.1       </span></span>
+<span><span class="co">#&gt;  [85] markdown_1.4                ggsignif_0.6.4             </span></span>
+<span><span class="co">#&gt;  [87] reshape2_1.4.4              stats4_4.2.2               </span></span>
+<span><span class="co">#&gt;  [89] glue_1.6.2                  evaluate_0.18              </span></span>
+<span><span class="co">#&gt;  [91] pcaMethods_1.90.0           BiocManager_1.30.19        </span></span>
+<span><span class="co">#&gt;  [93] vctrs_0.5.1                 gtable_0.3.1               </span></span>
+<span><span class="co">#&gt;  [95] purrr_0.3.5                 tidyr_1.2.1                </span></span>
+<span><span class="co">#&gt;  [97] reshape_0.8.9               cachem_1.0.6               </span></span>
+<span><span class="co">#&gt;  [99] ggplot2_3.4.0               xfun_0.35                  </span></span>
+<span><span class="co">#&gt; [101] broom_1.0.1                 e1071_1.7-12               </span></span>
+<span><span class="co">#&gt; [103] coda_0.19-4                 rstatix_0.7.1              </span></span>
+<span><span class="co">#&gt; [105] ragg_1.2.4                  class_7.3-20               </span></span>
+<span><span class="co">#&gt; [107] viridisLite_0.4.1           tibble_3.1.8               </span></span>
+<span><span class="co">#&gt; [109] pheatmap_1.0.12             memoise_2.0.1              </span></span>
+<span><span class="co">#&gt; [111] IRanges_2.32.0              BiocStyle_2.26.0</span></span></code></pre></div>
 </div>
   </div>
 
@@ -396,7 +396,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

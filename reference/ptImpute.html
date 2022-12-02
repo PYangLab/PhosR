@@ -22,7 +22,7 @@ values less than percent2."><!-- mathjax --><script src="https://cdnjs.cloudflar
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -102,17 +102,17 @@ values less than percent2.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ptImpute</span><span class="op">(</span>
-    <span class="va">mat1</span>, 
-    <span class="va">mat2</span>, 
-    <span class="va">percent1</span>, 
-    <span class="va">percent2</span>, 
-    m <span class="op">=</span> <span class="fl">1.6</span>, 
-    s <span class="op">=</span> <span class="fl">0.6</span>, 
-    paired <span class="op">=</span> <span class="cn">TRUE</span>, 
-    verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-    <span class="va">assay</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ptImpute</span><span class="op">(</span></span>
+<span>    <span class="va">mat1</span>, </span>
+<span>    <span class="va">mat2</span>, </span>
+<span>    <span class="va">percent1</span>, </span>
+<span>    <span class="va">percent2</span>, </span>
+<span>    m <span class="op">=</span> <span class="fl">1.6</span>, </span>
+<span>    s <span class="op">=</span> <span class="fl">0.6</span>, </span>
+<span>    paired <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>    verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="va">assay</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -120,69 +120,88 @@ values less than percent2.</p>
     <dl><dt>mat1</dt>
 <dd><p>a matrix (or PhosphoExperiment object) with rows correspond to
 phosphosites and columns correspond to replicates within treatment1.</p></dd>
+
+
 <dt>mat2</dt>
 <dd><p>a matrix (or PhosphoExperiment object) with rows correspond to
 phosphosites and columns correspond to replicates within treatment2.</p></dd>
+
+
 <dt>percent1</dt>
 <dd><p>a percent indicating minimum quantified percentages required
 for considering for imputation.</p></dd>
+
+
 <dt>percent2</dt>
 <dd><p>a percent indicating minimum quantified percentages required
 for considering for imputation.</p></dd>
+
+
 <dt>m</dt>
 <dd><p>a numeric number of for controlling mean downshifting.</p></dd>
+
+
 <dt>s</dt>
 <dd><p>a numeric number of for controlling standard deviation of
 downshifted sampling values.</p></dd>
+
+
 <dt>paired</dt>
 <dd><p>a flag indicating whether to impute for both treatment1 and
 treatment2 (default) or treatment2 only (if paired=FALSE).</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Default to <code>TRUE</code> to show messages during the progress.
 All messages will be suppressed if set to <code>FALSE</code></p></dd>
+
+
 <dt>assay</dt>
 <dd><p>an assay to be selected if <code>mat</code> is a PhosphoExperiment 
 object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An imputed matrix</p>
+    
+
+<p>An imputed matrix</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.impute</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="fu"><a href="scImpute.html">scImpute</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">phospho.cells.Ins.filtered</span>,</span>
-<span class="r-in">    <span class="fl">0.5</span>,</span>
-<span class="r-in">    <span class="va">grps</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
-<span class="r-in">    <span class="fu">ptImpute</span><span class="op">(</span><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">12</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in"><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span>, percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, </span>
-<span class="r-in">    paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'phospho.cells.Ins.sample'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">grps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">'_[0-9]{1}'</span>, <span class="st">''</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="selectGrps.html">selectGrps</a></span><span class="op">(</span><span class="va">phospho.cells.Ins</span>, <span class="va">grps</span>, <span class="fl">0.5</span>, n<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.impute</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="scImpute.html">scImpute</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">phospho.cells.Ins.filtered</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>    <span class="va">grps</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.cells.Ins.filtered</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> </span></span>
+<span class="r-in"><span>    <span class="fu">ptImpute</span><span class="op">(</span><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">12</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span><span class="va">phospho.cells.Ins.impute</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span>, percent1 <span class="op">=</span> <span class="fl">0.6</span>, percent2 <span class="op">=</span> <span class="fl">0</span>, </span></span>
+<span class="r-in"><span>    paired <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> idx1: 28</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># For PhosphoExperiment objects</span></span>
-<span class="r-in"><span class="co"># mat = PhosphoExperiment(</span></span>
-<span class="r-in"><span class="co">#     assay = phospho.cells.Ins.impute,</span></span>
-<span class="r-in"><span class="co">#     colData = S4Vectors::DataFrame(</span></span>
-<span class="r-in"><span class="co">#         groups = grps</span></span>
-<span class="r-in"><span class="co">#     )</span></span>
-<span class="r-in"><span class="co"># )</span></span>
-<span class="r-in"><span class="co"># SummarizedExperiment::assay(mat)[,seq(6)] &lt;- </span></span>
-<span class="r-in"><span class="co">#     ptImpute(SummarizedExperiment::assay(mat)[,seq(7,12)],</span></span>
-<span class="r-in"><span class="co">#         SummarizedExperiment::assay(mat)[,seq(6)], percent1 = 0.6, </span></span>
-<span class="r-in"><span class="co">#         percent2 = 0, paired = FALSE)</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For PhosphoExperiment objects</span></span></span>
+<span class="r-in"><span><span class="co"># mat = PhosphoExperiment(</span></span></span>
+<span class="r-in"><span><span class="co">#     assay = phospho.cells.Ins.impute,</span></span></span>
+<span class="r-in"><span><span class="co">#     colData = S4Vectors::DataFrame(</span></span></span>
+<span class="r-in"><span><span class="co">#         groups = grps</span></span></span>
+<span class="r-in"><span><span class="co">#     )</span></span></span>
+<span class="r-in"><span><span class="co"># )</span></span></span>
+<span class="r-in"><span><span class="co"># SummarizedExperiment::assay(mat)[,seq(6)] &lt;- </span></span></span>
+<span class="r-in"><span><span class="co">#     ptImpute(SummarizedExperiment::assay(mat)[,seq(7,12)],</span></span></span>
+<span class="r-in"><span><span class="co">#         SummarizedExperiment::assay(mat)[,seq(6)], percent1 = 0.6, </span></span></span>
+<span class="r-in"><span><span class="co">#         percent2 = 0, paired = FALSE)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -197,7 +216,7 @@ object.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

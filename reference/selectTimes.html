@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selectTimes</span><span class="op">(</span><span class="va">mat</span>, <span class="va">timepoint</span>, <span class="va">order</span>, <span class="va">percent</span>, <span class="va">w</span>, <span class="va">assay</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selectTimes</span><span class="op">(</span><span class="va">mat</span>, <span class="va">timepoint</span>, <span class="va">order</span>, <span class="va">percent</span>, <span class="va">w</span>, <span class="va">assay</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -101,69 +101,82 @@
 <dd><p>a matrix (or PhosphoExperiment object) with rows correspond to 
 phosphosites and columns correspond to samples in replicates for different 
 treatments.</p></dd>
+
+
 <dt>timepoint</dt>
 <dd><p>a timepoint as factor with a length equal to the
 number of columns of mat.</p></dd>
+
+
 <dt>order</dt>
 <dd><p>a vector specifying the order of timepoints.</p></dd>
+
+
 <dt>percent</dt>
 <dd><p>a percent (decimal) from 0 to 1, to filter phosphosites with
 with missing value larger than percent per timepoint.</p></dd>
+
+
 <dt>w</dt>
 <dd><p>a timepoint window for selection of phosphosites to remove.</p></dd>
+
+
 <dt>assay</dt>
 <dd><p>an assay to be selected if <code>mat</code> is a PhosphoExperiment 
 object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a filtered matrix. If param <code>mat</code> is a SummarizedExperiment 
+    
+
+<p>a filtered matrix. If param <code>mat</code> is a SummarizedExperiment 
 object, a SummarizedExperiment object will be returned.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_liverInsTC_RUV_sample"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">timepoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)(\\d+[ms])(.*)"</span>, <span class="st">"\\2"</span>,</span>
-<span class="r-in">                <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.ratio.RUV</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">timepoint</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">timepoint</span> <span class="op">==</span> <span class="st">"0m"</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="st">"0s"</span></span>
-<span class="r-in"><span class="va">timepoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">timepointOrder</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0s"</span>, <span class="st">"5s"</span>, <span class="st">"1m"</span>, <span class="st">"2m"</span>, <span class="st">"3m"</span>, <span class="st">"4m"</span>, <span class="st">"6m"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># For demonstration purpose, we introduce missing value at 0s</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"phospho_liverInsTC_RUV_sample"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">timepoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"(.*)(\\d+[ms])(.*)"</span>, <span class="st">"\\2"</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.ratio.RUV</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">timepoint</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">timepoint</span> <span class="op">==</span> <span class="st">"0m"</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="st">"0s"</span></span></span>
+<span class="r-in"><span><span class="va">timepoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">timepointOrder</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0s"</span>, <span class="st">"5s"</span>, <span class="st">"1m"</span>, <span class="st">"2m"</span>, <span class="st">"3m"</span>, <span class="st">"4m"</span>, <span class="st">"6m"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For demonstration purpose, we introduce missing value at 0s</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> timepoint</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0s 1m 2m 3m 4m 5s 6m </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 43  6  6  6  6 17  6 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">phospho.liver.Ins.TC.sim</span> <span class="op">=</span> <span class="va">phospho.liver.Ins.TC.ratio.RUV</span></span>
-<span class="r-in"><span class="va">rmId</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">timepoint</span> <span class="op">==</span> <span class="st">"0s"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># We replace the values to NA for the first 26 (~60%) of the '0s' samples</span></span>
-<span class="r-in"><span class="co"># for the first 100 phosphosite as NA</span></span>
-<span class="r-in"><span class="va">phospho.liver.Ins.TC.sim</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,<span class="va">rmId</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="cn">NA</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">phospho.liver.Ins.TC.sim</span> <span class="op">=</span> <span class="fu">selectTimes</span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.sim</span>,</span>
-<span class="r-in">                                    <span class="va">timepoint</span>, <span class="va">timepointOrder</span>, <span class="fl">0.5</span>,</span>
-<span class="r-in">                                    w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># For PhosphoExperiment objects</span></span>
-<span class="r-in"><span class="co"># mat = PhosR::PhosphoExperiment(</span></span>
-<span class="r-in"><span class="co">#     assay = phospho.liver.Ins.TC.sim,</span></span>
-<span class="r-in"><span class="co">#     colData = S4Vectors::DataFrame(</span></span>
-<span class="r-in"><span class="co">#         timepoint = timepoint</span></span>
-<span class="r-in"><span class="co">#     )</span></span>
-<span class="r-in"><span class="co"># )</span></span>
-<span class="r-in"><span class="co"># phospho.liver.Ins.TC.sim = selectTimes(mat, mat$timepoint, timepointOrder, </span></span>
-<span class="r-in"><span class="co">#       0.5, w = length(table(mat$timepoint)))</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Before filtering</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.ratio.RUV</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">phospho.liver.Ins.TC.sim</span> <span class="op">=</span> <span class="va">phospho.liver.Ins.TC.ratio.RUV</span></span></span>
+<span class="r-in"><span><span class="va">rmId</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">timepoint</span> <span class="op">==</span> <span class="st">"0s"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># We replace the values to NA for the first 26 (~60%) of the '0s' samples</span></span></span>
+<span class="r-in"><span><span class="co"># for the first 100 phosphosite as NA</span></span></span>
+<span class="r-in"><span><span class="va">phospho.liver.Ins.TC.sim</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,<span class="va">rmId</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">phospho.liver.Ins.TC.sim</span> <span class="op">=</span> <span class="fu">selectTimes</span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.sim</span>,</span></span>
+<span class="r-in"><span>                                    <span class="va">timepoint</span>, <span class="va">timepointOrder</span>, <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                                    w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For PhosphoExperiment objects</span></span></span>
+<span class="r-in"><span><span class="co"># mat = PhosR::PhosphoExperiment(</span></span></span>
+<span class="r-in"><span><span class="co">#     assay = phospho.liver.Ins.TC.sim,</span></span></span>
+<span class="r-in"><span><span class="co">#     colData = S4Vectors::DataFrame(</span></span></span>
+<span class="r-in"><span><span class="co">#         timepoint = timepoint</span></span></span>
+<span class="r-in"><span><span class="co">#     )</span></span></span>
+<span class="r-in"><span><span class="co"># )</span></span></span>
+<span class="r-in"><span><span class="co"># phospho.liver.Ins.TC.sim = selectTimes(mat, mat$timepoint, timepointOrder, </span></span></span>
+<span class="r-in"><span><span class="co">#       0.5, w = length(table(mat$timepoint)))</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Before filtering</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.ratio.RUV</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 800  90</span>
-<span class="r-in"><span class="co"># After filtering</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.sim</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># After filtering</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">phospho.liver.Ins.TC.sim</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 700  90</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -178,7 +191,7 @@ object, a SummarizedExperiment object will be returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">PhosR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -92,31 +92,44 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plotKinaseNetwork</span><span class="op">(</span><span class="va">KSR</span>, <span class="va">predMatrix</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, <span class="va">color</span>, 
-type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotKinaseNetwork</span><span class="op">(</span><span class="va">KSR</span>, <span class="va">predMatrix</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, <span class="va">color</span>, </span>
+<span>type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>KSR</dt>
 <dd><p>Kinase-substrate relationship scoring results</p></dd>
+
+
 <dt>predMatrix</dt>
 <dd><p>Output of kinaseSubstratePred function</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>Threshold used to select interconnected kinases for
 the expanded signalomes</p></dd>
+
+
 <dt>color</dt>
 <dd><p>A string specifying the color vector for nodes</p></dd>
+
+
 <dt>type</dt>
 <dd><p>A type (<code>graph</code> or <code>chord</code>) of plot. If NULL, network 
 graph is plotted</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Default to <code>TRUE</code> to show messages during the progress.
 All messages will be suppressed if set to <code>FALSE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a graphical plot</p>
+    
+
+<p>a graphical plot</p>
     </div>
 
   </div>
@@ -131,7 +144,7 @@ All messages will be suppressed if set to <code>FALSE</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
