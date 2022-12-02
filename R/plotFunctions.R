@@ -34,7 +34,8 @@ plotSignalomeMap <- function(signalomes, color) {
 
     df_balloon <- do.call(rbind, lapply(seq(nrow(df_balloon)), function(x) {
         
-        res <- unlist(lapply(df_balloon[x,], function(y) y/sum(df_balloon[x,])*100))
+        res <- unlist(lapply(df_balloon[x,], 
+            function(y) y/sum(df_balloon[x,])*100))
         
     }))
     

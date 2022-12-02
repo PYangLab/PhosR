@@ -1,3 +1,7 @@
+## PhosR 1.9.1
+
+* Bug fixes
+
 ## PhosR 1.5.2
 
 * Bug fix in plotQC

@@ -151,8 +151,8 @@ quantPlot = function(mat, grps, labels) {
         Groups = grps
     )
     gNum = length(table(grps))
-    ggplot2::ggplot(dat, ggplot2::aes(x = .data$Sample, y = .data$Quantification, 
-        fill = .data$Groups)) +
+    ggplot2::ggplot(dat, ggplot2::aes(x = .data$Sample, 
+        y = .data$Quantification, fill = .data$Groups)) +
         ggplot2::geom_bar(stat = "identity") +
         ggplot2::coord_cartesian(ylim = c(0,100)) + 
         ggplot2::ggtitle("Quantification per sample") +

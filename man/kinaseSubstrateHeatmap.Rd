@@ -22,7 +22,8 @@ included in the heatmap. Default is 1.}
 \item{printPlot}{indicate whether the plot should be saved as a PDF
 in the specified directory. Default is NULL, otherwise specify TRUE.}
 
-\item{filePath}{path name to save the plot as a PDF file. Default saves in the working directory.}
+\item{filePath}{path name to save the plot as a PDF file. 
+Default saves in the working directory.}
 
 \item{width}{width of PDF.}
 

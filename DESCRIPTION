@@ -45,7 +45,7 @@ Imports:
     stringi
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.2
 VignetteBuilder: knitr
 biocViews: Software, ResearchField, Proteomics
 Suggests:
