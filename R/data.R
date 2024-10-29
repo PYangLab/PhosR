@@ -236,6 +236,17 @@
 #' @docType data
 "SPSs"
 
+#' @title A list of human Stably Phosphorylated Sites (hSPSs)
+#'
+#' @description A list of stably phosphoryalted sites defined from a panel of
+#' human phosphoproteomics datasets. 
+#'
+#' @usage data(hSPSs)
+#'
+#' @name hSPSs
+#' @docType data
+"hSPSs"
+
 #' @title A list of Stably Expressed Genes (SEGs)
 #'
 #' @description A list of stably expressed genes (SEGs) in mouse and human 
