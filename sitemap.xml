@@ -1,189 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/PhosR.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/PhosR_STAR_protocols.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/PhosR_STAR_protocols2.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/batch_correction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/imputation.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/pathway_analysis.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/signalomes.html</loc>
-  </url>
-  <url>
-    <loc>/articles/web/site_gene_analysis.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/KinaseFamily.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoExperiment-methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoExperiment-operate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoExperiment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoSite.human.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoSite.mouse.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PhosphoSite.rat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/RUVphospho.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SPSs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Signalomes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createFrequencyMat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/frequencyScoring.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getSPS.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hSEGs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kinaseSubstrateHeatmap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kinaseSubstratePred.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kinaseSubstrateProfile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kinaseSubstrateScore.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mIntersect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mSEGs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/matANOVA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/meanAbundance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/medianScaling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/minmax.html</loc>
-  </url>
-  <url>
-    <loc>/reference/motif.human.list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/motif.mouse.list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/motif.rat.list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pathwayOverrepresent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pathwayRankBasedEnrichment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phosCollapse.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phospho.L6.ratio.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phospho.L6.ratio.pe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phospho.cells.Ins.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phospho.liver.Ins.TC.ratio.RUV.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phospho.liver.Ins.TC.ratio.RUV.pe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotKinaseNetwork.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotQC.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotSignalomeMap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ptImpute.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scImpute.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selectGrps.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selectLocalisedSites.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selectOverallPercent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selectTimes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/siteAnnotate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/standardise.html</loc>
-  </url>
-  <url>
-    <loc>/reference/tImpute.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/PhosR.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/web/PhosR_STAR_protocols.html</loc></url>
+<url><loc>/articles/web/PhosR_STAR_protocols2.html</loc></url>
+<url><loc>/articles/web/batch_correction.html</loc></url>
+<url><loc>/articles/web/imputation.html</loc></url>
+<url><loc>/articles/web/pathway_analysis.html</loc></url>
+<url><loc>/articles/web/signalomes.html</loc></url>
+<url><loc>/articles/web/site_gene_analysis.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/KinaseFamily.html</loc></url>
+<url><loc>/reference/PhosphoExperiment-methods.html</loc></url>
+<url><loc>/reference/PhosphoExperiment-operate.html</loc></url>
+<url><loc>/reference/PhosphoExperiment.html</loc></url>
+<url><loc>/reference/PhosphoSite.human.html</loc></url>
+<url><loc>/reference/PhosphoSite.mouse.html</loc></url>
+<url><loc>/reference/PhosphoSite.rat.html</loc></url>
+<url><loc>/reference/RUVphospho.html</loc></url>
+<url><loc>/reference/SPSs.html</loc></url>
+<url><loc>/reference/Signalomes.html</loc></url>
+<url><loc>/reference/createFrequencyMat.html</loc></url>
+<url><loc>/reference/frequencyScoring.html</loc></url>
+<url><loc>/reference/getSPS.html</loc></url>
+<url><loc>/reference/hSEGs.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/kinaseSubstrateHeatmap.html</loc></url>
+<url><loc>/reference/kinaseSubstratePred.html</loc></url>
+<url><loc>/reference/kinaseSubstrateProfile.html</loc></url>
+<url><loc>/reference/kinaseSubstrateScore.html</loc></url>
+<url><loc>/reference/mIntersect.html</loc></url>
+<url><loc>/reference/mSEGs.html</loc></url>
+<url><loc>/reference/matANOVA.html</loc></url>
+<url><loc>/reference/meanAbundance.html</loc></url>
+<url><loc>/reference/medianScaling.html</loc></url>
+<url><loc>/reference/minmax.html</loc></url>
+<url><loc>/reference/motif.human.list.html</loc></url>
+<url><loc>/reference/motif.mouse.list.html</loc></url>
+<url><loc>/reference/motif.rat.list.html</loc></url>
+<url><loc>/reference/pathwayOverrepresent.html</loc></url>
+<url><loc>/reference/pathwayRankBasedEnrichment.html</loc></url>
+<url><loc>/reference/phosCollapse.html</loc></url>
+<url><loc>/reference/phospho.L6.ratio.html</loc></url>
+<url><loc>/reference/phospho.L6.ratio.pe.html</loc></url>
+<url><loc>/reference/phospho.cells.Ins.html</loc></url>
+<url><loc>/reference/phospho.liver.Ins.TC.ratio.RUV.html</loc></url>
+<url><loc>/reference/phospho.liver.Ins.TC.ratio.RUV.pe.html</loc></url>
+<url><loc>/reference/plotKinaseNetwork.html</loc></url>
+<url><loc>/reference/plotQC.html</loc></url>
+<url><loc>/reference/plotSignalomeMap.html</loc></url>
+<url><loc>/reference/ptImpute.html</loc></url>
+<url><loc>/reference/scImpute.html</loc></url>
+<url><loc>/reference/selectGrps.html</loc></url>
+<url><loc>/reference/selectLocalisedSites.html</loc></url>
+<url><loc>/reference/selectOverallPercent.html</loc></url>
+<url><loc>/reference/selectTimes.html</loc></url>
+<url><loc>/reference/siteAnnotate.html</loc></url>
+<url><loc>/reference/standardise.html</loc></url>
+<url><loc>/reference/tImpute.html</loc></url>
 </urlset>
+

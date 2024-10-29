@@ -1,13 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 2.0.6
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  web/batch_correction: web/batch_correction.html
+  web/imputation: web/imputation.html
+  web/pathway_analysis: web/pathway_analysis.html
+  web/PhosR_STAR_protocols2: web/PhosR_STAR_protocols2.html
   PhosR: PhosR.html
-  PhosR_STAR_protocols2: web/PhosR_STAR_protocols2.html
-  batch_correction: web/batch_correction.html
-  imputation: web/imputation.html
-  pathway_analysis: web/pathway_analysis.html
-  signalomes: web/signalomes.html
-  site_gene_analysis: web/site_gene_analysis.html
-last_built: 2022-12-02T05:18Z
-
+  web/signalomes: web/signalomes.html
+  web/site_gene_analysis: web/site_gene_analysis.html
+last_built: 2024-10-29T08:51Z
