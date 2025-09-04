@@ -44,4 +44,4 @@ Please find the links to our vignette below. Note that the vignette utilises sub
 
 ## Contact us
 
-If you have any enquiries, especially about performing PhosR to analyse your phosphoproteomic data, please contact taiyun.kim@sydney.edu.au or hani.kim@sydney.edu.au. We are also happy to receive any suggestions and comments.
+If you have any enquiries, especially about performing PhosR to analyse your phosphoproteomic data, please contact dxiao@cmri.org.au or hani.kim@garvan.org.au or pengyi.yang@sydney.edu.au. We are also happy to receive any suggestions and comments.
