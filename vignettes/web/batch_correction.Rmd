@@ -29,7 +29,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to [our preprint](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full) for the full list of the datasets used). The `SPSs` will be used as our `negative control` in RUV normalisation.
+In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to the [PhosR Cell Reports paper](https://doi.org/10.1016/j.celrep.2021.108771) for the full list of the datasets used). The `SPSs` will be used as our `negative control` in RUV normalisation.
 
 ```{r}
 data("phospho_L6_ratio_pe")
@@ -184,4 +184,3 @@ ppe = RUVphospho(ppe, M = design, k = 3, ctl = ctl)
 ```{r}
 sessionInfo()
 ```
-

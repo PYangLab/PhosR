@@ -1,0 +1,7 @@
+^\.github$
+^\.gitignore$
+^\.travis\.yml$
+^CITATION\.cff$
+^PhosR\.Rproj$
+^README\.md$
+^docs$

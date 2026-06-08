@@ -1,3 +1,13 @@
+## PhosR 1.20.0
+
+* Synchronised GitHub package metadata with the current Bioconductor release.
+* Added GitHub citation metadata via `CITATION.cff`.
+* Updated README and vignette installation guidance to make Bioconductor the
+  primary installation route and GitHub the development installation route.
+* Updated citation and tutorial text to point to the published Cell Reports
+  method paper and STAR Protocol.
+* Modernised GitHub Actions workflows for package checks and pkgdown builds.
+
 ## PhosR 1.9.1
 
 * Bug fixes

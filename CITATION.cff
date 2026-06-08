@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use PhosR, please cite the Cell Reports method paper and, where relevant, the STAR Protocol."
+title: "PhosR"
+type: software
+version: 1.20.0
+license: GPL-3.0-only
+url: "https://github.com/PYangLab/PhosR"
+repository-code: "https://github.com/PYangLab/PhosR"
+identifiers:
+  - type: doi
+    value: "10.18129/B9.bioc.PhosR"
+    description: "Bioconductor package DOI"
+authors:
+  - family-names: Yang
+    given-names: Pengyi
+  - family-names: Kim
+    given-names: Hani Jieun
+  - family-names: Kim
+    given-names: Taiyun
+  - family-names: Xiao
+    given-names: Di
+preferred-citation:
+  type: article
+  title: "PhosR enables processing and functional analysis of phosphoproteomic data"
+  authors:
+    - family-names: Kim
+      given-names: Hani Jieun
+    - family-names: Kim
+      given-names: Taiyun
+    - family-names: Hoffman
+      given-names: Nolan J.
+    - family-names: Xiao
+      given-names: Di
+    - family-names: James
+      given-names: David E.
+    - family-names: Humphrey
+      given-names: Sean J.
+    - family-names: Yang
+      given-names: Pengyi
+  journal: "Cell Reports"
+  year: 2021
+  volume: 34
+  issue: 8
+  doi: "10.1016/j.celrep.2021.108771"
+  url: "https://doi.org/10.1016/j.celrep.2021.108771"
+references:
+  - type: article
+    title: "Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR"
+    authors:
+      - family-names: Kim
+        given-names: Hani Jieun
+      - family-names: Kim
+        given-names: Taiyun
+      - family-names: Xiao
+        given-names: Di
+      - family-names: Yang
+        given-names: Pengyi
+    journal: "STAR Protocols"
+    year: 2021
+    volume: 2
+    issue: 2
+    doi: "10.1016/j.xpro.2021.100585"
+    url: "https://doi.org/10.1016/j.xpro.2021.100585"

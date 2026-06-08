@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .DS_Store$
-.Rbuildignore
 .Ruserdata
 .PhosR.proj
 vignettes/webOnly/*

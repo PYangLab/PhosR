@@ -7,7 +7,9 @@
 
 # PhosR
 
-`PhosR` is a package for the comprehensive analysis of phosphoproteomic data (https://doi.org/10.1016/j.celrep.2021.108771). There are two major components to PhosR: processing and downstream analysis. PhosR consists of various processing tools for phosphoproteomic data including filtering, imputation, normalisaton and batch correction, which enables integration of multiple phosphoproteomic datasets. Downstream analytical tools consists of site- and protein-centric pathway analysis to evaluate activities of kinases and signalling pathways, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes present in the phosphoproteomic data of interest.
+`PhosR` is a Bioconductor package for the comprehensive analysis of phosphoproteomic data. There are two major components to PhosR: processing and downstream analysis. PhosR provides tools for filtering, imputation, normalisation and batch correction, enabling integration of multiple phosphoproteomic datasets. Downstream analytical tools support site- and protein-centric pathway analysis, inference of kinase and signalling pathway activities, large-scale kinase-substrate annotation from dynamic phosphoproteomic profiling, and visualisation and construction of signalomes.
+
+The method was published in Cell Reports (https://doi.org/10.1016/j.celrep.2021.108771), with a step-by-step STAR Protocol (https://doi.org/10.1016/j.xpro.2021.100585).
 
 ## PhosR overview
 
@@ -16,17 +18,25 @@
 
 ## Installation
 
-Install the development version from GitHub using the `devtools` package:
+Install the formal Bioconductor release:
 
 ```r
-library(devtools)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("PhosR")
+```
+
+Install the development version from GitHub:
+
+```r
 devtools::install_github("PYangLab/PhosR")
 ```
 
 ## Vignette 
 
 <!--You can find the vignette at our website: https://PYangLab.github.io/PhosR/articles/PhosR.html-->
-Please find the links to our vignette below. Note that the vignette utilises subsets of the full phosphoproteomic datasets that were used in [our pre-print](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full), meaning that the results will not be identical and are for demonstration purposes only.
+Please find the links to our vignette below. The vignette uses subsets of the phosphoproteomic datasets from the published Cell Reports study, so results are intended for demonstration and will not be identical to full-study analyses.
 
 * Introduction
      * [Full vignette](https://pyanglab.github.io/PhosR/articles/PhosR.html)
@@ -38,9 +48,17 @@ Please find the links to our vignette below. Note that the vignette utilises sub
      * [Site- and gene-centric analysis](https://PYangLab.github.io/PhosR/articles/web/site_gene_analysis.html)
      * [Kinase-substrate relationship scoring and signalome construction](https://PYangLab.github.io/PhosR/articles/web/signalomes.html)
 
-## Reference
-1. Kim, H.✢, Kim, T.✢, Hoffman, N., Xiao, D., James, D., Humphrey S., Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771. (https://doi.org/10.1016/j.celrep.2021.108771)
-2. Kim, H., Kim, T., Xiao, D. & Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585. (https://doi.org/10.1016/j.xpro.2021.100585)
+## Citation
+
+If you use PhosR, please cite the method paper:
+
+1. Kim, H.J., Kim, T., Hoffman, N.J., Xiao, D., James, D.E., Humphrey, S.J. & Yang, P. (2021) PhosR enables processing and functional analysis of phosphoproteomic data. Cell Reports, 34(8), 108771. https://doi.org/10.1016/j.celrep.2021.108771
+
+For step-by-step use of PhosR, please also cite the STAR Protocol:
+
+2. Kim, H.J., Kim, T., Xiao, D. & Yang, P. (2021) Protocol for the processing and downstream analysis of phosphoproteomic data with PhosR. STAR Protocols, 2(2), 100585. https://doi.org/10.1016/j.xpro.2021.100585
+
+From R, run `citation("PhosR")` for the package citation metadata.
 
 ## Contact us
 

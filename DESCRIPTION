@@ -1,18 +1,27 @@
 Package: PhosR
 Type: Package
 Title: A set of methods and tools for comprehensive analysis of phosphoproteomics data
-Version: 1.13.1
+Version: 1.20.0
 Authors@R: c(
     person("Pengyi", "Yang", email = "pengyi.yang@sydney.edu.au", role = c("aut")),
     person("Taiyun", "Kim", email = "taiyun.kim91@gmail.com", role = c("aut")),
     person("Hani Jieun", "Kim", email = "jieun.kim@sydney.edu.au", role = c("aut")),
     person("Di", "Xiao", email = "di.xiao@sydney.edu.au", role = c("aut", "cre")))
-Description: PhosR is a package for the comprenhensive analysis of phosphoproteomic data.
+Author: Pengyi Yang [aut],
+    Taiyun Kim [aut],
+    Hani Jieun Kim [aut],
+    Di Xiao [aut, cre]
+Maintainer: Di Xiao <di.xiao@sydney.edu.au>
+Description: PhosR is a package for the comprehensive analysis of phosphoproteomic data.
     There are two major components to PhosR: processing and downstream analysis.
     PhosR consists of various processing tools for phosphoproteomics data
     including filtering, imputation, normalisation, and functional analysis
     for inferring active kinases and signalling pathways.
 License: GPL-3 + file LICENSE
+URL: https://bioconductor.org/packages/PhosR,
+    https://github.com/PYangLab/PhosR,
+    https://pyanglab.github.io/PhosR/
+BugReports: https://github.com/PYangLab/PhosR/issues
 Depends: R (>= 4.2.0)
 Imports:
     ruv,
@@ -48,7 +57,7 @@ Encoding: UTF-8
 LazyData: false
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
-biocViews: Software, ResearchField, Proteomics
+biocViews: Software, ResearchField, Proteomics, Pathways
 Suggests:
     testthat,
     knitr,

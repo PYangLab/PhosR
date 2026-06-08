@@ -1,3 +1,5 @@
+url: https://pyanglab.github.io/PhosR/
+
 template:
   params:
     bootswatch: cosmo
@@ -26,7 +28,11 @@ navbar:
       href: reference/index.html
     - text: STAR Protocols
       href: articles/web/PhosR_STAR_protocols.html
+    - text: Citation
+      href: authors.html#citation
   right:
+    - text: Bioconductor
+      href: https://bioconductor.org/packages/PhosR/
     - icon: fa-github fa-lg
       href: https://github.com/PYangLab/PhosR
 future: true

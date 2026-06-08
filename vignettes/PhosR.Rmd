@@ -40,7 +40,7 @@ knitr::opts_chunk$set(echo = TRUE)
 `PhosR` is a package for the comprehensive analysis of phosphoproteomic data. 
 There are two major components to PhosR: processing and downstream analysis. 
 PhosR consists of various processing tools for phosphoproteomic data including 
-filtering, imputation, normalisaton and batch correction, enabling integration 
+filtering, imputation, normalisation and batch correction, enabling integration 
 of multiple phosphoproteomic datasets. Downstream analytical tools consists of 
 site- and protein-centric pathway analysis to evaluate activities of kinases and
 signalling pathways, large-scale kinase-substrate annotation from dynamic 
@@ -59,21 +59,19 @@ its key components.
 
 # Installation
 
-Install the latest development version from GitHub using the `devtools` package:
+Install the formal Bioconductor release:
 
 ```{r, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-library(devtools)
-devtools::install_github("PYangLab/PhosR")
+BiocManager::install("PhosR")
 ```
 
-To install the Bioconductor version of PhosR, enter the following to your R console.
+Install the development version from GitHub:
 
 ```{r, eval = FALSE}
-#if (!requireNamespace("BiocManager", quietly = TRUE))
-#    install.packages("BiocManager")
-#
-#BiocManager::install("PhosR")
+devtools::install_github("PYangLab/PhosR")
 ```
 
 
@@ -301,7 +299,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to [our preprint](https://www.biorxiv.org/content/10.1101/2020.08.31.276329v2.full) for the full list of the datasets used). The `SPSs` will be used as our `negative control` in RUV normalisation.
+In this example, we will use L6 myotube phosphoproteome dataset (with accession number PXD019127) and the SPSs we identified from a panel of phosphoproteomic datasets (please refer to the [PhosR Cell Reports paper](https://doi.org/10.1016/j.celrep.2021.108771) for the full list of the datasets used). The `SPSs` will be used as our `negative control` in RUV normalisation.
 
 ```{r}
 data("phospho_L6_ratio_pe")
@@ -910,4 +908,3 @@ plotKinaseNetwork(KSR = L6.matrices, predMatrix = L6.predMat, threshold = 0.9, c
 ```{r}
 sessionInfo()
 ```
-
