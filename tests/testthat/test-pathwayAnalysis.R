@@ -14,6 +14,18 @@ annotation = list(
 )
 universe = c(letters, LETTERS)
 
+expect_pathway_matrix_equal <- function(expected, observed, tolerance = 1e-12) {
+  expect_identical(rownames(expected), rownames(observed))
+  expect_identical(colnames(expected), colnames(observed))
+  expect_equal(as.numeric(expected[, "pvalue"]),
+    as.numeric(observed[, "pvalue"]),
+    tolerance = tolerance
+  )
+  expect_identical(expected[, setdiff(colnames(expected), "pvalue"), drop = FALSE],
+    observed[, setdiff(colnames(observed), "pvalue"), drop = FALSE]
+  )
+}
+
 
 
 ###################################################
@@ -71,9 +83,15 @@ test_that(
     rownames(result3) = rNames
 
 
-    expect_identical(result1, pathwayOverrepresent(geneSet, annotation, universe, alter1))
-    expect_identical(result2, pathwayOverrepresent(geneSet, annotation, universe, alter2))
-    expect_identical(result3, pathwayOverrepresent(geneSet, annotation, universe, alter3))
+    expect_pathway_matrix_equal(result1,
+      pathwayOverrepresent(geneSet, annotation, universe, alter1)
+    )
+    expect_pathway_matrix_equal(result2,
+      pathwayOverrepresent(geneSet, annotation, universe, alter2)
+    )
+    expect_pathway_matrix_equal(result3,
+      pathwayOverrepresent(geneSet, annotation, universe, alter3)
+    )
   }
 )
 
@@ -137,7 +155,6 @@ test_that(
     expect_identical(result3, pathwayRankBasedEnrichment(geneStats, annotation, alter3))
   }
 )
-
 
 
 

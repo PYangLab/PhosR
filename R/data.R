@@ -243,6 +243,8 @@
 #'
 #' @usage data(hSPSs)
 #'
+#' @format An object of class \code{character} of length 326.
+#'
 #' @name hSPSs
 #' @docType data
 "hSPSs"
@@ -269,7 +271,7 @@
 #' GigaScience, 8(9):giz106, https://doi.org/10.1093/gigascience/giz106 for 
 #' more details
 #'
-#' @usage data(SEGs)
+#' @usage data(hSEGs)
 #'
 #' @name hSEGs
 #' @docType data
