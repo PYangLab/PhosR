@@ -1,5 +1,5 @@
-pandoc: 2.7.3
-pkgdown: 2.1.1
+pandoc: 3.8.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   web/batch_correction: web/batch_correction.html
@@ -9,4 +9,7 @@ articles:
   PhosR: PhosR.html
   web/signalomes: web/signalomes.html
   web/site_gene_analysis: web/site_gene_analysis.html
-last_built: 2024-10-29T22:16Z
+last_built: 2026-06-08T09:01Z
+urls:
+  reference: https://pyanglab.github.io/PhosR/reference
+  article: https://pyanglab.github.io/PhosR/articles
